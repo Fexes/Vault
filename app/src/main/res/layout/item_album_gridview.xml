@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="180dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="#00FFFFFF"
+
+    >
+
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+
+        android:scaleType="centerCrop"
+        android:id="@+id/image_viewx" />
+
+    <com.makeramen.roundedimageview.RoundedImageView
+         android:id="@+id/image_view"
+         android:scaleType="centerCrop"
+        app:riv_corner_radius="10dp"
+        android:layout_margin="2dp"
+         app:riv_mutate_background="true"
+        app:riv_tile_mode="repeat"
+         android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+    <CheckBox
+        android:id="@+id/checkBox"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="10dp"
+        android:button="@drawable/checkbox"
+        android:gravity="top"
+        android:layoutDirection="rtl" />
+
+    <ImageView
+        android:id="@+id/image_play"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_centerVertical="true"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp"
+        android:scaleType="centerCrop"
+        android:src="@mipmap/ic_video_thumb"
+        android:visibility="gone" />
+
+</RelativeLayout>

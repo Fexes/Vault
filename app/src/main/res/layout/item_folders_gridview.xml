@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/album_lay"
+    android:orientation="vertical">
+
+    <FrameLayout
+        android:id="@+id/file"
+        android:layout_gravity="center"
+        android:layout_margin="2dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+
+
+        <com.makeramen.roundedimageview.RoundedImageView
+            android:id="@+id/file_image"
+            android:layout_width="match_parent"
+            android:layout_height="280dp"
+            android:layout_gravity="center"
+            android:scaleType="centerCrop"
+            app:riv_corner_radius="10dp"
+            app:riv_mutate_background="true"
+             />
+        <TextView
+            android:id="@+id/name"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:textColor="@color/black"
+            android:elevation="5dp"
+            android:layout_gravity="bottom|center_horizontal"
+            android:background="@drawable/album_count"
+            android:paddingLeft="10dp"
+            android:gravity="start|center"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/filenum"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:textColor="@android:color/white"
+             android:background="@drawable/album_txt_back"
+            android:singleLine="true"
+            android:textSize="15sp" />
+    </FrameLayout>
+
+
+
+</LinearLayout>

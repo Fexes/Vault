@@ -1,0 +1,319 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/grad_bac3"
+    android:gravity="center|bottom"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/TxtForgetPasscode"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="6dp"
+        android:padding="16dp"
+        android:text="Forget Pincode?"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/fingerfrint_image" />
+
+    <ImageView
+        android:id="@+id/fingerfrint_image"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_above="@+id/TxtForgetPasscode"
+        android:layout_centerHorizontal="true"
+        android:src="@drawable/ic_fingerprint"
+        app:layout_constraintBottom_toTopOf="@+id/TxtForgetPasscode"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout4" />
+
+
+
+    <LinearLayout
+        android:id="@+id/linearLayout4"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="33dp"
+        android:gravity="center|bottom"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toTopOf="@+id/fingerfrint_image"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/LockAppIcon"
+            android:layout_width="122dp"
+            android:layout_height="122dp"
+            android:layout_marginBottom="40dp"
+              android:elevation="2dp"
+            android:src="@mipmap/ic_launcher"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+        <TextView
+            android:id="@+id/TxtEnterPasscode"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="10dp"
+            android:text="Enter Pincode"
+            android:textColor="#FFF"
+            android:textSize="15sp" />
+
+        <RelativeLayout
+            android:id="@+id/LayoutPasscode"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/TxtEnterPasscode"
+            android:layout_centerHorizontal="true">
+
+            <ImageView
+                android:id="@+id/PassDot1"
+                android:layout_width="12dp"
+                android:layout_height="12dp"
+                android:src="@drawable/pass_border" />
+
+            <ImageView
+                android:id="@+id/PassDot2"
+                android:layout_width="12dp"
+                android:layout_height="12dp"
+                android:layout_marginLeft="15dp"
+                android:layout_toRightOf="@+id/PassDot1"
+                android:src="@drawable/pass_border" />
+
+            <ImageView
+                android:id="@+id/PassDot3"
+                android:layout_width="12dp"
+                android:layout_height="12dp"
+                android:layout_marginLeft="15dp"
+                android:layout_toRightOf="@+id/PassDot2"
+                android:src="@drawable/pass_border" />
+
+            <ImageView
+                android:id="@+id/PassDot4"
+                android:layout_width="12dp"
+                android:layout_height="12dp"
+                android:layout_marginLeft="15dp"
+                android:layout_toRightOf="@+id/PassDot3"
+                android:src="@drawable/pass_border" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/LayoutNumber"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/LayoutPasscode"
+            android:layout_marginTop="20dp">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="20dp"
+                    android:orientation="horizontal">
+
+                    <RelativeLayout
+                        android:id="@+id/BtnPasscode1"
+                        android:layout_width="75dp"
+                        android:layout_height="75dp"
+                        android:background="@drawable/number_background">
+
+                        <TextView
+                            android:id="@+id/TxtPasscode1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerInParent="true"
+                            android:text="1"
+                            android:textColor="#FFF"
+                            android:textSize="35sp" />
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:id="@+id/BtnPasscode2"
+                        android:layout_width="75dp"
+                        android:layout_height="75dp"
+                        android:layout_marginLeft="20dp"
+                        android:background="@drawable/number_background">
+
+                        <TextView
+                            android:id="@+id/TxtPasscode2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerInParent="true"
+                            android:text="2"
+                            android:textColor="#FFF"
+                            android:textSize="35sp" />
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:id="@+id/BtnPasscode3"
+                        android:layout_width="75dp"
+                        android:layout_height="75dp"
+                        android:layout_marginLeft="20dp"
+                        android:background="@drawable/number_background">
+
+                        <TextView
+                            android:id="@+id/TxtPasscode3"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerInParent="true"
+                            android:text="3"
+                            android:textColor="#FFF"
+                            android:textSize="35sp" />
+                    </RelativeLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="20dp"
+                    android:orientation="horizontal">
+
+                    <RelativeLayout
+                        android:id="@+id/BtnPasscode4"
+                        android:layout_width="75dp"
+                        android:layout_height="75dp"
+                        android:background="@drawable/number_background">
+
+                        <TextView
+                            android:id="@+id/TxtPasscode4"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerInParent="true"
+                            android:text="4"
+                            android:textColor="#FFF"
+                            android:textSize="35sp" />
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:id="@+id/BtnPasscode5"
+                        android:layout_width="75dp"
+                        android:layout_height="75dp"
+                        android:layout_marginLeft="20dp"
+                        android:background="@drawable/number_background">
+
+                        <TextView
+                            android:id="@+id/TxtPasscode5"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerInParent="true"
+                            android:text="5"
+                            android:textColor="#FFF"
+                            android:textSize="35sp" />
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:id="@+id/BtnPasscode6"
+                        android:layout_width="75dp"
+                        android:layout_height="75dp"
+                        android:layout_marginLeft="20dp"
+                        android:background="@drawable/number_background">
+
+                        <TextView
+                            android:id="@+id/TxtPasscode6"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerInParent="true"
+                            android:text="6"
+                            android:textColor="#FFF"
+                            android:textSize="35sp" />
+                    </RelativeLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="20dp"
+                    android:orientation="horizontal">
+
+                    <RelativeLayout
+                        android:id="@+id/BtnPasscode7"
+                        android:layout_width="75dp"
+                        android:layout_height="75dp"
+                        android:background="@drawable/number_background">
+
+                        <TextView
+                            android:id="@+id/TxtPasscode7"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerInParent="true"
+                            android:text="7"
+                            android:textColor="#FFF"
+                            android:textSize="35sp" />
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:id="@+id/BtnPasscode8"
+                        android:layout_width="75dp"
+                        android:layout_height="75dp"
+                        android:layout_marginLeft="20dp"
+                        android:background="@drawable/number_background">
+
+                        <TextView
+                            android:id="@+id/TxtPasscode8"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerInParent="true"
+                            android:text="8"
+                            android:textColor="#FFF"
+                            android:textSize="35sp" />
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:id="@+id/BtnPasscode9"
+                        android:layout_width="75dp"
+                        android:layout_height="75dp"
+                        android:layout_marginLeft="20dp"
+                        android:background="@drawable/number_background">
+
+                        <TextView
+                            android:id="@+id/TxtPasscode9"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerInParent="true"
+                            android:text="9"
+                            android:textColor="#FFF"
+                            android:textSize="35sp" />
+                    </RelativeLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:orientation="horizontal">
+
+                    <RelativeLayout
+                        android:id="@+id/BtnPasscode0"
+                        android:layout_width="75dp"
+                        android:layout_height="75dp"
+                        android:background="@drawable/number_background">
+
+                        <TextView
+                            android:id="@+id/TxtPasscode0"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerInParent="true"
+                            android:text="0"
+                            android:textColor="#FFF"
+                            android:textSize="35sp" />
+                    </RelativeLayout>
+                </LinearLayout>
+            </LinearLayout>
+        </RelativeLayout>
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

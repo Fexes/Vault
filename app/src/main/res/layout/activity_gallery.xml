@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:id="@+id/backcolor"
+    android:layout_height="match_parent"
+     >
+
+    <com.example.encrypt.photo.ViewPagerFixed
+        android:id="@+id/gallery01"
+        android:layout_width="match_parent"
+         android:layout_height="match_parent"
+        android:unselectedAlpha="1" />
+
+    <Button
+        android:id="@+id/buttonAdd"
+        android:layout_width="170dp"
+        android:layout_height="45dp"
+        android:layout_gravity="bottom|center_horizontal"
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/button_back_enc"
+        android:text="@string/encrypt"
+        android:textColor="@color/white"
+        android:textSize="16sp" />
+
+    <Button
+        android:id="@+id/buttonMin"
+        android:layout_width="170dp"
+        android:layout_height="45dp"
+        android:layout_gravity="bottom|center_horizontal"
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/button_back"
+        android:text="Unhide"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        android:visibility="gone" />
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_gravity="center"
+        android:visibility="gone" />
+</FrameLayout>

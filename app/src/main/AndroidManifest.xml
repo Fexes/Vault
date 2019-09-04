@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.example.encrypt"
+    android:versionName="1.2">
+
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.USE_FINGERPRINT" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="com.android.launcher.permission.INSTALL_SHORTCUT" />
+    <uses-permission android:name="com.android.launcher.permission.UNINSTALL_SHORTCUT" />
+
+    <application
+        android:name=".activity.BseApplication"
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme"
+        tools:ignore="GoogleAppIndexingWarning">
+        <activity
+            android:name=".activity.IntroActivity"
+            android:theme="@style/Theme.Intro"></activity>
+        <activity android:name=".lock.LockType" />
+        <activity android:name=".lock.PasscodeActivity" />
+        <activity android:name=".lock.PatternActivity" />
+        <activity android:name=".activity.BaseActivity" />
+        <activity
+            android:name=".activity.AdvancedSetup"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.MainActivity"
+            android:excludeFromRecents="true"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+
+
+        <activity
+            android:name=".photo.Album"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".photo.PrivateAlbum"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".photo.Folders"
+            android:screenOrientation="portrait" />
+        <activity android:name=".photo.Gallery" />
+        <activity android:name=".video.PrivateVideoPlayActivity" />
+        <activity
+            android:name=".video.VideoAlbum"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.UseHelp"
+            android:screenOrientation="portrait" />
+
+        <meta-data
+            android:name="preloaded_fonts"
+            android:resource="@array/preloaded_fonts" />
+    </application>
+
+</manifest>
