@@ -23,9 +23,7 @@ import java.util.List;
 
 import in.myinnos.library.AppIconNameChanger;
 
-/**
- * Created by dongrp on 2016/8/15. 高级设置界面
- */
+
 public class AdvancedSetup extends BaseActivity implements View.OnClickListener, CompoundButton.OnCheckedChangeListener {
 
     public static FingerprintManager mFingerprintManager;
@@ -54,9 +52,6 @@ public class AdvancedSetup extends BaseActivity implements View.OnClickListener,
         mFingerprintManager = null;
     }
 
-    /**
-     * 初始化view
-     */
     @SuppressLint("NewApi")
     private void initView() {
 
@@ -73,10 +68,10 @@ public class AdvancedSetup extends BaseActivity implements View.OnClickListener,
 
         mSwitch4 = (Switch) findViewById(R.id.switch4);
 
-        mSwitch1.setChecked(BseApplication.sp.getBoolean("fingerprint", false));
+        mSwitch1.setChecked(BseApplication.sp.getBoolean("fingerprint", true));
 
 
-        mSwitch4.setChecked(BseApplication.sp.getBoolean("fastExit", true));
+        mSwitch4.setChecked(BseApplication.sp.getBoolean("fastExit", false));
 
         mSwitch1.setOnCheckedChangeListener(this);
 

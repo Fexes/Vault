@@ -77,7 +77,7 @@ public class PatternActivity extends Activity {
         if (mChangePattern) {
             Pattern = null;
         }
-        if(!BseApplication.sp.getBoolean("fingerprint", false)){
+        if(!BseApplication.sp.getBoolean("fingerprint", true)){
             FingerPrintImage.setVisibility(View.INVISIBLE);
             mFAH=null;
         }
@@ -86,7 +86,7 @@ public class PatternActivity extends Activity {
             FingerPrintImage.setVisibility(View.INVISIBLE);
             TxtForgetPasscode.setVisibility(View.INVISIBLE);
         }else{
-            if(!BseApplication.sp.getBoolean("fingerprint", false)){
+            if(!BseApplication.sp.getBoolean("fingerprint", true)){
                 FingerPrintImage.setVisibility(View.INVISIBLE);
                 mFAH=null;
             }else {

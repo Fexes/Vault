@@ -12,7 +12,7 @@ import com.example.encrypt.activity.BaseActivity;
 import com.example.encrypt.activity.BseApplication;
 
 public class LockType extends BaseActivity {
-//new
+//new 2
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

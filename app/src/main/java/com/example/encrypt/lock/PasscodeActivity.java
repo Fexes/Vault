@@ -145,7 +145,7 @@ public class PasscodeActivity extends Activity {
             TxtForgetPasscode.setVisibility(View.INVISIBLE);
 
         }else{
-            if(!BseApplication.sp.getBoolean("fingerprint", false)){
+            if(!BseApplication.sp.getBoolean("fingerprint", true)){
                 FingerPrintImage.setVisibility(View.INVISIBLE);
                 mFAH=null;
             }else {
