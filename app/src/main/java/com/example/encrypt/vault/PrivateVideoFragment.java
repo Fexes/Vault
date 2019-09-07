@@ -3,14 +3,14 @@ package com.example.encrypt.vault;
 import android.app.ProgressDialog;
 import android.content.ContentResolver;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.Intent;
 import android.database.DataSetObserver;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import androidx.annotation.Nullable;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import androidx.fragment.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,26 +20,29 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
+import androidx.fragment.app.Fragment;
+
 import com.example.encrypt.R;
-import com.example.encrypt.activity.BseApplication;
 import com.example.encrypt.database.DatabaseAdapter;
 import com.example.encrypt.photo.Bimp;
 import com.example.encrypt.util.Notifi;
-import com.example.encrypt.util.XorEncryptionUtil;
-
-
+import com.example.encrypt.util.NotificationUtil;
 import com.example.encrypt.video.PrivateVideoGridViewAdapter;
 import com.example.encrypt.video.VideoAlbum;
 import com.example.encrypt.video.VideoItem;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
 
 /**
  * Created by User on 2/28/2017.
@@ -55,6 +58,13 @@ public class PrivateVideoFragment extends Fragment {
     private static TextView tvNoPicture;
     TextView file_count;
     static Button button_min;
+    static CheckBox checkbox_select_all;
+
+    public static void hideNoPictureTip() {
+        tvNoPicture.setText(R.string.no_video);
+        tvNoPicture.setVisibility(View.GONE);
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.vault_fragment,container,false);
@@ -69,11 +79,23 @@ public class PrivateVideoFragment extends Fragment {
         dateList = databaseAdapter.getVideo();
 
         initView(view);
-        decryptVideosTemporary();
+
 
 
         return view;
     }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Bimp.tempSelectVideo.clear();
+
+        dateList = null;
+        databaseAdapter = null;
+        executorService = null;
+        tvNoPicture = null;
+    }
+
     @Override
     public void onResume() {
         super.onResume();
@@ -83,6 +105,11 @@ public class PrivateVideoFragment extends Fragment {
         dateList = databaseAdapter.getVideo();
         privateVideoAlbumGridViewAdapter = new PrivateVideoGridViewAdapter(getActivity(), dateList);
         gridView.setAdapter(privateVideoAlbumGridViewAdapter);
+        if (dateList.size() == 0) {
+            showNoPictureTip();
+        } else {
+            hideNoPictureTip();
+        }
         if(dateList.size()==1){
             file_count.setText(dateList.size()+" File");
         }else {
@@ -99,36 +126,30 @@ public class PrivateVideoFragment extends Fragment {
                 }
             }
         });
-        decryptVideosTemporary();
+
     }
+
+    int grid_count = 4;
 
     @Override
     public void onPause() {
         super.onPause();
-     //   checkbox_select_all.setChecked(false);
+        //   checkbox_select_all.setChecked(false);
         showDec();
-        if (!BseApplication.sp.getBoolean("privVideoAlbumToVideoPlay", false)) {
-            encryptVideosTemporary();
-        }
+
     }
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        Bimp.tempSelectVideo.clear();
 
-        dateList = null;
-        databaseAdapter = null;
-        executorService = null;
-        tvNoPicture = null;
+    public static void showNoPictureTip() {
+        tvNoPicture.setText(R.string.no_video);
+        tvNoPicture.setVisibility(View.VISIBLE);
     }
-   static CheckBox checkbox_select_all;
-    int grid_count=4;
+
     public void initView(View view) {
-        TextView tvTitle = (TextView) view.findViewById(R.id.title);
+        TextView tvTitle = view.findViewById(R.id.title);
         tvTitle.setText(R.string.private_video_album);
-        tvNoPicture = (TextView) view.findViewById(R.id.tv_no_picture);
-        gridView = (GridView) view.findViewById(R.id.album_GridView);
+        tvNoPicture = view.findViewById(R.id.tv_no_picture);
+        gridView = view.findViewById(R.id.album_GridView);
         privateVideoAlbumGridViewAdapter = new PrivateVideoGridViewAdapter(getActivity(), dateList);
         gridView.setAdapter(privateVideoAlbumGridViewAdapter);
         if(dateList.size()==1){
@@ -152,7 +173,7 @@ public class PrivateVideoFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(getActivity(), VideoAlbum.class));
-               // getActivity().finish();
+                // getActivity().finish();
             }
         });
 
@@ -161,7 +182,7 @@ public class PrivateVideoFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 if (Bimp.tempSelectVideo.size() == 0) {
-                //    Toast.makeText(getActivity(), getString(R.string.choose_at_least_one_video), Toast.LENGTH_SHORT).show();
+                    //    Toast.makeText(getActivity(), getString(R.string.choose_at_least_one_video), Toast.LENGTH_SHORT).show();
                     Notifi.message(getActivity(),getString(R.string.choose_at_least_one_video),true);
                 }
                 DecryptionTask decryptionTask = new DecryptionTask(Bimp.tempSelectVideo);
@@ -207,61 +228,7 @@ public class PrivateVideoFragment extends Fragment {
     }
 
 
-    public static void showNoPictureTip() {
-        tvNoPicture.setText(R.string.no_video);
-        tvNoPicture.setVisibility(View.VISIBLE);
-    }
-
-
     static boolean result = true;
-
-    public static boolean decryptVideosTemporary() {
-        if (BseApplication.sp.getBoolean("video_encrypt", true)) {
-
-            for (final VideoItem item : dateList) {
-                final String privVideoPath = item.getPath();
-                executorService.submit(new Runnable() {
-                    @Override
-                    public void run() {
-                        boolean b = XorEncryptionUtil.encrypt(privVideoPath, null);
-                        if (!b) {
-                            XorEncryptionUtil.encrypt(privVideoPath, null);
-                        }
-                        result &= b;
-                    }
-                });
-            }
-
-
-
-            BseApplication.editor.putBoolean("video_encrypt", false).commit();
-        }
-        return result;
-    }
-
-
-    static boolean result1 = true;
-
-    public static boolean encryptVideosTemporary() {
-        if (!BseApplication.sp.getBoolean("video_encrypt", false)) {
-            for (final VideoItem item : dateList) {
-                final String privVideoPath = item.getPath();
-                executorService.submit(new Runnable() {
-                    @Override
-                    public void run() {
-                        boolean b = XorEncryptionUtil.encrypt(privVideoPath, null);
-                        if (!b) {
-                            XorEncryptionUtil.encrypt(privVideoPath, null);
-                        }
-                        result1 &= b;
-                    }
-                });
-            }
-            BseApplication.editor.putBoolean("video_encrypt", true).commit();
-        }
-        return result1;
-    }
-
 
     public static void showDec(){
 
@@ -274,6 +241,88 @@ public class PrivateVideoFragment extends Fragment {
 
         }
 
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    public boolean decryptVideoList(final ArrayList<VideoItem> arrayList) {
+        int current = 0;
+
+
+        for (final VideoItem item : arrayList) {
+            final String privVideoPath = item.getPath();
+
+            final String videoPath = privVideoPath.replaceFirst("/data/data/" + getActivity().getPackageName() + "/files/storage/emulated/0", "/storage/emulated/0");
+
+
+            boolean b = moveFile(getContext(), privVideoPath, videoPath, arrayList.size(), current);
+                    if (b) {
+                        deletePrivateVideo(item, videoPath,getActivity().getContentResolver());
+                        current++;
+                    }else {
+
+                        if (moveFile(getContext(), privVideoPath, videoPath, arrayList.size(), current)) {
+                            deletePrivateVideo(item, videoPath, getActivity().getContentResolver());
+                            current++;
+                        }
+                    }
+
+
+        }
+
+
+
+
+
+        return result;
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    public boolean moveFile(Context context, String sourcepath, String targetpath, int TotalFiles, int current) {
+        current++;
+        NotificationUtil notificationUtil = new NotificationUtil(context, "Files : " + current + " / " + TotalFiles, TotalFiles, current);
+        File sourceLocation = new File(sourcepath);
+        File targetLocation = new File(targetpath);
+
+        try {
+            if (!targetLocation.getParentFile().exists()) {
+                targetLocation.getParentFile().mkdirs();
+            }
+            InputStream in = new FileInputStream(sourceLocation);
+            OutputStream out = new FileOutputStream(targetLocation);
+            long expectedBytes = sourceLocation.length();
+            long totalBytesCopied = 0;
+            byte[] buf = new byte[1024];
+            int len;
+            int progress;
+            while ((len = in.read(buf)) > 0) {
+                out.write(buf, 0, len);
+                totalBytesCopied += len;
+                progress = (int) Math.round(((double) totalBytesCopied / (double) expectedBytes) * 100);
+
+                progressDialog.setMessage("Files :" + TotalFiles + " / " + current + "\n" + "Progress :" + progress + " % ");
+
+                // Log.d("progress :",   progress+"");
+            }
+            progressDialog.setProgress(current);
+            progressDialog.setMax(TotalFiles);
+            notificationUtil.updateNotification("Files : " + current + " / " + TotalFiles, TotalFiles, current);
+
+            // cdd.update("Files : "+current+" / "+TotalFiles);
+            //  cdd.showProgress(getContext(), "Files : "+current+" / "+TotalFiles, false);
+
+
+            if (current == TotalFiles) {
+                notificationUtil.cancel();
+            }
+            in.close();
+            out.close();
+            sourceLocation.delete();
+
+            return true;
+        } catch (Exception e) {
+            Log.d("Error :", e.toString());
+            return false;
+        }
     }
 
     public class DecryptionTask extends AsyncTask<Void, Void, Boolean> {
@@ -291,10 +340,16 @@ public class PrivateVideoFragment extends Fragment {
             super.onPreExecute();
             startSize = getActivity().getApplicationContext().getContentResolver()
                     .query(MediaStore.Video.Media.EXTERNAL_CONTENT_URI, null, null, null, null).getCount();
-            progressDialog.setMessage(getString(R.string.decrypting));
+
+            progressDialog.setIcon(R.mipmap.ic_launcher);
+            progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+            progressDialog.setTitle(getString(R.string.decrypting));
             progressDialog.show();
+
+
         }
 
+        @RequiresApi(api = Build.VERSION_CODES.N)
         @Override
         protected Boolean doInBackground(Void... params) {
             boolean result = decryptVideoList(listPrivVideo);
@@ -318,65 +373,14 @@ public class PrivateVideoFragment extends Fragment {
             super.onPostExecute(result);
             privateVideoAlbumGridViewAdapter.refreshDataAfterDecrypt();
             String showMessage = result ? getString(R.string.decrypt_success) : getString(R.string.partial_video_decryption_failed);
-          //  Toast.makeText(getActivity(), showMessage, Toast.LENGTH_SHORT).show();
-            Notifi.message(getActivity(),showMessage,result);
+            //  Toast.makeText(getActivity(), showMessage, Toast.LENGTH_SHORT).show();
+            Notifi.message(getActivity(), showMessage, result);
             checkbox_select_all.setChecked(false);
             progressDialog.dismiss();
             showDec();
+
         }
     }
-
-
-    public boolean decryptVideoList(final ArrayList<VideoItem> arrayList) {
-        ArrayList<Future<Boolean>> futures = new ArrayList<>();
-        futures.clear();
-
-        for (final VideoItem item : arrayList) {
-            final String privVideoPath = item.getPath();
-
-            final String videoPath = privVideoPath.replaceFirst("/data/data/" + getActivity().getPackageName() + "/files/storage/emulated/0", "/storage/emulated/0");
-            Future<Boolean> future = executorService.submit(new Callable<Boolean>() {
-                @Override
-                public Boolean call() {
-
-
-                    boolean b = XorEncryptionUtil.copyFile(privVideoPath, videoPath);
-                    if (b) {
-                        deletePrivateVideo(item, videoPath,getActivity().getContentResolver());
-                    }else {
-                        XorEncryptionUtil.copyFile(privVideoPath, null);
-                        boolean x = XorEncryptionUtil.copyFile(privVideoPath, videoPath);
-                        if (x) {
-                            deletePrivateVideo(item, videoPath, getActivity().getContentResolver());
-                        } else {
-                            XorEncryptionUtil.copyFile(privVideoPath, null);
-                            b = x;
-                            result=x;
-                        }
-                    }
-                    return b;
-                }
-            });
-            futures.add(future);
-        }
-
-        for (Future<Boolean> future : futures) {
-            try {
-                result &= future.get();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            } catch (ExecutionException e) {
-                e.printStackTrace();
-            }
-        }
-
-
-
-
-        return result;
-    }
-
-
 
     public static void deletePrivateVideo(VideoItem item, String videoPath, ContentResolver contentResolver) {
 

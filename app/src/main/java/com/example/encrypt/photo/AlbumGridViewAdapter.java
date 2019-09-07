@@ -39,11 +39,6 @@ public class AlbumGridViewAdapter extends BaseAdapter {
 		//((Activity) context).getWindowManager().getDefaultDisplay().getMetrics(dm);
 	}
 
-	/**
-	 * 数据全选、取消全选 的方法
-	 *
-	 * @param selectAll
-	 */
 	public void selectAll(boolean selectAll) {
 		Bimp.tempSelectBitmap.clear();
 		if (selectAll) {
@@ -52,17 +47,12 @@ public class AlbumGridViewAdapter extends BaseAdapter {
 		notifyDataSetChanged();
 	}
 
-    /**
-     * 适配器 获取已选数据集 的方法
-     * @return
-     */
+
     public ArrayList<ImageItem> getSelectedData(){
         return Bimp.tempSelectBitmap;
     }
 
-    /**
-     * 解密完成后，刷新适配器的方法
-     */
+
     public void refreshDataAfterEncrypt(){
         dataList.removeAll(Bimp.tempSelectBitmap);
         notifyDataSetChanged();
@@ -86,8 +76,8 @@ public class AlbumGridViewAdapter extends BaseAdapter {
 		public void imageLoad(ImageView imageView, Bitmap bitmap, Object... params) {
 			if (imageView != null && bitmap != null) {
 				String url = (String) params[0];
-				if (url != null && url.equals((String) imageView.getTag())) {
-					((ImageView) imageView).setImageBitmap(bitmap);
+                if (url != null && url.equals(imageView.getTag())) {
+                    imageView.setImageBitmap(bitmap);
 				} else {
 					Log.e(TAG, "callback, bmp not match");
 				}
@@ -97,10 +87,8 @@ public class AlbumGridViewAdapter extends BaseAdapter {
 		}
 	};
 
-	/**
-	 * 存放列表项控件句柄
-	 */
-	private class ViewHolder {
+
+    private class ViewHolder {
 		public ImageView imageView;
 		public CheckBox checkBox;
 	}
@@ -111,7 +99,7 @@ public class AlbumGridViewAdapter extends BaseAdapter {
 			viewHolder = new ViewHolder();
 			convertView = LayoutInflater.from(context).inflate(R.layout.item_album_gridview, parent, false);
 			viewHolder.imageView =  convertView.findViewById(R.id.image_view);
-			viewHolder.checkBox = (CheckBox) convertView.findViewById(R.id.checkBox);
+            viewHolder.checkBox = convertView.findViewById(R.id.checkBox);
 			convertView.setTag(viewHolder);
 		} else {
 			viewHolder = (ViewHolder) convertView.getTag();
@@ -168,8 +156,5 @@ public class AlbumGridViewAdapter extends BaseAdapter {
 		return convertView;
 	}
 
-/*	public int dipToPx(int dip) {
-		return (int) (dip * dm.density + 0.5f);
-	}*/
 
 }

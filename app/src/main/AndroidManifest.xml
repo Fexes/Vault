@@ -47,9 +47,7 @@
         <activity
             android:name=".photo.Album"
             android:screenOrientation="portrait" />
-        <activity
-            android:name=".photo.PrivateAlbum"
-            android:screenOrientation="portrait" />
+
         <activity
             android:name=".photo.Folders"
             android:screenOrientation="portrait" />

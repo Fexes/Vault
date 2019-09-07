@@ -1,7 +1,6 @@
 package com.example.encrypt.photo;
 
 
-import android.content.Intent;
 import android.database.DataSetObserver;
 import android.os.Bundle;
 import android.view.View;
@@ -10,17 +9,12 @@ import android.widget.GridView;
 import android.widget.TextView;
 
 import com.example.encrypt.R;
-import com.example.encrypt.activity.MainActivity;
 import com.example.encrypt.activity.BaseActivity;
 
 import java.util.List;
 
 
-/**
- * 这个类主要是用来:将所有包含图片的文件夹  以GridView的形式展示出来
- *
- * @author Tom
- */
+
 public class Folders extends BaseActivity {
 
     private AlbumHelper helper;
@@ -35,13 +29,13 @@ public class Folders extends BaseActivity {
         addAppActivity(Folders.this);
         helper = AlbumHelper.getHelper();
         helper.init(getApplicationContext());
-         file_count=findViewById(R.id.file_count);
-        gridView = (GridView) findViewById(R.id.fileGridView);
+        file_count = findViewById(R.id.file_count);
+        gridView = findViewById(R.id.fileGridView);
         folderAdapter = new FolderGirdViewAdapter(this);
          findViewById(R.id.button_back).setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(Folders.this, MainActivity.class));
+                // startActivity(new Intent(Folders.this, MainActivity.class));
                 finish();
             }
         });

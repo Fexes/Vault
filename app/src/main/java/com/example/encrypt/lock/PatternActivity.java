@@ -10,7 +10,6 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
-import androidx.appcompat.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -39,7 +38,7 @@ public class PatternActivity extends Activity {
     Boolean mForget = false;
     ImageView FingerPrintImage, LockAppIcon;
     private FingerprintAuthHelper mFAH;
-    private static final int REQ_CODE_CAMERA_PERMISSION = 1253;
+
 
 
     @Override
@@ -51,7 +50,7 @@ public class PatternActivity extends Activity {
 
         Intent init = getIntent();
         Bundle bundle = init.getExtras();
-        LockAppIcon = (ImageView) findViewById(R.id.LockAppIcon);
+        LockAppIcon = findViewById(R.id.LockAppIcon);
         if (bundle != null) {
             String mpackage = (String) bundle.get("package");
 
@@ -65,10 +64,10 @@ public class PatternActivity extends Activity {
         }
 
 
-        mPatternLockView = (PatternLockView) findViewById(R.id.pattern_lock_view);
-        TxtEnterPasscode = (TextView) findViewById(R.id.TxtEnterPasscode);
-        TxtForgetPasscode = (TextView) findViewById(R.id.TxtForgetPasscode);
-        FingerPrintImage = (ImageView) findViewById(R.id.fingerfrint_image);
+        mPatternLockView = findViewById(R.id.pattern_lock_view);
+        TxtEnterPasscode = findViewById(R.id.TxtEnterPasscode);
+        TxtForgetPasscode = findViewById(R.id.TxtForgetPasscode);
+        FingerPrintImage = findViewById(R.id.fingerfrint_image);
         Pattern = AppPreferences.getPattern(getApplicationContext());
 
         mChangePattern = this.getIntent().hasExtra("ChangePattern");

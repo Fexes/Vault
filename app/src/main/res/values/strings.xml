@@ -14,11 +14,11 @@
     <string name="choose_at_least_one_picture">Please select at least one image</string>
     <string name="choose_at_least_one_video">Please select at least one video</string>
     <string name="encrypt">Hide</string>
-    <string name="encrypting">Encrypting, please wait...</string>
+    <string name="encrypting">Encrypting</string>
     <string name="encrypt_success">Encrypted successfully</string>
     <string name="partial_picture_encryption_failed">Some images failed to encrypt!</string>
     <string name="partial_video_encryption_failed">Some video encryption failed!</string>
-    <string name="decrypting">Decrypting, please wait...</string>
+    <string name="decrypting">Decrypting</string>
     <string name="decrypt_success">Decrypted successfully</string>
     <string name="partial_picture_decryption_failed">Some images failed to decrypt!</string>
     <string name="partial_video_decryption_failed">Some video decryption failed!</string>

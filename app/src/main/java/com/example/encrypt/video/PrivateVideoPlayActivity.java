@@ -5,15 +5,14 @@ import android.content.ContextWrapper;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
-import androidx.annotation.Nullable;
 import android.view.WindowManager;
 import android.widget.MediaController;
 import android.widget.VideoView;
 
+import androidx.annotation.Nullable;
+
 import com.example.encrypt.R;
-import com.example.encrypt.vault.PrivateVideoFragment;
 import com.example.encrypt.activity.BaseActivity;
-import com.example.encrypt.activity.BseApplication;
 
 
 
@@ -29,7 +28,7 @@ public class PrivateVideoPlayActivity extends BaseActivity {
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         String videoPath = getIntent().getStringExtra("videoPath");
-        videoView = (VideoView) findViewById(R.id.video_view);
+        videoView = findViewById(R.id.video_view);
         mediaController = new MyMediaController(PrivateVideoPlayActivity.this);
         videoView.setMediaController(mediaController);
         playVideo(videoPath);
@@ -38,16 +37,15 @@ public class PrivateVideoPlayActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        BseApplication.editor.putBoolean("privVideoAlbumToVideoPlay", false).commit();
+        //  BseApplication.editor.putBoolean("privVideoAlbumToVideoPlay", false).commit();
 
-        PrivateVideoFragment.decryptVideosTemporary();
+
     }
 
     @Override
     protected void onPause() {
         super.onPause();
 
-        PrivateVideoFragment.encryptVideosTemporary();
 
     }
 

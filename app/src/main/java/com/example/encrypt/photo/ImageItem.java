@@ -6,9 +6,7 @@ import java.io.Serializable;
 
 
 public class ImageItem implements Serializable {
-	/**
-	 *  default 序列化id
-	 */
+
 	private static final long serialVersionUID = 1L;
 	
 	public String imageId;
@@ -16,8 +14,7 @@ public class ImageItem implements Serializable {
 	public String imagePath;
 	private Bitmap bitmap;
 	public boolean isSelected = false;
-	//add by dongrp
-	public String size;
+    public String size;
 	public String displayName;
 	public String title;
 	public String dateAdded;

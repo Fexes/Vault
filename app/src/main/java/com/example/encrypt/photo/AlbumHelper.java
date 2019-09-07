@@ -80,17 +80,64 @@ public class AlbumHelper {
         }
     }
 
-
-
-
     boolean hasBuildImagesBucketList = false;
+
+    public static ArrayList<VideoItem> getSystemVideoList(Context context) {
+        ArrayList<VideoItem> sysVideoList = new ArrayList<>();
+
+
+        String[] videoThumbColumns = {MediaStore.Video.Thumbnails.DATA,
+                MediaStore.Video.Thumbnails.VIDEO_ID};
+
+        // MediaStore.Video.Media.DATA：视频文件路径；
+        String[] videoColumns = {MediaStore.Video.Media._ID, MediaStore.Video.Media.DATA,
+                MediaStore.Video.Media.DISPLAY_NAME, MediaStore.Video.Media.SIZE,
+                MediaStore.Video.Media.MIME_TYPE, MediaStore.Video.Media.DATE_ADDED,
+                MediaStore.Video.Media.TITLE, MediaStore.Video.Media.ALBUM,
+                MediaStore.Video.Media.BUCKET_ID, MediaStore.Video.Media.BUCKET_DISPLAY_NAME,
+                MediaStore.Video.Media.WIDTH, MediaStore.Video.Media.HEIGHT};
+
+        Cursor cursor = context.getContentResolver().query(MediaStore.Video.Media.EXTERNAL_CONTENT_URI,
+                videoColumns, null, null, MediaStore.Video.Media._ID + " DESC ");
+
+/*		if(cursor==null){
+			Toast.makeText(SystemVideoChooseActivity.this, "没有找到可播放视频文件", 1).show();
+			return;
+		}*/
+
+        if (cursor.moveToFirst()) {
+            do {
+                VideoItem videoItem = new VideoItem();
+                int id = cursor.getInt(cursor.getColumnIndex(MediaStore.Video.Media._ID));
+                Cursor thumbCursor = context.getContentResolver().query(MediaStore.Video.Thumbnails.EXTERNAL_CONTENT_URI, videoThumbColumns,
+                        MediaStore.Video.Thumbnails.VIDEO_ID + "=" + id, null, null);
+                if (thumbCursor.moveToFirst()) {
+                    videoItem.setThumbPath(thumbCursor.getString(thumbCursor.getColumnIndex(MediaStore.Video.Thumbnails.DATA)));
+                }
+                videoItem.setId(String.valueOf(id));
+                videoItem.setPath(cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Video.Media.DATA)));
+                videoItem.setDisplayName(cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Video.Media.DISPLAY_NAME)));
+                videoItem.setSize(cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Video.Media.SIZE)));
+                videoItem.setMimeType(cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Video.Media.MIME_TYPE)));
+                videoItem.setDateAdded(cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Video.Media.DATE_ADDED)));
+                videoItem.setTitle(cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Video.Media.TITLE)));
+                videoItem.setAlbum(cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Video.Media.ALBUM)));
+                videoItem.setBucketId(cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Video.Media.BUCKET_ID)));
+                videoItem.setBucketDisplayName(cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Video.Media.BUCKET_DISPLAY_NAME)));
+                videoItem.setWidth(cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Video.Media.WIDTH)));
+                videoItem.setHeight(cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Video.Media.HEIGHT)));
+                sysVideoList.add(videoItem);
+            } while (cursor.moveToNext());
+        }
+        return sysVideoList;
+    }
 
     void buildImagesBucketList() {
         long startTime = System.currentTimeMillis();
 
         getThumbnail();
 
-        String columns[] = new String[]{Media._ID, Media.BUCKET_ID,
+        String[] columns = new String[]{Media._ID, Media.BUCKET_ID,
                 Media.PICASA_ID, Media.DATA, Media.DISPLAY_NAME, Media.TITLE,
                 Media.SIZE, Media.BUCKET_DISPLAY_NAME, Media.DATE_ADDED, Media.MIME_TYPE, Media.WIDTH, Media.HEIGHT};
         Cursor cur = cr.query(Media.EXTERNAL_CONTENT_URI, columns, null, null, Media._ID + " DESC ");
@@ -159,7 +206,7 @@ public class AlbumHelper {
         Iterator<Entry<String, ImageBucket>> itr = bucketList.entrySet()
                 .iterator();
         while (itr.hasNext()) {
-            Entry<String, ImageBucket> entry = (Entry<String, ImageBucket>) itr
+            Entry<String, ImageBucket> entry = itr
                     .next();
             ImageBucket bucket = entry.getValue();
 			/*Log.d(TAG, entry.getKey() + ", " + bucket.bucketName + ", "
@@ -175,7 +222,6 @@ public class AlbumHelper {
         //Log.d(TAG, "use time: " + (endTime - startTime) + " ms");
     }
 
-
     public List<ImageBucket> getImagesBucketList(boolean refresh) {
         if (refresh || (!refresh && !hasBuildImagesBucketList)) {
             buildImagesBucketList();
@@ -184,64 +230,11 @@ public class AlbumHelper {
         Iterator<Entry<String, ImageBucket>> itr = bucketList.entrySet()
                 .iterator();
         while (itr.hasNext()) {
-            Entry<String, ImageBucket> entry = (Entry<String, ImageBucket>) itr
+            Entry<String, ImageBucket> entry = itr
                     .next();
             tmpList.add(entry.getValue());
         }
         return tmpList;
-    }
-
-
-
-
-    public static ArrayList<VideoItem> getSystemVideoList(Context context) {
-        ArrayList<VideoItem> sysVideoList = new ArrayList<>();
-
-        // MediaStore.Video.Thumbnails.DATA:视频缩略图的文件路径
-        String[] videoThumbColumns = {MediaStore.Video.Thumbnails.DATA,
-                MediaStore.Video.Thumbnails.VIDEO_ID};
-
-        // MediaStore.Video.Media.DATA：视频文件路径；
-        String[] videoColumns = {MediaStore.Video.Media._ID, MediaStore.Video.Media.DATA,
-                MediaStore.Video.Media.DISPLAY_NAME, MediaStore.Video.Media.SIZE,
-                MediaStore.Video.Media.MIME_TYPE, MediaStore.Video.Media.DATE_ADDED,
-                MediaStore.Video.Media.TITLE, MediaStore.Video.Media.ALBUM,
-                MediaStore.Video.Media.BUCKET_ID, MediaStore.Video.Media.BUCKET_DISPLAY_NAME,
-                MediaStore.Video.Media.WIDTH, MediaStore.Video.Media.HEIGHT};
-
-        Cursor cursor = context.getContentResolver().query(MediaStore.Video.Media.EXTERNAL_CONTENT_URI,
-                videoColumns, null, null, MediaStore.Video.Media._ID + " DESC ");
-
-/*		if(cursor==null){
-			Toast.makeText(SystemVideoChooseActivity.this, "没有找到可播放视频文件", 1).show();
-			return;
-		}*/
-
-        if (cursor.moveToFirst()) {
-            do {
-                VideoItem videoItem = new VideoItem();
-                int id = cursor.getInt(cursor.getColumnIndex(MediaStore.Video.Media._ID));
-                Cursor thumbCursor = context.getContentResolver().query(MediaStore.Video.Thumbnails.EXTERNAL_CONTENT_URI, videoThumbColumns,
-                        MediaStore.Video.Thumbnails.VIDEO_ID + "=" + id, null, null);
-                if (thumbCursor.moveToFirst()) {
-                    videoItem.setThumbPath(thumbCursor.getString(thumbCursor.getColumnIndex(MediaStore.Video.Thumbnails.DATA)));
-                }
-                videoItem.setId(String.valueOf(id));
-                videoItem.setPath(cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Video.Media.DATA)));
-                videoItem.setDisplayName(cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Video.Media.DISPLAY_NAME)));
-                videoItem.setSize(cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Video.Media.SIZE)));
-                videoItem.setMimeType(cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Video.Media.MIME_TYPE)));
-                videoItem.setDateAdded(cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Video.Media.DATE_ADDED)));
-                videoItem.setTitle(cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Video.Media.TITLE)));
-                videoItem.setAlbum(cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Video.Media.ALBUM)));
-                videoItem.setBucketId(cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Video.Media.BUCKET_ID)));
-                videoItem.setBucketDisplayName(cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Video.Media.BUCKET_DISPLAY_NAME)));
-                videoItem.setWidth(cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Video.Media.WIDTH)));
-                videoItem.setHeight(cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Video.Media.HEIGHT)));
-                sysVideoList.add(videoItem);
-            } while (cursor.moveToNext());
-        }
-        return sysVideoList;
     }
 
 

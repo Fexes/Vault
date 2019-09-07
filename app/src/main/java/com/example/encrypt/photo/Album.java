@@ -3,19 +3,23 @@ package com.example.encrypt.photo;
 import android.app.ProgressDialog;
 import android.content.ContentResolver;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.Intent;
 import android.database.DataSetObserver;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.GridView;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import androidx.annotation.RequiresApi;
 
 import com.example.encrypt.R;
 import com.example.encrypt.activity.AdvancedSetup;
@@ -23,9 +27,13 @@ import com.example.encrypt.activity.BaseActivity;
 import com.example.encrypt.database.DatabaseAdapter;
 import com.example.encrypt.database.PsDatabaseHelper;
 import com.example.encrypt.util.Notifi;
-import com.example.encrypt.util.XorEncryptionUtil;
+import com.example.encrypt.util.NotificationUtil;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.concurrent.ExecutorService;
@@ -60,12 +68,35 @@ public class Album extends BaseActivity implements OnClickListener {
         init();
     }
 
-    /**
-     * view初始化
-     */
+
+    public static void delete(ImageItem item, String privImagePath, ContentResolver contentResolver) {
+
+        Uri baseUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
+        contentResolver.delete(baseUri, "_id=?", new String[]{item.getImageId()});
+
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(PsDatabaseHelper.FilesClumns._ID, Integer.valueOf(item.getImageId()));
+        contentValues.put(PsDatabaseHelper.FilesClumns._DATA, privImagePath);
+        contentValues.put(PsDatabaseHelper.FilesClumns._SOURCE_DATA, item.getImagePath());
+        contentValues.put(PsDatabaseHelper.FilesClumns._SIZE, Integer.valueOf(item.getSize()));
+        contentValues.put(PsDatabaseHelper.FilesClumns._DISPLAY_NAME, item.getDisplayName());
+        contentValues.put(PsDatabaseHelper.FilesClumns.TITLE, item.getTitle());
+        contentValues.put(PsDatabaseHelper.FilesClumns.DATE_ADDED, Long.valueOf(item.getDateAdded()));
+        contentValues.put(PsDatabaseHelper.FilesClumns.MIME_TYPE, item.getMimeType());
+        contentValues.put(PsDatabaseHelper.FilesClumns.BUCKET_ID, item.getBucketId());
+        contentValues.put(PsDatabaseHelper.FilesClumns.BUCKET_DISPLAY_NAME, item.getBucket_display_name());
+        try {
+            contentValues.put(PsDatabaseHelper.FilesClumns.WIDTH, Integer.valueOf(item.getWidth()));
+            contentValues.put(PsDatabaseHelper.FilesClumns.HEIGHT, Integer.valueOf(item.getHeight()));
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+        }
+        databaseAdapter.insertPhoto(contentValues);
+    }
+
     private void init() {
-        //创建gridView并绑定适配器
-        gridView = (GridView) findViewById(R.id.album_GridView);
+
+        gridView = findViewById(R.id.album_GridView);
         if(dataList.size()==1){
             file_count.setText(dataList.size()+" Image");
         }else {
@@ -86,6 +117,8 @@ public class Album extends BaseActivity implements OnClickListener {
         gridView.setAdapter(gridImageAdapter);
     }
 
+    int grid_count = 3;
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -97,12 +130,21 @@ public class Album extends BaseActivity implements OnClickListener {
         dataList = null;
         databaseAdapter = null;
         executorService = null;
-/*        if (null != mTask && !mTask.isCancelled()){  注释掉此段，不取消mTask,让加解密在后台继续执行完成
-            mTask.cancel(true);
-        }*/
+
     }
 
-     int grid_count=3;
+    public static void showDec() {
+
+        if (Bimp.tempSelectBitmap.size() > 0) {
+            button_add.setVisibility(View.VISIBLE);
+        } else {
+            button_add.setVisibility(View.GONE);
+        }
+
+    }
+
+    public ProgressDialog progressDialog;
+
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
@@ -152,19 +194,77 @@ public class Album extends BaseActivity implements OnClickListener {
         }
 
     }
-    public static void showDec(){
 
-        if (Bimp.tempSelectBitmap.size() > 0) {
-            button_add.setVisibility(View.VISIBLE);
-        }else {
-            button_add.setVisibility(View.GONE);
+
+    boolean result = true;
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    public boolean encryptFileList(final ArrayList<ImageItem> arrayList) {
+//        long l2 = System.currentTimeMillis();
+        int current = 0;
+        for (final ImageItem item : arrayList) {
+            final String imagePath = item.getImagePath();
+            final String privImagePath = imagePath.replaceFirst("/storage/emulated/0", "/data/data/" + getPackageName() + "/files/storage/emulated/0");
+            boolean b = moveFile(getApplicationContext(), imagePath, privImagePath, arrayList.size(), current);
+            if (b) {
+                delete(item, privImagePath, getContentResolver());
+                current++;
+            } else {
+
+                if (moveFile(getApplicationContext(), imagePath, privImagePath, arrayList.size(), current)) {
+                    delete(item, privImagePath, getContentResolver());
+                    current++;
+                }
+            }
+            result = b;
         }
-
+        return result;
     }
-    /**
-     * 批量加密异步任务
-     */
-    public ProgressDialog progressDialog;
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    public boolean moveFile(Context context, String sourcepath, String targetpath, int TotalFiles, int current) {
+        current++;
+        NotificationUtil notificationUtil = new NotificationUtil(context, "Files : " + current + " / " + TotalFiles, TotalFiles, current);
+        File sourceLocation = new File(sourcepath);
+        File targetLocation = new File(targetpath);
+
+        try {
+            if (!targetLocation.getParentFile().exists()) {
+                targetLocation.getParentFile().mkdirs();
+            }
+            InputStream in = new FileInputStream(sourceLocation);
+            OutputStream out = new FileOutputStream(targetLocation);
+            long expectedBytes = sourceLocation.length();
+            long totalBytesCopied = 0;
+            byte[] buf = new byte[1024];
+            int len;
+            int progress;
+            while ((len = in.read(buf)) > 0) {
+                out.write(buf, 0, len);
+                totalBytesCopied += len;
+                progress = (int) Math.round(((double) totalBytesCopied / (double) expectedBytes) * 100);
+
+                progressDialog.setMessage("Files :" + TotalFiles + " / " + current + "\n" + "Progress :" + progress + " % ");
+
+                // Log.d("progress :",   progress+"");
+            }
+            progressDialog.setProgress(current);
+            progressDialog.setMax(TotalFiles);
+            notificationUtil.updateNotification("Files : " + current + " / " + TotalFiles, TotalFiles, current);
+
+            if (current == TotalFiles) {
+                notificationUtil.cancel();
+            }
+            in.close();
+            out.close();
+            sourceLocation.delete();
+
+            return true;
+        } catch (Exception e) {
+            Log.d("Error :", e.toString());
+            return false;
+        }
+    }
 
     public class EncryptionTask extends AsyncTask<Void, Void, Boolean> {
         private ArrayList<ImageItem> mImageArrayList;
@@ -180,10 +280,15 @@ public class Album extends BaseActivity implements OnClickListener {
         protected void onPreExecute() {
             super.onPreExecute();
             startSize = databaseAdapter.getPhoto().size();
-            progressDialog.setMessage(getString(R.string.encrypting));
+            progressDialog.setIcon(R.mipmap.ic_launcher);
+            progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+            progressDialog.setTitle(getString(R.string.encrypting));
             progressDialog.show();
+            // DialogUtil cdd;
+
         }
 
+        @RequiresApi(api = Build.VERSION_CODES.N)
         @Override
         protected Boolean doInBackground(Void... params) {
             boolean result = encryptFileList(mImageArrayList); //加密文件集合
@@ -206,72 +311,15 @@ public class Album extends BaseActivity implements OnClickListener {
             gridImageAdapter.refreshDataAfterEncrypt();
 
             String showMessage = result ? getString(R.string.encrypt_success) : getString(R.string.partial_picture_encryption_failed);
-          //  Toast.makeText(Album.this, showMessage, Toast.LENGTH_SHORT).show();
-            CheckBox checkbox_select_all=findViewById(R.id.checkbox_select_all);
+            //  Toast.makeText(Album.this, showMessage, Toast.LENGTH_SHORT).show();
+            CheckBox checkbox_select_all = findViewById(R.id.checkbox_select_all);
             checkbox_select_all.setChecked(false);
             showDec();
-            Notifi.message(Album.this,showMessage,result);
+            Notifi.message(Album.this, showMessage, result);
             progressDialog.dismiss();
+
         }
 
-    }
-
-
-    boolean result = true;
-
-    public boolean encryptFileList(ArrayList<ImageItem> arrayList) {
-//        long l2 = System.currentTimeMillis();
-        for (final ImageItem item : arrayList) {
-            final String imagePath = item.getImagePath();
-            final String privImagePath = imagePath.replaceFirst("/storage/emulated/0", "/data/data/" + getPackageName() + "/files/storage/emulated/0");
-            executorService.submit(new Runnable() {
-                @Override
-                public void run() {
-                     boolean b = XorEncryptionUtil.encrypt(imagePath, privImagePath);
-                    if (b) {
-                        delete(item, privImagePath, getContentResolver());
-                    } else {
-
-                        XorEncryptionUtil.encrypt(imagePath, null);
-                        boolean x = XorEncryptionUtil.encrypt(imagePath, privImagePath);
-                        if (x) {
-                            delete(item, privImagePath, getContentResolver());
-                        } else {
-                            XorEncryptionUtil.encrypt(imagePath, null);
-                            result = x;
-                        }
-                    }
-                }
-            });
-        }
-        return result;
-    }
-
-
-    public static void delete(ImageItem item, String privImagePath, ContentResolver contentResolver) {
-         File file = new File(item.getImagePath());
-        file.delete();
-         Uri baseUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
-        contentResolver.delete(baseUri, "_id=?", new String[]{item.getImageId()});
-
-        ContentValues contentValues = new ContentValues();
-        contentValues.put(PsDatabaseHelper.FilesClumns._ID, Integer.valueOf(item.getImageId()));
-        contentValues.put(PsDatabaseHelper.FilesClumns._DATA, privImagePath);
-        contentValues.put(PsDatabaseHelper.FilesClumns._SOURCE_DATA, item.getImagePath());
-        contentValues.put(PsDatabaseHelper.FilesClumns._SIZE, Integer.valueOf(item.getSize()));
-        contentValues.put(PsDatabaseHelper.FilesClumns._DISPLAY_NAME, item.getDisplayName());
-        contentValues.put(PsDatabaseHelper.FilesClumns.TITLE, item.getTitle());
-        contentValues.put(PsDatabaseHelper.FilesClumns.DATE_ADDED, Long.valueOf(item.getDateAdded()));
-        contentValues.put(PsDatabaseHelper.FilesClumns.MIME_TYPE, item.getMimeType());
-        contentValues.put(PsDatabaseHelper.FilesClumns.BUCKET_ID, item.getBucketId());
-        contentValues.put(PsDatabaseHelper.FilesClumns.BUCKET_DISPLAY_NAME, item.getBucket_display_name());
-        try {
-            contentValues.put(PsDatabaseHelper.FilesClumns.WIDTH, Integer.valueOf(item.getWidth()));
-            contentValues.put(PsDatabaseHelper.FilesClumns.HEIGHT, Integer.valueOf(item.getHeight()));
-        } catch (NumberFormatException e) {
-            e.printStackTrace();
-        }
-        databaseAdapter.insertPhoto(contentValues);
     }
 
 

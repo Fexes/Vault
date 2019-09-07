@@ -11,10 +11,6 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
-
-import androidx.core.content.ContextCompat;
-import androidx.appcompat.app.AppCompatActivity;
-import android.util.Log;
 import android.util.SparseIntArray;
 import android.view.Surface;
 import android.view.TextureView;
@@ -26,6 +22,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.core.content.ContextCompat;
+
 import com.example.encrypt.R;
 import com.example.encrypt.activity.BseApplication;
 import com.example.encrypt.lock.utils.AppPreferences;
@@ -35,7 +33,6 @@ import com.pro100svitlo.fingerprintAuthHelper.FahListener;
 import com.pro100svitlo.fingerprintAuthHelper.FingerprintAuthHelper;
 
 public class PasscodeActivity extends Activity {
-    private static final String TAG = "AndroidCameraApi";
     private TextureView textureView;
     private static final SparseIntArray ORIENTATIONS = new SparseIntArray();
 
@@ -74,7 +71,7 @@ public class PasscodeActivity extends Activity {
 
         Intent init= getIntent();
         Bundle bundle = init.getExtras();
-        LockAppIcon=(ImageView)findViewById(R.id.LockAppIcon);
+        LockAppIcon = findViewById(R.id.LockAppIcon);
         if(bundle!=null)
         {
             String mpackage =(String) bundle.get("package");
@@ -110,34 +107,34 @@ public class PasscodeActivity extends Activity {
         if (mChangePasscode) {
             Passcode = null;
         }
-        FingerPrintImage = (ImageView) findViewById(R.id.fingerfrint_image);
+        FingerPrintImage = findViewById(R.id.fingerfrint_image);
 
 
-        BtnPasscode1 = (RelativeLayout) findViewById(R.id.BtnPasscode1);
-        BtnPasscode2 = (RelativeLayout) findViewById(R.id.BtnPasscode2);
-        BtnPasscode3 = (RelativeLayout) findViewById(R.id.BtnPasscode3);
-        BtnPasscode4 = (RelativeLayout) findViewById(R.id.BtnPasscode4);
-        BtnPasscode5 = (RelativeLayout) findViewById(R.id.BtnPasscode5);
-        BtnPasscode6 = (RelativeLayout) findViewById(R.id.BtnPasscode6);
-        BtnPasscode7 = (RelativeLayout) findViewById(R.id.BtnPasscode7);
-        BtnPasscode8 = (RelativeLayout) findViewById(R.id.BtnPasscode8);
-        BtnPasscode9 = (RelativeLayout) findViewById(R.id.BtnPasscode9);
-        BtnPasscode0 = (RelativeLayout) findViewById(R.id.BtnPasscode0);
+        BtnPasscode1 = findViewById(R.id.BtnPasscode1);
+        BtnPasscode2 = findViewById(R.id.BtnPasscode2);
+        BtnPasscode3 = findViewById(R.id.BtnPasscode3);
+        BtnPasscode4 = findViewById(R.id.BtnPasscode4);
+        BtnPasscode5 = findViewById(R.id.BtnPasscode5);
+        BtnPasscode6 = findViewById(R.id.BtnPasscode6);
+        BtnPasscode7 = findViewById(R.id.BtnPasscode7);
+        BtnPasscode8 = findViewById(R.id.BtnPasscode8);
+        BtnPasscode9 = findViewById(R.id.BtnPasscode9);
+        BtnPasscode0 = findViewById(R.id.BtnPasscode0);
 
-        TxtPasscode1 = (TextView) findViewById(R.id.TxtPasscode1);
-        TxtPasscode2 = (TextView) findViewById(R.id.TxtPasscode2);
-        TxtPasscode3 = (TextView) findViewById(R.id.TxtPasscode3);
-        TxtPasscode4 = (TextView) findViewById(R.id.TxtPasscode4);
-        TxtPasscode5 = (TextView) findViewById(R.id.TxtPasscode5);
-        TxtPasscode6 = (TextView) findViewById(R.id.TxtPasscode6);
-        TxtPasscode7 = (TextView) findViewById(R.id.TxtPasscode7);
-        TxtPasscode8 = (TextView) findViewById(R.id.TxtPasscode8);
-        TxtPasscode9 = (TextView) findViewById(R.id.TxtPasscode9);
-        TxtPasscode0 = (TextView) findViewById(R.id.TxtPasscode0);
+        TxtPasscode1 = findViewById(R.id.TxtPasscode1);
+        TxtPasscode2 = findViewById(R.id.TxtPasscode2);
+        TxtPasscode3 = findViewById(R.id.TxtPasscode3);
+        TxtPasscode4 = findViewById(R.id.TxtPasscode4);
+        TxtPasscode5 = findViewById(R.id.TxtPasscode5);
+        TxtPasscode6 = findViewById(R.id.TxtPasscode6);
+        TxtPasscode7 = findViewById(R.id.TxtPasscode7);
+        TxtPasscode8 = findViewById(R.id.TxtPasscode8);
+        TxtPasscode9 = findViewById(R.id.TxtPasscode9);
+        TxtPasscode0 = findViewById(R.id.TxtPasscode0);
 
-        TxtForgetPasscode = (TextView) findViewById(R.id.TxtForgetPasscode);
+        TxtForgetPasscode = findViewById(R.id.TxtForgetPasscode);
 
-        TxtEnterPasscode = (TextView) findViewById(R.id.TxtEnterPasscode);
+        TxtEnterPasscode = findViewById(R.id.TxtEnterPasscode);
 
         if (mForget || mChangePasscode || Passcode==null ) {
             mFAH=null;
@@ -263,18 +260,10 @@ public class PasscodeActivity extends Activity {
         }
 
 
-
-
-
-
-
-
-
-
-        PassDot1 = (ImageView) findViewById(R.id.PassDot1);
-        PassDot2 = (ImageView) findViewById(R.id.PassDot2);
-        PassDot3 = (ImageView) findViewById(R.id.PassDot3);
-        PassDot4 = (ImageView) findViewById(R.id.PassDot4);
+        PassDot1 = findViewById(R.id.PassDot1);
+        PassDot2 = findViewById(R.id.PassDot2);
+        PassDot3 = findViewById(R.id.PassDot3);
+        PassDot4 = findViewById(R.id.PassDot4);
 
         TxtPasscode1.setTypeface(UnlockFontThin);
         TxtPasscode2.setTypeface(UnlockFontThin);
@@ -655,13 +644,13 @@ public class PasscodeActivity extends Activity {
         if(mFAH!=null) {
             mFAH.startListening();
         }
-        Log.e(TAG, "onResume");
+
 
     }
 
     @Override
     protected void onPause() {
-        Log.e(TAG, "onPause");
+
         //closeCamera();
          super.onPause();
     }

@@ -11,11 +11,8 @@ import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.example.encrypt.R;
-import com.example.encrypt.activity.BseApplication;
 import com.example.encrypt.photo.Bimp;
 import com.example.encrypt.vault.PrivateVideoFragment;
-import com.example.encrypt.video.PrivateVideoPlayActivity;
-import com.example.encrypt.video.VideoItem;
 import com.makeramen.roundedimageview.RoundedImageView;
 
 import java.util.ArrayList;
@@ -65,8 +62,8 @@ public class PrivateVideoGridViewAdapter extends BaseAdapter {
             viewHolder = new ViewHolder();
             convertView = LayoutInflater.from(mContext).inflate(R.layout.item_video_album_gridview, parent, false);
             viewHolder.imageView =  convertView.findViewById(R.id.image_view);
-            viewHolder.checkBox = (CheckBox) convertView.findViewById(R.id.checkBox);
-            viewHolder.imagePlay = (ImageView) convertView.findViewById(R.id.image_play);
+            viewHolder.checkBox = convertView.findViewById(R.id.checkBox);
+            viewHolder.imagePlay = convertView.findViewById(R.id.image_play);
             viewHolder.imagePlay.setVisibility(View.VISIBLE);
             convertView.setTag(viewHolder);
         } else {
@@ -96,7 +93,7 @@ public class PrivateVideoGridViewAdapter extends BaseAdapter {
         viewHolder.imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                BseApplication.editor.putBoolean("privVideoAlbumToVideoPlay", true).commit();
+                //    BseApplication.editor.putBoolean("privVideoAlbumToVideoPlay", true).commit();
 
                 mContext.startActivity(new Intent(mContext, PrivateVideoPlayActivity.class).putExtra("videoPath", listPrivFlies.get(position).getPath()));
             }

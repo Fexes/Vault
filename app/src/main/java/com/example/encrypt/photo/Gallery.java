@@ -10,20 +10,30 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
-import androidx.viewpager.widget.ViewPager.OnPageChangeListener;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.FrameLayout;
 
+import androidx.annotation.RequiresApi;
+import androidx.viewpager.widget.ViewPager.OnPageChangeListener;
+
 import com.example.encrypt.R;
-import com.example.encrypt.util.Notifi;
-import com.example.encrypt.vault.PrivatePhotoFragment;
 import com.example.encrypt.activity.BaseActivity;
 import com.example.encrypt.activity.BseApplication;
-import com.example.encrypt.util.XorEncryptionUtil;
+import com.example.encrypt.util.Notifi;
+import com.example.encrypt.util.NotificationUtil;
+import com.example.encrypt.vault.PrivatePhotoFragment;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
 
 
 public class Gallery extends BaseActivity implements OnClickListener, OnPageChangeListener {
@@ -54,7 +64,7 @@ public class Gallery extends BaseActivity implements OnClickListener, OnPageChan
         //恢复privAlbumToGallery为false状态
         if (isFromPrivateAlbum) {
             BseApplication.editor.putBoolean("privAlbumToGallery", false).commit();
-            PrivatePhotoFragment.decryptAndEncryptPhotosTemporary();
+
         }
         initViewAndCtrl(); //初始化view 和 ctrl
     }
@@ -84,8 +94,8 @@ public class Gallery extends BaseActivity implements OnClickListener, OnPageChan
     private void initViewAndCtrl() {
         //加密、解密按钮
         progressDialog = new ProgressDialog(Gallery.this);
-        buttonAdd = (Button) findViewById(R.id.buttonAdd);
-        buttonMin = (Button) findViewById(R.id.buttonMin);
+        buttonAdd = findViewById(R.id.buttonAdd);
+        buttonMin = findViewById(R.id.buttonMin);
         buttonAdd.setOnClickListener(this);
         buttonMin.setOnClickListener(this);
         if (isFromPrivateAlbum) {//私密相册
@@ -97,7 +107,7 @@ public class Gallery extends BaseActivity implements OnClickListener, OnPageChan
         }
 
         //ViewPagerFixed
-        pager = (ViewPagerFixed) findViewById(R.id.gallery01);
+        pager = findViewById(R.id.gallery01);
         pager.setOnPageChangeListener(this);
         //GalleryViewPagerAdapter
         adapter = new GalleryViewPagerAdapter(Gallery.this);
@@ -107,29 +117,21 @@ public class Gallery extends BaseActivity implements OnClickListener, OnPageChan
         pager.setCurrentItem(id);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    public boolean encryptSinglePhoto() {
+        ImageItem item = Album.dataList.get(location);
+        String imagePath = item.getImagePath();
+        String privImagePath = imagePath.replaceFirst("/storage/emulated/0", "/data/data/" + getPackageName() + "/files/storage/emulated/0");
+        //boolean b = AESEncryptionUtil.encryptFile(imagePath, privImagePath);
+        boolean b = moveFile(getApplicationContext(), imagePath, privImagePath, 1, 1);
+        if (b) {
+            Bimp.tempSelectBitmap.remove(Album.dataList.get(location));
+            Album.dataList.remove(location);
+            Album.delete(item, privImagePath, getContentResolver());
+            return true;
+        } else {
 
-    private class SystemKeyEventReceiver extends BroadcastReceiver {
-        private final String SYSTEM_DIALOG_REASON_KEY = "reason";
-        private final String SYSTEM_DIALOG_REASON_HOME_KEY = "homekey";
-        private final String SYSTEM_DIALOG_REASON_RECENT_APPS = "recentapps";
-
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            String action = intent.getAction();
-            if (action.equals(Intent.ACTION_CLOSE_SYSTEM_DIALOGS)) {
-                String reason = intent.getStringExtra(SYSTEM_DIALOG_REASON_KEY);
-                if (reason == null) {
-                    return;
-                }
-
-                if (reason.equals(SYSTEM_DIALOG_REASON_HOME_KEY)) {
-                    PrivatePhotoFragment.encryptPhotosTemporary();
-                }
-
-                if (reason.equals(SYSTEM_DIALOG_REASON_RECENT_APPS)) {
-                    PrivatePhotoFragment.encryptPhotosTemporary();
-                }
-            }
+            return false;
         }
     }
 
@@ -147,7 +149,7 @@ public class Gallery extends BaseActivity implements OnClickListener, OnPageChan
     public void onPageScrollStateChanged(int arg0) {
     }
 
-    //点击监听
+
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -162,82 +164,15 @@ public class Gallery extends BaseActivity implements OnClickListener, OnPageChan
         }
     }
 
-
-    public class SingleEncryptionOrDecryptionTask extends AsyncTask<Void, Void, Boolean> {
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            progressDialog.setCancelable(false);
-            progressDialog.setMessage(isFromPrivateAlbum ? getString(R.string.decrypting) : getString(R.string.encrypting));
-            progressDialog.show();
-        }
-
-        @Override
-        protected Boolean doInBackground(Void... params) {
-            boolean result = false;
-            if (isFromPrivateAlbum) {//从私密相册来，肯定是要解密了
-                result = decryptSinglePhoto();//解密单张图片
-            } else {//从正常相册来，肯定是要加密了
-                result = encryptSinglePhoto();//加密单张图片
-            }
-            return result;
-        }
-
-        @Override
-        protected void onPostExecute(Boolean result) {
-            super.onPostExecute(result);
-            if (adapter.getCount() == 0) {
-                finish();
-            } else {
-                adapter.notifyDataSetChanged();
-
-
-
-            }
-            String showMessage = result ? getString(R.string.success) : getString(R.string.fail);
-            Notifi.message(Gallery.this,showMessage,result);
-
-            //  Toast.makeText(Gallery.this, showMessage, Toast.LENGTH_SHORT).show();
-            progressDialog.dismiss();
-        }
-
-    }
-
-    public boolean encryptSinglePhoto() {
-        ImageItem item = Album.dataList.get(location);
-        String imagePath = item.getImagePath();
-        String privImagePath = imagePath.replaceFirst("/storage/emulated/0", "/data/data/" + getPackageName() + "/files/storage/emulated/0");
-        //boolean b = AESEncryptionUtil.encryptFile(imagePath, privImagePath);
-        boolean b = XorEncryptionUtil.encrypt(imagePath, privImagePath);
-        if (b) {//成功
-            if (Bimp.tempSelectBitmap.contains(Album.dataList.get(location))) {
-                Bimp.tempSelectBitmap.remove(Album.dataList.get(location));
-            }
-            Album.dataList.remove(location);
-            //adapter.notifyDataSetChanged(); 在异步任务的子线程中不能刷新UI线程，所以注释了
-            Album.delete(item, privImagePath, getContentResolver());
-            return true;
-        } else {//失败
-            //加密失败：再进行一次异或（相当于事务回退）
-            XorEncryptionUtil.encrypt(imagePath, null);
-            return false;
-        }
-    }
-
-    /**
-     * 解密单张图片
-     */
+    @RequiresApi(api = Build.VERSION_CODES.N)
     public boolean decryptSinglePhoto() {
         ImageItem item = PrivatePhotoFragment.dateList.get(location);
-        String privImagePath = item.getImagePath(); //这个私密文件的绝对路径
+        String privImagePath = item.getImagePath();
         String imagePath = privImagePath.replaceFirst("/data/data/" + getPackageName() + "/files/storage/emulated/0", "/storage/emulated/0");
 
-        boolean b = XorEncryptionUtil.copyFile(privImagePath, imagePath);
+        boolean b = moveFile(getApplicationContext(), privImagePath, imagePath, 1, 1);
         if (b) {
-            if (Bimp.tempSelectBitmap.contains(PrivatePhotoFragment.dateList.get(location))) {
-                Bimp.tempSelectBitmap.remove(PrivatePhotoFragment.dateList.get(location));
-            }
+            Bimp.tempSelectBitmap.remove(PrivatePhotoFragment.dateList.get(location));
             PrivatePhotoFragment.dateList.remove(location);
             PrivatePhotoFragment.delete(item, imagePath, getContentResolver());
             return true;
@@ -246,9 +181,81 @@ public class Gallery extends BaseActivity implements OnClickListener, OnPageChan
         }
     }
 
-    /**
-     * 切换 “加密” “解密” 按钮的显示与隐藏
-     */
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    public boolean moveFile(Context context, String sourcepath, String targetpath, int TotalFiles, int current) {
+        current++;
+        NotificationUtil notificationUtil = new NotificationUtil(context, "Files : " + current + " / " + TotalFiles, TotalFiles, current);
+        File sourceLocation = new File(sourcepath);
+        File targetLocation = new File(targetpath);
+
+        try {
+            if (!targetLocation.getParentFile().exists()) {
+                targetLocation.getParentFile().mkdirs();
+            }
+            InputStream in = new FileInputStream(sourceLocation);
+            OutputStream out = new FileOutputStream(targetLocation);
+            long expectedBytes = sourceLocation.length();
+            long totalBytesCopied = 0;
+            byte[] buf = new byte[1024];
+            int len;
+            int progress;
+            while ((len = in.read(buf)) > 0) {
+                out.write(buf, 0, len);
+                totalBytesCopied += len;
+                progress = (int) Math.round(((double) totalBytesCopied / (double) expectedBytes) * 100);
+
+                progressDialog.setMessage("Files :" + TotalFiles + " / " + current + "\n" + "Progress :" + progress + " % ");
+
+                // Log.d("progress :",   progress+"");
+            }
+            progressDialog.setProgress(current);
+            progressDialog.setMax(TotalFiles);
+            notificationUtil.updateNotification("Files : " + current + " / " + TotalFiles, TotalFiles, current);
+
+            // cdd.update("Files : "+current+" / "+TotalFiles);
+            //  cdd.showProgress(getContext(), "Files : "+current+" / "+TotalFiles, false);
+
+
+            if (current == TotalFiles) {
+                notificationUtil.cancel();
+            }
+            in.close();
+            out.close();
+            sourceLocation.delete();
+
+            return true;
+        } catch (Exception e) {
+            Log.d("Error :", e.toString());
+            return false;
+        }
+    }
+
+    private class SystemKeyEventReceiver extends BroadcastReceiver {
+        private final String SYSTEM_DIALOG_REASON_KEY = "reason";
+        private final String SYSTEM_DIALOG_REASON_HOME_KEY = "homekey";
+        private final String SYSTEM_DIALOG_REASON_RECENT_APPS = "recentapps";
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            if (action.equals(Intent.ACTION_CLOSE_SYSTEM_DIALOGS)) {
+                String reason = intent.getStringExtra(SYSTEM_DIALOG_REASON_KEY);
+                if (reason == null) {
+                    return;
+                }
+
+                if (reason.equals(SYSTEM_DIALOG_REASON_HOME_KEY)) {
+
+                }
+
+                if (reason.equals(SYSTEM_DIALOG_REASON_RECENT_APPS)) {
+
+                }
+            }
+        }
+    }
+
+
     static boolean isHide = false;
 
     public static void switchButtonVisibility() {
@@ -277,5 +284,49 @@ public class Gallery extends BaseActivity implements OnClickListener, OnPageChan
         }
     }
 
+    public class SingleEncryptionOrDecryptionTask extends AsyncTask<Void, Void, Boolean> {
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            progressDialog.setCancelable(false);
+            progressDialog.setIcon(R.mipmap.ic_launcher);
+            progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+            progressDialog.setTitle(isFromPrivateAlbum ? getString(R.string.decrypting) : getString(R.string.encrypting));
+            progressDialog.show();
+            // DialogUtil cdd;
+
+        }
+
+        @RequiresApi(api = Build.VERSION_CODES.N)
+        @Override
+        protected Boolean doInBackground(Void... params) {
+            boolean result = false;
+            if (isFromPrivateAlbum) {//从私密相册来，肯定是要解密了
+                result = decryptSinglePhoto();//解密单张图片
+            } else {//从正常相册来，肯定是要加密了
+                result = encryptSinglePhoto();//加密单张图片
+            }
+            return result;
+        }
+
+        @Override
+        protected void onPostExecute(Boolean result) {
+            super.onPostExecute(result);
+            if (adapter.getCount() == 0) {
+                finish();
+            } else {
+                adapter.notifyDataSetChanged();
+
+
+            }
+            String showMessage = result ? getString(R.string.success) : getString(R.string.fail);
+            Notifi.message(Gallery.this, showMessage, result);
+
+            //  Toast.makeText(Gallery.this, showMessage, Toast.LENGTH_SHORT).show();
+            progressDialog.dismiss();
+        }
+
+    }
 
 }

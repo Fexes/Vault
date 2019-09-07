@@ -6,17 +6,17 @@ import android.content.Intent;
 import android.hardware.fingerprint.FingerprintManager;
 import android.os.Build;
 import android.os.Bundle;
-import androidx.annotation.Nullable;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.RelativeLayout;
 import android.widget.Switch;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
+
 import com.example.encrypt.BuildConfig;
 import com.example.encrypt.R;
 import com.example.encrypt.lock.LockType;
-import com.example.encrypt.util.AlipayUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -58,15 +58,15 @@ public class AdvancedSetup extends BaseActivity implements View.OnClickListener,
         TextView appversion = findViewById(R.id.appversion);
         appversion.setText("Version "+BuildConfig.VERSION_NAME);
 
-        rv1 = (RelativeLayout) findViewById(R.id.rv1);
+        rv1 = findViewById(R.id.rv1);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && mFingerprintManager.isHardwareDetected()) {
             rv1.setVisibility(View.VISIBLE);
         }
-        mSwitch1 = (Switch) findViewById(R.id.switch1);
+        mSwitch1 = findViewById(R.id.switch1);
 
 
-        mSwitch4 = (Switch) findViewById(R.id.switch4);
+        mSwitch4 = findViewById(R.id.switch4);
 
         mSwitch1.setChecked(BseApplication.sp.getBoolean("fingerprint", true));
 
@@ -131,14 +131,7 @@ public class AdvancedSetup extends BaseActivity implements View.OnClickListener,
             case R.id.rv7:
                 startActivity(new Intent(AdvancedSetup.this, UseHelp.class));
                 break;
-            case R.id.rv8:
-                if (AlipayUtil.hasInstalledAlipayClient(AdvancedSetup.this)) {
 
-                    AlipayUtil.startAlipayClient(AdvancedSetup.this, "FKX08718ZXKVQ3OY5FFH09");
-                } else {
-                 //   Toast.makeText(AdvancedSetup.this, R.string.not_install_alipay, Toast.LENGTH_LONG).show();
-                }
-                break;
         }
     }
 

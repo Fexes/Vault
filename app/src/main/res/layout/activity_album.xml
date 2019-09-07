@@ -132,7 +132,7 @@
             android:layout_height="45dp"
             android:visibility="gone"
             android:layout_gravity="bottom|center_horizontal"
-            android:layout_marginBottom="10dp"
+            android:layout_marginBottom="20dp"
             android:background="@drawable/button_back_enc"
             android:onClick="onClick"
             android:text="@string/encrypt"

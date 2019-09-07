@@ -95,7 +95,6 @@
 
             <RelativeLayout
                 android:id="@+id/rv4"
-                android:visibility="gone"
                 android:layout_margin="5dp"
                 android:layout_width="match_parent"
                 android:background="@drawable/settings_button_back"
