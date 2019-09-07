@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.GridView;
@@ -69,7 +70,7 @@ public class PrivateVideoFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.vault_fragment,container,false);
 
-
+        getActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
 
         button_min=view.findViewById(R.id.button_min);
 
@@ -299,7 +300,7 @@ public class PrivateVideoFragment extends Fragment {
                 totalBytesCopied += len;
                 progress = (int) Math.round(((double) totalBytesCopied / (double) expectedBytes) * 100);
 
-                progressDialog.setMessage("Files :" + TotalFiles + " / " + current + "\n" + "Progress :" + progress + " % ");
+                //        progressDialog.setMessage("Files :" + TotalFiles + " / " + current + "\n" + "Progress :" + progress + " % ");
 
                 // Log.d("progress :",   progress+"");
             }

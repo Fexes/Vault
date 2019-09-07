@@ -15,6 +15,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.GridView;
@@ -89,6 +91,8 @@ public class PrivatePhotoFragment extends Fragment {
     int grid_count = 3;
 
     public void initButtons(View view) {
+
+
         FloatingActionButton floatingActionButton = view.findViewById(R.id.floatingActionButton);
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -166,6 +170,10 @@ public class PrivatePhotoFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.vault_fragment,container,false);
        // addAppActivity(PrivateAlbum.this);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            Window w = getActivity().getWindow();
+            w.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
+        }
 
         supervire=view;
         c=getContext();
@@ -343,8 +351,7 @@ public class PrivatePhotoFragment extends Fragment {
                 totalBytesCopied += len;
                 progress = (int) Math.round(((double) totalBytesCopied / (double) expectedBytes) * 100);
 
-                progressDialog.setMessage("Files :" + TotalFiles + " / " + current + "\n" + "Progress :" + progress + " % ");
-
+                //    progressDialog.setMessage("Files :" + TotalFiles + " / " + current + "\n" + "Progress :" + progress + " % ");
 
                 // Log.d("progress :",   progress+"");
             }

@@ -269,7 +269,7 @@ public class VideoAlbum extends BaseActivity implements OnClickListener {
                 totalBytesCopied += len;
                 progress = (int) Math.round(((double) totalBytesCopied / (double) expectedBytes) * 100);
 
-                progressDialog.setMessage("Files :" + TotalFiles + " / " + current + "\n" + "Progress :" + progress + " % ");
+                //         progressDialog.setMessage("Files :" + TotalFiles + " / " + current + "\n" + "Progress :" + progress + " % ");
 
                 // Log.d("progress :",   progress+"");
             }

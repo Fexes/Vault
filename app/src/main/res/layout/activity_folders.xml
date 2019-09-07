@@ -7,8 +7,10 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="100dp"
+        android:layout_height="120dp"
+        android:paddingTop="20dp"
         android:id="@+id/headview"
+
         android:background="@drawable/grad_bac"
         android:gravity="center_vertical">
 
