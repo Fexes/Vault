@@ -27,19 +27,32 @@ public class OnboardingActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_onboarding);
+
+        Bundle extras;
+
+        boolean explore = false;
+
+
+//fetching extra data passed with intents in a Bundle type variable
+
+        extras = getIntent().getExtras();
+        if (extras != null) {
+            explore = extras.getBoolean("explore", false);
+        }
         makeStatusbarTransparent();
         String Pattern = AppPreferences.getPattern(getApplicationContext());
         String Passcode = AppPreferences.getPasscode(getApplicationContext());
-
-
         prefs = getSharedPreferences("com.example.encrypt", MODE_PRIVATE);
-        if (!prefs.getBoolean("firstrun", true)) {
-            if (Pattern == null || Passcode == null) {
-                Intent i = new Intent(getApplicationContext(), LockType.class);
-                startActivity(i);
-                finish();
-            }
+        if (!explore) {
 
+            if (!prefs.getBoolean("firstrun", true)) {
+                if (Pattern == null && Passcode == null) {
+                    Intent i = new Intent(getApplicationContext(), LockType.class);
+                    startActivity(i);
+                    finish();
+                }
+
+            }
         }
         viewPager = findViewById(R.id.onboarding_view_pager);
         onboardingAdapter = new OnboardingAdapter(this);
@@ -64,10 +77,15 @@ public class OnboardingActivity extends AppCompatActivity {
                         public void onClick(View view) {
                             prefs.edit().putBoolean("firstrun", false).apply();
 
-                            Intent i = new Intent(getApplicationContext(), LockType.class);
-                            startActivity(i);
-                            finish();
+                            String Pattern = AppPreferences.getPattern(getApplicationContext());
+                            String Passcode = AppPreferences.getPasscode(getApplicationContext());
 
+                            if (Pattern == null && Passcode == null) {
+                                Intent i = new Intent(getApplicationContext(), LockType.class);
+                                startActivity(i);
+
+                            }
+                            finish();
                         }
                     });
                 } else {

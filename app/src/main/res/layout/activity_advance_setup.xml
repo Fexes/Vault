@@ -37,7 +37,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="15dp"
                 android:text="Login Settings"
-                android:textColor="@color/colorAccent" />
+                android:textColor="#FF8D00" />
 
             <RelativeLayout
                 android:id="@+id/rv1"
@@ -150,7 +150,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="15dp"
                 android:text="Password Settings"
-                android:textColor="@color/colorAccent" />
+                android:textColor="#FF8D00" />
 
             <RelativeLayout
                 android:id="@+id/rv5"
@@ -220,7 +220,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="15dp"
                 android:text="Advanced Settings"
-                android:textColor="@color/colorAccent" />
+                android:textColor="#FF8D00" />
 
 
             <RelativeLayout
@@ -259,8 +259,38 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="15dp"
                 android:text="About"
-                android:textColor="@color/colorAccent" />
+                android:textColor="#FF8D00" />
 
+            <RelativeLayout
+                android:id="@+id/rv19"
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:layout_margin="5dp"
+                android:background="@drawable/settings_button_back"
+                android:clickable="true"
+                android:foreground="?android:attr/selectableItemBackgroundBorderless"
+                android:onClick="onClick"
+                android:paddingTop="15dp"
+                android:paddingBottom="15dp">
+
+                <ImageView
+                    android:id="@+id/iv18"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:src="@drawable/ic_explore" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_toEndOf="@+id/iv18"
+                    android:text="App Intro"
+                    android:textColor="@color/white"
+                    android:textSize="16sp" />
+            </RelativeLayout>
             <RelativeLayout
                 android:id="@+id/rv9"
                 android:layout_width="match_parent"

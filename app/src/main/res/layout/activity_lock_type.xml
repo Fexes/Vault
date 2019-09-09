@@ -1,46 +1,60 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-
     android:background="@drawable/grad_bac4"
     tools:context="com.example.encrypt.lock.LockType">
 
 
     <TextView
         android:id="@+id/title"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="80dp"
         android:layout_margin="10dp"
+        android:layout_marginStart="9dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="9dp"
         android:fontFamily="@font/alfa_slab_one"
         android:gravity="bottom|center"
         android:text="SetUp Password"
         android:textColor="@color/white"
         android:textSize="28dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         tools:ignore="MissingConstraints" />
 
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/lav_thumbUp"
+        android:layout_width="wrap_content"
 
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginBottom="8dp"
+        android:background="@color/transparent"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/title"
+        app:lottie_autoPlay="true"
+        app:lottie_fileName="password.json"
+        app:lottie_loop="false"
+        app:lottie_speed="0.70" />
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="fill_parent"
-        android:gravity="center|bottom"
+        android:id="@+id/linearLayout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:gravity="center"
         android:orientation="vertical"
-        tools:ignore="MissingConstraints">
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
 
-        <com.airbnb.lottie.LottieAnimationView
-            android:id="@+id/lav_thumbUp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/grad_bac4"
-            app:layout_constraintStart_toStartOf="parent"
-            app:lottie_autoPlay="true"
-            app:lottie_fileName="password.json"
-            app:lottie_loop="false"
-            app:lottie_speed="0.70" />
 
         <TextView
             android:id="@+id/textView"
@@ -48,6 +62,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:fontFamily="@font/roboto_thin"
+            android:visibility="gone"
             android:gravity="bottom|center"
             android:text="Fingerprint"
             android:textColor="@color/white"
@@ -55,23 +70,28 @@
             tools:ignore="MissingConstraints" />
 
         <RelativeLayout
+            android:id="@+id/frl"
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_marginLeft="30dp"
+            android:visibility="gone"
             android:layout_marginTop="20dp"
             android:layout_marginRight="30dp"
             android:background="@color/white"
-            tools:ignore="MissingConstraints" />
+            tools:ignore="MissingConstraints">
+
+        </RelativeLayout>
 
         <LinearLayout
             android:id="@+id/rv1"
             android:layout_width="wrap_content"
             android:layout_height="80dp"
-            android:orientation="horizontal"
             android:gravity="center"
             android:layout_marginTop="20dp"
             android:background="@drawable/settings_button_back"
             android:clickable="true"
+            android:orientation="horizontal"
+            android:visibility="gone"
             android:paddingTop="15dp"
             android:paddingBottom="15dp">
 
@@ -101,12 +121,12 @@
 
             <Switch
                 android:id="@+id/switch1"
-                android:layout_marginStart="8dp"
-                android:layout_marginEnd="8dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
                 android:layout_marginRight="5dp" />
 
 
@@ -131,15 +151,16 @@
             android:layout_marginTop="20dp"
             android:layout_marginRight="30dp"
             android:background="@color/white"
-            tools:ignore="MissingConstraints" />
+            tools:ignore="MissingConstraints">
+
+        </RelativeLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
+            android:layout_marginTop="20dp"
             android:layout_marginBottom="30dp"
-
-            android:layout_marginTop="30dp"
+            android:gravity="center"
             android:orientation="horizontal">
 
             <Button
@@ -148,9 +169,9 @@
                 android:layout_height="60dp"
                 android:layout_marginStart="1dp"
                 android:layout_marginEnd="24dp"
+                android:layout_marginRight="40dp"
                 android:background="@drawable/button_back_gen"
                 android:onClick="pin"
-                android:layout_marginRight="40dp"
                 android:text="Pin"
                 android:textColor="@color/white" />
 
@@ -168,4 +189,4 @@
     </LinearLayout>
 
 
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

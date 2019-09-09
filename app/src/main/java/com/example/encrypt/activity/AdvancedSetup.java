@@ -3,6 +3,8 @@ package com.example.encrypt.activity;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.hardware.fingerprint.FingerprintManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -17,6 +19,7 @@ import androidx.annotation.Nullable;
 import com.example.encrypt.BuildConfig;
 import com.example.encrypt.R;
 import com.example.encrypt.lock.LockType;
+import com.example.encrypt.onboarding.OnboardingActivity;
 import com.example.encrypt.util.ChangeIconDialogue;
 
 
@@ -105,9 +108,15 @@ public class AdvancedSetup extends BaseActivity implements View.OnClickListener,
             case R.id.rv5:
                  startActivity(new Intent(AdvancedSetup.this, LockType.class));
                 break;
+            case R.id.rv19:
+                Intent init = new Intent(AdvancedSetup.this, OnboardingActivity.class);
+                init.putExtra("explore", true);
+                startActivity(init);
+                break;
             case R.id.rv11:
                // startActivity(new Intent(AdvancedSetup.this, SecurityQuestion.class));
                 ChangeIconDialogue cdd = new ChangeIconDialogue(AdvancedSetup.this);
+                cdd.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                 cdd.show();
                 break;
             case R.id.rv7:

@@ -1,14 +1,14 @@
 <resources>
 
-    <string name="app_name">Private space</string>
+    <string name="app_name">Feksi</string>
     <string name="private_fingerprint">Fingerprint login</string>
     <string name="enter_private_space_by_private_fingerprint">Use fingerprint to login to the application</string>
     <string name="fast_exit">Quick exit</string>
-    <string name="fast_exit_when_press_home_key">Press the Home / Recent Tasks button to immediately close the application</string>
+    <string name="fast_exit_when_press_home_key"> Home / Recent Tasks button immediately closes the application</string>
     <string name="using_help">Using help</string>
     <string name="security_question">Security Question</string>
-    <string name="success">success</string>
-    <string name="fail">failure</string>
+    <string name="success">Success</string>
+    <string name="fail">Failure</string>
     <string name="choose_at_least_one_picture">Please select at least one image</string>
     <string name="choose_at_least_one_video">Please select at least one video</string>
     <string name="encrypt">Hide</string>
@@ -24,15 +24,15 @@
     <string name="select_video">Select Video</string>
     <string name="no_picture">No image</string>
     <string name="no_video">No video</string>
-    <string name="about_private_space">About "private space"</string>
-    <string name="about_private_space_desc">Through this application, you can encrypt the privacy information files such as pictures and videos in your mobile phone. The encrypted files can only be viewed in a private space. The encrypted files cannot be seen outside the private space, which fully protects your personal privacy.</string>
-    <string name="about_enter">Log in to "private space"</string>
-    <string name="about_enter_desc">The private space supports two login modes: password and fingerprint. You can enter the password to log in on the login interface. You can also log in by verifying the fingerprint after clicking the fingerprint login button (you need to set the lock screen and enter the fingerprint information first).</string>
-    <string name="about_exit">Exit "private space"</string>
-    <string name="about_exit_desc">The private space supports quick exit from the application. After the quick exit switch is enabled on the setup interface, press the Home button and the menu button to quickly exit the application. Please pay attention to the applications exit method to avoid personal privacy leakage!</string>
+    <string name="about_private_space">About "Feksi"</string>
+    <string name="about_private_space_desc">Through this application, you can encrypt the privacy information files such as pictures and videos in your mobile phone. The encrypted files can only be viewed in Feksi. The encrypted files cannot be seen outside the Feksi, which fully protects your personal privacy.</string>
+    <string name="about_enter">Log in to "Feksi"</string>
+    <string name="about_enter_desc">The Feksi supports two login modes: password and fingerprint. You can enter the password to log in on the login interface. You can also log in by verifying the fingerprint after clicking the fingerprint login button (you need to set the lock screen and enter the fingerprint information first).</string>
+    <string name="about_exit">Exit "Feksi"</string>
+    <string name="about_exit_desc">The Feksi supports quick exit from the application. After the quick exit switch is enabled on the setup interface, press the Home button and the menu button to quickly exit the application. Please pay attention to the applications exit method to avoid personal privacy leakage!</string>
     <string name="about_forget_pwd">forget password</string>
     <string name="about_forget_pwd_desc">When you forget your password, you can click "Forgot Password" on the verification interface to reset the password by verifying the secret question, so please remember your secret question!</string>
-    <string name="about_uninstall">Uninstall "private space"</string>
+    <string name="about_uninstall">Uninstall "Feksi"</string>
     <string name="about_uninstall_des">Before uninstalling the software, be sure to decrypt the encrypted file, otherwise it will cause the loss of the private file, please keep in mind!</string>
 
     <string name="warning">Uninstalling the Application will delete all the hidden data, make sure you un-hide all of your important data before uninstalling</string>

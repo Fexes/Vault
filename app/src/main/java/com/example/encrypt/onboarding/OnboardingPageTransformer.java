@@ -45,7 +45,7 @@ public class OnboardingPageTransformer implements ViewPager.PageTransformer {
                     break;
                 case 2:
 
-                    computer.setAnimation("video.json");
+                    computer.setAnimation("arrow.json");
 
                     break;
                 case 3:

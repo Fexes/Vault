@@ -198,6 +198,7 @@ public class PasscodeActivity extends Activity {
                             switch (errorType) {
                                 case FahErrorType.General.LOCK_SCREEN_DISABLED:
                                 case FahErrorType.General.NO_FINGERPRINTS:
+                                    FingerPrintImage.setVisibility(View.INVISIBLE);
                                     mFAH.showSecuritySettingsDialog();
                                     break;
                                 case FahErrorType.Auth.AUTH_NOT_RECOGNIZED:
