@@ -37,7 +37,6 @@ dependencies {
     implementation 'androidx.legacy:legacy-preference-v14:1.0.0'
     implementation 'com.github.pro100svitlo:fingerprintAuthHelper:1.2.1'
     implementation 'com.andrognito.patternlockview:patternlockview:1.0.0'
-    implementation 'com.github.myinnos:AppIconNameChanger:1.0.7'
     implementation 'agency.tango.android:material-intro-screen:0.0.5'
     implementation 'com.airbnb.android:lottie:3.0.1'
 

@@ -17,11 +17,7 @@ import androidx.annotation.Nullable;
 import com.example.encrypt.BuildConfig;
 import com.example.encrypt.R;
 import com.example.encrypt.lock.LockType;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import in.myinnos.library.AppIconNameChanger;
+import com.example.encrypt.util.ChangeIconDialogue;
 
 
 public class AdvancedSetup extends BaseActivity implements View.OnClickListener, CompoundButton.OnCheckedChangeListener {
@@ -102,31 +98,17 @@ public class AdvancedSetup extends BaseActivity implements View.OnClickListener,
             case R.id.rv1:
                 mSwitch1.toggle();
                 break;
-            case R.id.rv11:
-                String activeName = "in.myinnos.changeappiconandname.MainActivitySettings";
 
-// Disable alias names
-                List<String> disableNames = new ArrayList<String>();
-
-                disableNames.add("com.example.encrypt.activity.MainActivity");
-
-// Initiate App Icon Name Changer
-                new AppIconNameChanger.Builder(AdvancedSetup.this)
-                        .activeName(activeName) // String
-                        .disableNames(disableNames) // List<String>
-                        .packageName(BuildConfig.APPLICATION_ID)
-                        .build()
-                        .setNow();
-
-                break;
             case R.id.rv4:
                 mSwitch4.toggle();
                 break;
             case R.id.rv5:
                  startActivity(new Intent(AdvancedSetup.this, LockType.class));
                 break;
-            case R.id.rv6:
+            case R.id.rv11:
                // startActivity(new Intent(AdvancedSetup.this, SecurityQuestion.class));
+                ChangeIconDialogue cdd = new ChangeIconDialogue(AdvancedSetup.this);
+                cdd.show();
                 break;
             case R.id.rv7:
                 startActivity(new Intent(AdvancedSetup.this, UseHelp.class));

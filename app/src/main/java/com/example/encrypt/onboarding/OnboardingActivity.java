@@ -1,6 +1,7 @@
 package com.example.encrypt.onboarding;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
@@ -13,19 +14,33 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.ViewPager;
 
 import com.example.encrypt.R;
-import com.example.encrypt.activity.MainActivity;
+import com.example.encrypt.lock.LockType;
+import com.example.encrypt.lock.utils.AppPreferences;
 
 
 public class OnboardingActivity extends AppCompatActivity {
 
     private ViewPager viewPager;
     private OnboardingAdapter onboardingAdapter;
-
+    SharedPreferences prefs = null;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_onboarding);
         makeStatusbarTransparent();
+        String Pattern = AppPreferences.getPattern(getApplicationContext());
+        String Passcode = AppPreferences.getPasscode(getApplicationContext());
+
+
+        prefs = getSharedPreferences("com.example.encrypt", MODE_PRIVATE);
+        if (!prefs.getBoolean("firstrun", true)) {
+            if (Pattern == null || Passcode == null) {
+                Intent i = new Intent(getApplicationContext(), LockType.class);
+                startActivity(i);
+                finish();
+            }
+
+        }
         viewPager = findViewById(R.id.onboarding_view_pager);
         onboardingAdapter = new OnboardingAdapter(this);
         viewPager.setAdapter(onboardingAdapter);
@@ -37,19 +52,26 @@ public class OnboardingActivity extends AppCompatActivity {
 
             }
 
+            Button button2 = findViewById(R.id.button2);
             @Override
             public void onPageSelected(int position) {
-                if (position == 3) {
+                if (position == 4) {
 
-                    Button button2 = findViewById(R.id.button2);
+
                     button2.setText("Finish");
                     button2.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            Intent init = new Intent(OnboardingActivity.this, MainActivity.class);
-                            startActivity(init);
+                            prefs.edit().putBoolean("firstrun", false).apply();
+
+                            Intent i = new Intent(getApplicationContext(), LockType.class);
+                            startActivity(i);
+                            finish();
+
                         }
                     });
+                } else {
+                    button2.setText("Next");
                 }
             }
 
@@ -62,7 +84,6 @@ public class OnboardingActivity extends AppCompatActivity {
     }
 
 
-    // Listener for next button press
     public void nextPage(View view) {
         if (view.getId() == R.id.button2) {
             if (viewPager.getCurrentItem() < onboardingAdapter.getCount() - 1) {

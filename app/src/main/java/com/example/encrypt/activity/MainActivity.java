@@ -1,43 +1,49 @@
 package com.example.encrypt.activity;
 
-import android.Manifest;
 import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import com.google.android.material.tabs.TabLayout;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-import androidx.viewpager.widget.ViewPager;
-import androidx.appcompat.app.AppCompatActivity;
 import android.view.View;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.viewpager.widget.ViewPager;
 
 import com.example.encrypt.R;
 import com.example.encrypt.lock.LockType;
 import com.example.encrypt.lock.PasscodeActivity;
 import com.example.encrypt.lock.PatternActivity;
 import com.example.encrypt.lock.utils.AppPreferences;
+import com.example.encrypt.onboarding.OnboardingActivity;
 import com.example.encrypt.vault.PrivatePhotoFragment;
 import com.example.encrypt.vault.PrivateVideoFragment;
 import com.example.encrypt.vault.SectionsPageAdapter;
+import com.google.android.material.tabs.TabLayout;
 
 public class MainActivity extends AppCompatActivity {
 
      SectionsPageAdapter mSectionsPageAdapter;
      ViewPager mViewPager;
     private SystemKeyEventReceiver receiver;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        SharedPreferences prefs;
+        prefs = getSharedPreferences("com.example.encrypt", MODE_PRIVATE);
+
       String  Pattern = AppPreferences.getPattern(getApplicationContext());
       String Passcode = AppPreferences.getPasscode(getApplicationContext());
 
-      if(Pattern!=null||Passcode!=null) {
+
+        if(Pattern!=null||Passcode!=null) {
 
           if (AppPreferences.getPasscodeType(getApplicationContext()).equalsIgnoreCase("0")) {
               Intent i = new Intent(getApplicationContext(), PasscodeActivity.class);
@@ -47,10 +53,15 @@ public class MainActivity extends AppCompatActivity {
               startActivity(i);
           }
       }else{
-
-
-          Intent i = new Intent(getApplicationContext(), LockType.class);
-          startActivity(i);
+            if (prefs.getBoolean("firstrun", true)) {
+                Intent i = new Intent(getApplicationContext(), OnboardingActivity.class);
+                startActivity(i);
+                finish();
+            } else {
+                Intent i = new Intent(getApplicationContext(), LockType.class);
+                startActivity(i);
+                finish();
+            }
       }
 /*
   if (AppPreferences.getPasscodeType(getActivity().getApplicationContext()).equalsIgnoreCase("0")) {
@@ -66,10 +77,6 @@ public class MainActivity extends AppCompatActivity {
                 }
 */
 
-
-
-
-
     //    Notifi.message(this,"yolo",false);
 
         setContentView(R.layout.activity_main);
@@ -78,10 +85,10 @@ public class MainActivity extends AppCompatActivity {
         mSectionsPageAdapter = new SectionsPageAdapter(getSupportFragmentManager());
 
         // Set up the ViewPager with the sections adapter.
-        mViewPager = (ViewPager) findViewById(R.id.container);
+        mViewPager = findViewById(R.id.container);
         setupViewPager(mViewPager);
 
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
+        TabLayout tabLayout = findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
 
         receiver = new SystemKeyEventReceiver();

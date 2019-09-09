@@ -10,7 +10,7 @@ import android.content.SharedPreferences;
 public class BseApplication extends Application {
     public static SharedPreferences sp;
     public static SharedPreferences.Editor editor;
-    public static final String PRIVATE_SPACE_SP = "share_preference";
+    public static final String PRIVATE_SPACE_SP = "com.example.encrypt";
 
     @Override
     public void onCreate() {
