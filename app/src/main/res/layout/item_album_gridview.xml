@@ -44,7 +44,6 @@
         android:layout_marginTop="20dp"
         android:layout_marginBottom="20dp"
         android:scaleType="centerCrop"
-        android:src="@mipmap/ic_video_thumb"
         android:visibility="gone" />
 
 </RelativeLayout>

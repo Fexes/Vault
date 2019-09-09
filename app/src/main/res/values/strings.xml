@@ -36,5 +36,9 @@
     <string name="about_uninstall_des">Before uninstalling the software, be sure to decrypt the encrypted file, otherwise it will cause the loss of the private file, please keep in mind!</string>
     <string name="demo_content">Lorem ipsum dolor sit amet, consectetur\n adipiscing elit. Vivamus sodales faucibus\n dapibus. Etiam mattis leo quis laoreet dictum.</string>
     <string name="demo_title">Lorem Ipsum</string>
+    <string name="warning">Uninstalling the Application will delete all the hidden data, make sure you un-hide all of your important data before uninstalling</string>
+    <string name="alert">Alert !</string>
+    <string name="private_gallery">A private Gallery that stores you Pictures and Videos that are ony accessible from within the application</string>
+    <string name="tagline">Secure, Simple and Fast</string>
 
 </resources>

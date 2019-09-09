@@ -35,7 +35,6 @@ import com.example.encrypt.photo.Folders;
 import com.example.encrypt.photo.ImageItem;
 import com.example.encrypt.photo.PrivateAlbumGridViewAdapter;
 import com.example.encrypt.util.Notifi;
-import com.example.encrypt.util.NotificationUtil;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.io.File;
@@ -331,7 +330,7 @@ public class PrivatePhotoFragment extends Fragment {
     @RequiresApi(api = Build.VERSION_CODES.N)
     public boolean moveFile(Context context, String sourcepath, String targetpath, int TotalFiles, int current) {
         current++;
-        NotificationUtil notificationUtil = new NotificationUtil(context, "Files : " + current + " / " + TotalFiles, TotalFiles, current);
+        //  NotificationUtil notificationUtil = new NotificationUtil(context, "Files : " + current + " / " + TotalFiles, TotalFiles, current);
         File sourceLocation = new File(sourcepath);
         File targetLocation = new File(targetpath);
 
@@ -357,14 +356,14 @@ public class PrivatePhotoFragment extends Fragment {
             }
             progressDialog.setProgress(current);
             progressDialog.setMax(TotalFiles);
-            notificationUtil.updateNotification("Files : " + current + " / " + TotalFiles, TotalFiles, current);
+            //notificationUtil.updateNotification("Files : " + current + " / " + TotalFiles, TotalFiles, current);
 
             // cdd.update("Files : "+current+" / "+TotalFiles);
             //  cdd.showProgress(getContext(), "Files : "+current+" / "+TotalFiles, false);
 
 
             if (current == TotalFiles) {
-                notificationUtil.cancel();
+                //notificationUtil.cancel();
             }
             in.close();
             out.close();

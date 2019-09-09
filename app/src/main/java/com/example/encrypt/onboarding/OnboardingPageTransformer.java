@@ -50,6 +50,11 @@ public class OnboardingPageTransformer implements ViewPager.PageTransformer {
                     break;
                 case 3:
 
+                    computer.setAnimation("fingerprint.json");
+
+                    break;
+                case 4:
+
                     computer.setAnimation("warning.json");
 
                     break;

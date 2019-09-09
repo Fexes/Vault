@@ -26,7 +26,6 @@ import com.example.encrypt.R;
 import com.example.encrypt.activity.BaseActivity;
 import com.example.encrypt.activity.BseApplication;
 import com.example.encrypt.util.Notifi;
-import com.example.encrypt.util.NotificationUtil;
 import com.example.encrypt.vault.PrivatePhotoFragment;
 
 import java.io.File;
@@ -184,7 +183,7 @@ public class Gallery extends BaseActivity implements OnClickListener, OnPageChan
     @RequiresApi(api = Build.VERSION_CODES.N)
     public boolean moveFile(Context context, String sourcepath, String targetpath, int TotalFiles, int current) {
         current++;
-        NotificationUtil notificationUtil = new NotificationUtil(context, "Files : " + current + " / " + TotalFiles, TotalFiles, current);
+        //   NotificationUtil notificationUtil = new NotificationUtil(context, "Files : " + current + " / " + TotalFiles, TotalFiles, current);
         File sourceLocation = new File(sourcepath);
         File targetLocation = new File(targetpath);
 
@@ -210,14 +209,14 @@ public class Gallery extends BaseActivity implements OnClickListener, OnPageChan
             }
             progressDialog.setProgress(current);
             progressDialog.setMax(TotalFiles);
-            notificationUtil.updateNotification("Files : " + current + " / " + TotalFiles, TotalFiles, current);
+            //notificationUtil.updateNotification("Files : " + current + " / " + TotalFiles, TotalFiles, current);
 
             // cdd.update("Files : "+current+" / "+TotalFiles);
             //  cdd.showProgress(getContext(), "Files : "+current+" / "+TotalFiles, false);
 
 
             if (current == TotalFiles) {
-                notificationUtil.cancel();
+                //notificationUtil.cancel();
             }
             in.close();
             out.close();
