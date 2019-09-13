@@ -26,8 +26,8 @@
         app:layout_constraintTop_toTopOf="@+id/guideline12"
         app:lottie_autoPlay="true"
         app:lottie_loop="false"
-        android:visibility="gone"
-        app:lottie_speed="0.70" />
+        android:visibility="gone" />
+
 
     <ImageView
         android:layout_width="350dp"

@@ -35,7 +35,7 @@ public class PatternActivity extends Activity {
 
     int tries = 0;
     String Pattern, CurrentPattern;
-    TextView TxtEnterPasscode, TxtForgetPasscode;
+    TextView TxtEnterPasscode;
     PatternLockView mPatternLockView;
     Boolean mChangePattern = false;
     Boolean mForget = false;
@@ -76,7 +76,7 @@ public class PatternActivity extends Activity {
 
         mPatternLockView = findViewById(R.id.pattern_lock_view);
         TxtEnterPasscode = findViewById(R.id.TxtEnterPasscode);
-        TxtForgetPasscode = findViewById(R.id.TxtForgetPasscode);
+
         FingerPrintImage = findViewById(R.id.fingerfrint_image);
         Pattern = AppPreferences.getPattern(getApplicationContext());
 
@@ -93,7 +93,7 @@ public class PatternActivity extends Activity {
         if (mForget || mChangePattern || Pattern == null ) {
             mFAH=null;
             FingerPrintImage.setVisibility(View.INVISIBLE);
-            TxtForgetPasscode.setVisibility(View.INVISIBLE);
+
         }else{
             if(!BseApplication.sp.getBoolean("fingerprint", true)){
                 FingerPrintImage.setVisibility(View.INVISIBLE);
@@ -179,15 +179,6 @@ public class PatternActivity extends Activity {
                         .build();
             }
         }
-
-        TxtForgetPasscode.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-           //     Intent mIntentSettings = new Intent(getApplicationContext(), ForgetPasswordActivity.class);
-           //     startActivity(mIntentSettings);
-                finish();
-            }
-        });
 
 
         mPatternLockView.addPatternLockListener(new PatternLockViewListener() {

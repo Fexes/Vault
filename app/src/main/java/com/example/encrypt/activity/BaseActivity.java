@@ -21,9 +21,6 @@ import androidx.core.content.ContextCompat;
 
 import java.util.ArrayList;
 
-/**
- * Created by ruipan.dong on 2017/8/18.
- */
 
 public class BaseActivity extends AppCompatActivity {
 
@@ -64,6 +61,7 @@ public class BaseActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 
+
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1655);
@@ -92,6 +90,25 @@ public class BaseActivity extends AppCompatActivity {
         }
     }
 
+    public void exitApp() {
+        for (Activity ac : activityList) {
+            if (!ac.isFinishing()) {
+                ac.finish();
+            }
+        }
+        activityList.clear();
+        //  BseApplication.editor.putBoolean("isapprunning", false);
+
+        android.os.Process.killProcess(android.os.Process.myPid());
+    }
+
+
+    public static void addAppActivity(Activity activity) {
+        if (!activityList.contains(activity)) {
+            activityList.add(activity);
+        }
+    }
+
     private class SystemKeyEventReceiver extends BroadcastReceiver {
         private final String SYSTEM_DIALOG_REASON_KEY = "reason";
         private final String SYSTEM_DIALOG_REASON_HOME_KEY = "homekey";
@@ -101,6 +118,7 @@ public class BaseActivity extends AppCompatActivity {
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
             if (action.equals(Intent.ACTION_CLOSE_SYSTEM_DIALOGS)) {
+                //   BseApplication.editor.putBoolean("isapprunning", false);
                 String reason = intent.getStringExtra(SYSTEM_DIALOG_REASON_KEY);
                 if (reason == null) {
                     return;
@@ -115,25 +133,6 @@ public class BaseActivity extends AppCompatActivity {
                 }
             }
         }
-    }
-
-
-    public static void addAppActivity(Activity activity) {
-        if (!activityList.contains(activity)) {
-            activityList.add(activity);
-        }
-    }
-
-
-    public void exitApp() {
-        for (Activity ac : activityList) {
-            if (!ac.isFinishing()) {
-                ac.finish();
-            }
-        }
-        activityList.clear();
-
-        android.os.Process.killProcess(android.os.Process.myPid());
     }
 
 

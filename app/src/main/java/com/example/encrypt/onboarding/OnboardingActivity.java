@@ -1,7 +1,9 @@
 package com.example.encrypt.onboarding;
 
+import android.Manifest;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
@@ -10,7 +12,10 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.viewpager.widget.ViewPager;
 
 import com.example.encrypt.R;
@@ -69,25 +74,29 @@ public class OnboardingActivity extends AppCompatActivity {
             @Override
             public void onPageSelected(int position) {
                 if (position == 4) {
+                    if (ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                            != PackageManager.PERMISSION_GRANTED) {
+                        ActivityCompat.requestPermissions(OnboardingActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1655);
+                    } else {
 
+                        button2.setText("Accept");
+                        button2.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                prefs.edit().putBoolean("firstrun", false).apply();
 
-                    button2.setText("Finish");
-                    button2.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            prefs.edit().putBoolean("firstrun", false).apply();
+                                String Pattern = AppPreferences.getPattern(getApplicationContext());
+                                String Passcode = AppPreferences.getPasscode(getApplicationContext());
 
-                            String Pattern = AppPreferences.getPattern(getApplicationContext());
-                            String Passcode = AppPreferences.getPasscode(getApplicationContext());
+                                if (Pattern == null && Passcode == null) {
+                                    Intent i = new Intent(getApplicationContext(), LockType.class);
+                                    startActivity(i);
 
-                            if (Pattern == null && Passcode == null) {
-                                Intent i = new Intent(getApplicationContext(), LockType.class);
-                                startActivity(i);
-
+                                }
+                                finish();
                             }
-                            finish();
-                        }
-                    });
+                        });
+                    }
                 } else {
                     button2.setText("Next");
                 }
@@ -99,6 +108,35 @@ public class OnboardingActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == 1655) {
+            if (grantResults[0] != PackageManager.PERMISSION_GRANTED) {
+                finish();
+            } else {
+                Button button2 = findViewById(R.id.button2);
+                button2.setText("Accept");
+                button2.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        prefs.edit().putBoolean("firstrun", false).apply();
+
+                        String Pattern = AppPreferences.getPattern(getApplicationContext());
+                        String Passcode = AppPreferences.getPasscode(getApplicationContext());
+
+                        if (Pattern == null && Passcode == null) {
+                            Intent i = new Intent(getApplicationContext(), LockType.class);
+                            startActivity(i);
+
+                        }
+                        finish();
+                    }
+                });
+            }
+        }
     }
 
 

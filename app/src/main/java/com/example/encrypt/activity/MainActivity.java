@@ -15,30 +15,80 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.ViewPager;
 
 import com.example.encrypt.R;
+import com.example.encrypt.database.DatabaseAdapter;
 import com.example.encrypt.lock.LockType;
 import com.example.encrypt.lock.PasscodeActivity;
 import com.example.encrypt.lock.PatternActivity;
 import com.example.encrypt.lock.utils.AppPreferences;
 import com.example.encrypt.onboarding.OnboardingActivity;
+import com.example.encrypt.photo.ImageItem;
 import com.example.encrypt.vault.PrivatePhotoFragment;
 import com.example.encrypt.vault.PrivateVideoFragment;
 import com.example.encrypt.vault.SectionsPageAdapter;
 import com.google.android.material.tabs.TabLayout;
 
+import java.util.ArrayList;
+
 public class MainActivity extends AppCompatActivity {
 
      SectionsPageAdapter mSectionsPageAdapter;
      ViewPager mViewPager;
+    public static ArrayList<ImageItem> dateList;
     private SystemKeyEventReceiver receiver;
+    private static DatabaseAdapter databaseAdapter;
+    String preffile = "com.example.encrypt";
 
+    public void onClick(View view) {
+
+        switch (view.getId()) {
+
+            case R.id.settings:
+                startActivity(new Intent(MainActivity.this, AdvancedSetup.class));
+                break;
+
+            case R.id.button_back:
+                finish();
+                break;
+
+            default:
+                break;
+
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        unregisterReceiver(receiver);
+    }
+
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == 1655) {
+            if (grantResults[0] != PackageManager.PERMISSION_GRANTED) {
+                exitApp();
+            }
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         SharedPreferences prefs;
-        prefs = getSharedPreferences("com.example.encrypt", MODE_PRIVATE);
+        prefs = getSharedPreferences(preffile, MODE_PRIVATE);
 
+        //   Toast.makeText(getApplicationContext(),BseApplication.sp.getBoolean("isapprunning", false)+"",Toast.LENGTH_LONG).show();
       String  Pattern = AppPreferences.getPattern(getApplicationContext());
       String Passcode = AppPreferences.getPasscode(getApplicationContext());
 
@@ -94,83 +144,9 @@ public class MainActivity extends AppCompatActivity {
         receiver = new SystemKeyEventReceiver();
 
         registerReceiver(receiver, new IntentFilter(Intent.ACTION_CLOSE_SYSTEM_DIALOGS));
-    }
-
-     void setupViewPager(ViewPager viewPager) {
-        SectionsPageAdapter adapter = new SectionsPageAdapter(getSupportFragmentManager());
-        adapter.addFragment(new PrivatePhotoFragment(), "Images");
-        adapter.addFragment(new PrivateVideoFragment(), "Videos");
-        viewPager.setAdapter(adapter);
-    }
-
-    public void onClick(View view) {
-
-        switch (view.getId()) {
-
-            case R.id.settings:
-                startActivity(new Intent(MainActivity.this, AdvancedSetup.class));
-                break;
-
-            case R.id.button_back:
-                finish();
-                break;
-
-            default:
-                break;
-
-        }
-    }
-    @Override
-    protected void onResume() {
-        super.onResume();
 
 
     }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-
-        unregisterReceiver(receiver);
-    }
-
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == 1655) {
-            if (grantResults[0] != PackageManager.PERMISSION_GRANTED) {
-                exitApp();
-            }
-        }
-    }
-
-
-    private class SystemKeyEventReceiver extends BroadcastReceiver {
-        private final String SYSTEM_DIALOG_REASON_KEY = "reason";
-        private final String SYSTEM_DIALOG_REASON_HOME_KEY = "homekey";
-        private final String SYSTEM_DIALOG_REASON_RECENT_APPS = "recentapps";
-
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            String action = intent.getAction();
-            if (action.equals(Intent.ACTION_CLOSE_SYSTEM_DIALOGS)) {
-                String reason = intent.getStringExtra(SYSTEM_DIALOG_REASON_KEY);
-                if (reason == null) {
-                    return;
-                }
-
-                if (reason.equals(SYSTEM_DIALOG_REASON_HOME_KEY) && BseApplication.sp.getBoolean("fastExit", false)) {
-                    exitApp();
-                }
-
-                if (reason.equals(SYSTEM_DIALOG_REASON_RECENT_APPS) && BseApplication.sp.getBoolean("fastExit", false)) {
-                    exitApp();
-                }
-            }
-        }
-    }
-
 
 
     public static void addAppActivity(Activity activity) {
@@ -189,5 +165,39 @@ public class MainActivity extends AppCompatActivity {
 
         android.os.Process.killProcess(android.os.Process.myPid());
     }
+
+    void setupViewPager(ViewPager viewPager) {
+        SectionsPageAdapter adapter = new SectionsPageAdapter(getSupportFragmentManager());
+        adapter.addFragment(new PrivatePhotoFragment(), "Images");
+        adapter.addFragment(new PrivateVideoFragment(), "Videos");
+        viewPager.setAdapter(adapter);
+    }
+
+    private class SystemKeyEventReceiver extends BroadcastReceiver {
+        private final String SYSTEM_DIALOG_REASON_KEY = "reason";
+        private final String SYSTEM_DIALOG_REASON_HOME_KEY = "homekey";
+        private final String SYSTEM_DIALOG_REASON_RECENT_APPS = "recentapps";
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            if (action.equals(Intent.ACTION_CLOSE_SYSTEM_DIALOGS)) {
+                // BseApplication.editor.putBoolean("isapprunning", false);
+                String reason = intent.getStringExtra(SYSTEM_DIALOG_REASON_KEY);
+                if (reason == null) {
+                    return;
+                }
+
+                if (reason.equals(SYSTEM_DIALOG_REASON_HOME_KEY) && BseApplication.sp.getBoolean("fastExit", false)) {
+                    exitApp();
+                }
+
+                if (reason.equals(SYSTEM_DIALOG_REASON_RECENT_APPS) && BseApplication.sp.getBoolean("fastExit", false)) {
+                    exitApp();
+                }
+            }
+        }
+    }
+
 
 }

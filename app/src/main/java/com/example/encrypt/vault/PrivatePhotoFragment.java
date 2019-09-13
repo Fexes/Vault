@@ -26,6 +26,8 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.encrypt.R;
 import com.example.encrypt.activity.BseApplication;
@@ -34,7 +36,12 @@ import com.example.encrypt.photo.Bimp;
 import com.example.encrypt.photo.Folders;
 import com.example.encrypt.photo.ImageItem;
 import com.example.encrypt.photo.PrivateAlbumGridViewAdapter;
+import com.example.encrypt.photo.RecyclerViewAdapter;
 import com.example.encrypt.util.Notifi;
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdLoader;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.formats.UnifiedNativeAd;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.io.File;
@@ -44,6 +51,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -164,58 +172,10 @@ public class PrivatePhotoFragment extends Fragment {
 
     }
 
-    @Nullable
-    @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.vault_fragment,container,false);
-       // addAppActivity(PrivateAlbum.this);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            Window w = getActivity().getWindow();
-            w.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
-        }
-
-        supervire=view;
-        c=getContext();
-        button_min=view.findViewById(R.id.button_min);
-
-        file_count=view.findViewById(R.id.file_count);
-        executorService = Executors.newCachedThreadPool();
-        databaseAdapter = new DatabaseAdapter(getActivity());
-
-        initButtons(view);
-
-        dateList = databaseAdapter.getPhoto();
-
-
-        tvNoPicture = view.findViewById(R.id.tv_no_picture);
-        gridView = view.findViewById(R.id.album_GridView);//组件
-        privateAlbumGridViewAdapter = new PrivateAlbumGridViewAdapter(getActivity(), dateList);
-        if(dateList.size()==1){
-            file_count.setText(dateList.size()+" Image");
-        }else {
-            file_count.setText(dateList.size()+" Images");
-        }
-        privateAlbumGridViewAdapter.registerDataSetObserver(new DataSetObserver() {
-            @Override
-            public void onChanged() {
-                super.onChanged();
-                if(dateList.size()==1){
-                    file_count.setText(dateList.size()+" Image");
-                }else {
-                    file_count.setText(dateList.size()+" Images");
-                }
-            }
-        });
-        gridView.setAdapter(privateAlbumGridViewAdapter);
-        try {
-            //      walkdir("/data/data/" + getActivity().getPackageName() + "/files/storage/emulated/0");
-        } catch (Exception e) {
-
-        }
-        // searchTXT(new File(Environment.getExternalStorageDirectory().getPath()));
-        //   walkdir(Environment.getExternalStorageDirectory());
-        return view;
-    }
+    public static RecyclerView.Adapter adapter;
+    public static RecyclerView mRecyclerView;
+    private List<Object> mRecyclerViewItems;
+    private List<UnifiedNativeAd> mNativeAds = new ArrayList<>();
 
     @Override
     public void onDestroy() {
@@ -231,31 +191,6 @@ public class PrivatePhotoFragment extends Fragment {
         tvNoPicture.setVisibility(View.VISIBLE);
     }
 
-    public void walkdir(String path) {
-
-        Log.d("Files", "Path: " + path);
-        File directory = new File(path);
-        File[] files = directory.listFiles();
-        Log.d("Files", "Size: " + files.length);
-        for (int i = 0; i < files.length; i++) {
-
-
-            if (files[i].isDirectory()) {
-                walkdir(files[i].getAbsolutePath());
-            }
-            Log.d("Files", "FileName:" + files[i].getName());
-
-            for (ImageItem item : dateList) {
-                final String privImagePath = item.getImagePath();
-                File f = new File(privImagePath);
-                if (!f.isDirectory()) {
-                    databaseAdapter.deletePhoto(item.getImageId());
-                }
-                //
-
-            }
-        }
-    }
 
     @Override
     public void onResume() {
@@ -431,5 +366,173 @@ public class PrivatePhotoFragment extends Fragment {
         }
     }
 
+    private AdLoader adLoader;
+    private List<Object> mRecyclerViewImageItems = new ArrayList<>();
+
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.vault_fragment, container, false);
+        // addAppActivity(PrivateAlbum.this);
+
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            Window w = getActivity().getWindow();
+            w.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
+        }
+        mRecyclerViewItems = getRecyclerViewImageItems();
+        //  View rootView = inflater.inflate(R.layout.vault_fragment, container, false);
+        mRecyclerView = view.findViewById(R.id.recycler_view);
+
+        // Use this setting to improve performance if you know that changes
+        // in content do not change the layout size of the RecyclerView.
+        mRecyclerView.setHasFixedSize(false);
+
+        // Specify a linear layout manager.
+        RecyclerView.LayoutManager layoutManager = new GridLayoutManager(getContext(), 3);
+
+
+        mRecyclerView.setLayoutManager(layoutManager);
+
+        // Specify an adapter.
+        adapter = new RecyclerViewAdapter(getActivity(), mRecyclerViewItems);
+        mRecyclerView.setAdapter(adapter);
+
+
+        loadImageData();
+        loadNativeAds();
+
+
+        supervire = view;
+        c = getContext();
+        button_min = view.findViewById(R.id.button_min);
+
+        file_count = view.findViewById(R.id.file_count);
+        executorService = Executors.newCachedThreadPool();
+        databaseAdapter = new DatabaseAdapter(getActivity());
+
+        initButtons(view);
+
+        dateList = databaseAdapter.getPhoto();
+
+
+        tvNoPicture = view.findViewById(R.id.tv_no_picture);
+        gridView = view.findViewById(R.id.album_GridView);
+        privateAlbumGridViewAdapter = new PrivateAlbumGridViewAdapter(getActivity(), dateList);
+        if (dateList.size() == 1) {
+            file_count.setText(dateList.size() + " Image");
+        } else {
+            file_count.setText(dateList.size() + " Images");
+        }
+        privateAlbumGridViewAdapter.registerDataSetObserver(new DataSetObserver() {
+            @Override
+            public void onChanged() {
+                super.onChanged();
+                if (dateList.size() == 1) {
+                    file_count.setText(dateList.size() + " Image");
+                } else {
+                    file_count.setText(dateList.size() + " Images");
+                }
+            }
+        });
+        gridView.setAdapter(privateAlbumGridViewAdapter);
+
+        return view;
+    }
+
+    public List<Object> getRecyclerViewImageItems() {
+        return mRecyclerViewImageItems;
+    }
+
+    private void loadNativeAds() {
+
+        AdLoader.Builder builder = new AdLoader.Builder(getContext(), "ca-app-pub-3940256099942544/2247696110");
+        adLoader = builder.forUnifiedNativeAd(
+                new UnifiedNativeAd.OnUnifiedNativeAdLoadedListener() {
+                    @Override
+                    public void onUnifiedNativeAdLoaded(UnifiedNativeAd unifiedNativeAd) {
+
+                        mNativeAds.add(unifiedNativeAd);
+                        if (!adLoader.isLoading()) {
+                            insertImageAds();
+                        }
+                    }
+                }).withAdListener(
+                new AdListener() {
+                    @Override
+                    public void onAdFailedToLoad(int errorCode) {
+
+                        Log.e("MainActivity", "The previous native ad failed to load. Attempting to"
+                                + " load another.");
+                        if (!adLoader.isLoading()) {
+                            insertImageAds();
+                        }
+                    }
+                }).build();
+
+        if (mRecyclerViewImageItems.size() > 219) {
+            adLoader.loadAds(new AdRequest.Builder().build(), 4);
+        } else if (mRecyclerViewImageItems.size() > 146) {
+            adLoader.loadAds(new AdRequest.Builder().build(), 3);
+        } else if (mRecyclerViewImageItems.size() > 73) {
+            adLoader.loadAds(new AdRequest.Builder().build(), 2);
+        } else if (mRecyclerViewImageItems.size() > 6) {
+            adLoader.loadAds(new AdRequest.Builder().build(), 1);
+        }
+
+    }
+
+    private void insertImageAds() {
+        if (mNativeAds.size() <= 0) {
+            return;
+        }
+
+        GridLayoutManager layoutManager = new GridLayoutManager(getContext(), 3);
+
+        try {
+            mRecyclerViewImageItems.add(6, mNativeAds.get(0));
+            mRecyclerViewImageItems.add(73, mNativeAds.get(1));
+            mRecyclerViewImageItems.add(146, mNativeAds.get(2));
+            mRecyclerViewImageItems.add(219, mNativeAds.get(3));
+
+
+            adapter.notifyItemInserted(6);
+            adapter.notifyItemInserted(73);
+            adapter.notifyItemInserted(146);
+            adapter.notifyItemInserted(219);
+            adapter.notifyItemRangeInserted(6, mRecyclerViewItems.size());
+            adapter.notifyItemRangeInserted(73, mRecyclerViewItems.size());
+            adapter.notifyItemRangeInserted(146, mRecyclerViewItems.size());
+            adapter.notifyItemRangeInserted(219, mRecyclerViewItems.size());
+        } catch (Exception e) {
+            // Toast.makeText(getContext(),e.toString(),Toast.LENGTH_SHORT).show();
+        }
+
+        layoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
+            @Override
+            public int getSpanSize(int position) {
+
+
+                if (position == 6 || position == 73 || position == 146 || position == 219 && position != 0) {
+
+                    return 3;
+                } else
+                    return 1;
+
+            }
+        });
+        mRecyclerView.setLayoutManager(layoutManager);
+
+    }
+
+    private void loadImageData() {
+        databaseAdapter = new DatabaseAdapter(getContext());
+        dateList = databaseAdapter.getPhoto();
+        for (int i = 0; i <= dateList.size() - 1; i++) {
+
+            mRecyclerViewImageItems.add(dateList.get(i));
+
+        }
+    }
 
 }

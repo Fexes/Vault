@@ -78,7 +78,6 @@ public class AdvancedSetup extends BaseActivity implements View.OnClickListener,
         mSwitch4.setOnCheckedChangeListener(this);
     }
 
-
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
         switch (buttonView.getId()) {

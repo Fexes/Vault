@@ -49,7 +49,7 @@ public class PasscodeActivity extends Activity {
 
     TextView TxtPasscode1, TxtPasscode2, TxtPasscode3, TxtPasscode4,
             TxtPasscode5, TxtPasscode6, TxtPasscode7, TxtPasscode8,
-            TxtPasscode9, TxtPasscode0, TxtEnterPasscode, TxtForgetPasscode;
+            TxtPasscode9, TxtPasscode0, TxtEnterPasscode;
     RelativeLayout BtnPasscode1, BtnPasscode2, BtnPasscode3, BtnPasscode4,
             BtnPasscode5, BtnPasscode6, BtnPasscode7, BtnPasscode8,
             BtnPasscode9, BtnPasscode0;
@@ -143,14 +143,14 @@ public class PasscodeActivity extends Activity {
         TxtPasscode9 = findViewById(R.id.TxtPasscode9);
         TxtPasscode0 = findViewById(R.id.TxtPasscode0);
 
-        TxtForgetPasscode = findViewById(R.id.TxtForgetPasscode);
+
 
         TxtEnterPasscode = findViewById(R.id.TxtEnterPasscode);
 
         if (mForget || mChangePasscode || Passcode==null ) {
             mFAH=null;
             FingerPrintImage.setVisibility(View.INVISIBLE);
-            TxtForgetPasscode.setVisibility(View.INVISIBLE);
+
 
         }else{
             if(!BseApplication.sp.getBoolean("fingerprint", true)){
@@ -169,7 +169,7 @@ public class PasscodeActivity extends Activity {
                             // do some stuff here in case auth was successful
                             // Toast.makeText(getBaseContext(), "Success", Toast.LENGTH_SHORT).show();
 
-
+                            //            BseApplication.editor.putBoolean("isapprunning", true);
                             finish();
 
 
@@ -293,15 +293,6 @@ public class PasscodeActivity extends Activity {
             TxtEnterPasscode.setText("Enter Pincode");
         }
 
-
-        TxtForgetPasscode.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-              //  Intent mIntentSettings = new Intent(getApplicationContext(), ForgetPasswordActivity.class);
-            //    startActivity(mIntentSettings);
-                finish();
-            }
-        });
 
         BtnPasscode1.setOnClickListener(new View.OnClickListener() {
 
@@ -472,6 +463,7 @@ public class PasscodeActivity extends Activity {
                                 AppPreferences.setPasscodeType(getApplicationContext(), "0");
                                 AppPreferences.setPasscodeSetup(getApplicationContext(), true);
                                 if (mChangePasscode) {
+                                    //            BseApplication.editor.putBoolean("isapprunning", true);
                                     finish();
                                 } else {
                                     finish();

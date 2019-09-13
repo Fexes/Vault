@@ -133,11 +133,17 @@
                 android:id="@+id/album_GridView"
                 android:layout_width="match_parent"
                 android:layout_margin="3dp"
-
+                android:visibility="gone"
                 android:layout_height="match_parent"
                 android:horizontalSpacing="2dp"
                 android:numColumns="3"
                 android:verticalSpacing="2dp" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recycler_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scrollbars="vertical" />
 
 
             <Button

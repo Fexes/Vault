@@ -36,11 +36,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="15dp"
-                android:text="Login Settings"
+                android:text="@string/login_settings"
                 android:textColor="#FF8D00" />
 
             <RelativeLayout
                 android:id="@+id/rv1"
+                android:gravity="center"
                 android:layout_margin="5dp"
                 android:background="@drawable/settings_button_back"
                 android:layout_width="match_parent"
@@ -95,6 +96,7 @@
 
             <RelativeLayout
                 android:id="@+id/rv4"
+                android:gravity="center"
                 android:layout_margin="5dp"
                 android:layout_width="match_parent"
                 android:background="@drawable/settings_button_back"
@@ -149,6 +151,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="15dp"
+                android:visibility="gone"
                 android:text="Password Settings"
                 android:textColor="#FF8D00" />
 
@@ -157,6 +160,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="80dp"
                 android:layout_margin="5dp"
+
                 android:background="@drawable/settings_button_back"
                 android:clickable="true"
                 android:foreground="?android:attr/selectableItemBackgroundBorderless"
@@ -178,15 +182,17 @@
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_toEndOf="@+id/iv4"
-                    android:text="Change Password"
+                    android:text="@string/change_password"
                     android:textColor="@color/white"
                     android:textSize="16sp" />
+
             </RelativeLayout>
 
             <RelativeLayout
                 android:id="@+id/rv6"
                 android:layout_width="match_parent"
                 android:layout_height="80dp"
+                android:visibility="gone"
                 android:layout_margin="5dp"
                 android:background="@drawable/settings_button_back"
                 android:clickable="true"
@@ -240,18 +246,29 @@
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:layout_centerVertical="true"
-                    android:layout_marginStart="8dp"
                     android:layout_marginEnd="8dp"
+                    android:layout_marginStart="8dp"
                     android:src="@drawable/ic_security" />
+
+                <TextView
+                    android:id="@+id/tv52"
+                    android:layout_width="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_height="wrap_content"
+                    android:layout_toEndOf="@id/iv52"
+                    android:text="@string/change_app_icon"
+                    android:textStyle="bold"
+                    android:textColor="@color/white"
+                    android:textSize="16sp" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_toEndOf="@+id/iv52"
-                    android:text="Change App Icon"
+                    android:layout_below="@id/tv52"
+                    android:layout_toEndOf="@id/iv52"
+                    android:text="@string/change_icon_discription"
                     android:textColor="@color/white"
-                    android:textSize="16sp" />
+                    android:textSize="12sp" />
             </RelativeLayout>
 
             <TextView
@@ -325,6 +342,7 @@
                 android:id="@+id/rv7"
                 android:layout_width="match_parent"
                 android:layout_height="80dp"
+                android:visibility="gone"
                 android:layout_margin="5dp"
                 android:background="@drawable/settings_button_back"
                 android:clickable="true"
@@ -389,6 +407,7 @@
                 android:textColor="@color/white"
                 android:layout_width="wrap_content"
                 android:paddingTop="15dp"
+                android:fontFamily="@font/roboto_thin"
                 android:paddingBottom="15dp"
                 android:layout_height="wrap_content"
                 android:textSize="16sp"

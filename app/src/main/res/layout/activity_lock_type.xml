@@ -140,7 +140,6 @@
             android:gravity="bottom|center"
             android:text="Select Password Type"
             android:textColor="@color/white"
-
             android:textSize="28dp"
             tools:ignore="MissingConstraints" />
 
