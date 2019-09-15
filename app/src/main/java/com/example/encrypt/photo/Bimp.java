@@ -1,20 +1,13 @@
 package com.example.encrypt.photo;
 
-import android.content.ContentResolver;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.net.Uri;
-import android.util.Base64;
 
 import com.example.encrypt.video.VideoItem;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.ArrayList;
-
-import javax.crypto.CipherInputStream;
 
 
 public class Bimp {
@@ -58,76 +51,6 @@ public class Bimp {
 	}
 	
 
-	public static Bitmap handleBitmap(Uri uri, ContentResolver cr) {
-
-		int sampleSize = 6;
-
-		BitmapFactory.Options options = new BitmapFactory.Options();
-
-		options.inJustDecodeBounds = true;
-
-		try {
-			BitmapFactory.decodeStream(cr.openInputStream(uri), null, options);
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		}
-
-		options.inSampleSize = sampleSize;
-
-		options.inJustDecodeBounds = false;
-		try {
-			return compressImage(BitmapFactory.decodeStream(cr.openInputStream(uri), null, options), 768);
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		}
-		return null;
-	}
-
-
-
-	public static Bitmap handleBitmap(CipherInputStream fis) {
-
-		int sampleSize = 6;
-
-		BitmapFactory.Options options = new BitmapFactory.Options();
-
-		options.inJustDecodeBounds = true;
-
-		BitmapFactory.decodeStream(fis, null, options);
-
-		options.inSampleSize = sampleSize;
-
-		options.inJustDecodeBounds = false;
-		return BitmapFactory.decodeStream(fis, null, options);
-	}
-
-
-	public static String bitmapToBase64(Bitmap bitmap) {
-		String result = null;
-		ByteArrayOutputStream baos = null;
-		try {
-			if (bitmap != null) {
-				baos = new ByteArrayOutputStream();
-				bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-				baos.flush();
-				baos.close();
-				byte[] bitmapBytes = baos.toByteArray();
-				result = Base64.encodeToString(bitmapBytes, Base64.DEFAULT);
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		} finally {
-			try {
-				if (baos != null) {
-					baos.flush();
-					baos.close();
-				}
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-		return result;
-	}
 	
 	
 }

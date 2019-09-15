@@ -5,7 +5,6 @@ import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
-import android.database.DataSetObserver;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -17,7 +16,6 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -30,9 +28,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.encrypt.R;
 import com.example.encrypt.database.DatabaseAdapter;
 import com.example.encrypt.photo.Bimp;
-import com.example.encrypt.photo.RecyclerViewVideoAdapter;
+import com.example.encrypt.photo.PrivateImageRecyclerViewAdapter;
 import com.example.encrypt.util.Notifi;
-import com.example.encrypt.video.PrivateVideoGridViewAdapter;
+import com.example.encrypt.video.PrivateVideoRecyclerViewAdapter;
 import com.example.encrypt.video.VideoAlbum;
 import com.example.encrypt.video.VideoItem;
 import com.google.android.gms.ads.AdListener;
@@ -49,19 +47,17 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 /**
  * Created by User on 2/28/2017.
  */
 
 public class PrivateVideoFragment extends Fragment {
-    private GridView gridView;
+
     public static ArrayList<VideoItem> dateList;
-    private PrivateVideoGridViewAdapter privateVideoAlbumGridViewAdapter;
+
     private static DatabaseAdapter databaseAdapter;
-    private static ExecutorService executorService;
+
     private ProgressDialog progressDialog;
     private static TextView tvNoPicture;
     TextView file_count;
@@ -78,6 +74,14 @@ public class PrivateVideoFragment extends Fragment {
     private List<Object> mRecyclerViewItems;
     private List<UnifiedNativeAd> mNativeAds = new ArrayList<>();
 
+    private List<Object> mRecyclerViewVideoItems = new ArrayList<>();
+    private List<VideoItem> mRecyclerViewVideoItems2 = new ArrayList<>();
+
+    public static void showNoPictureTip() {
+        tvNoPicture.setText(R.string.no_video);
+        tvNoPicture.setVisibility(View.VISIBLE);
+    }
+
     @Override
     public void onDestroy() {
         super.onDestroy();
@@ -85,139 +89,22 @@ public class PrivateVideoFragment extends Fragment {
 
         dateList = null;
         databaseAdapter = null;
-        executorService = null;
+
         tvNoPicture = null;
     }
 
     @Override
     public void onResume() {
         super.onResume();
-
-        executorService = Executors.newCachedThreadPool();
-        databaseAdapter = new DatabaseAdapter(getActivity());
-        dateList = databaseAdapter.getVideo();
-        privateVideoAlbumGridViewAdapter = new PrivateVideoGridViewAdapter(getActivity(), dateList);
-        gridView.setAdapter(privateVideoAlbumGridViewAdapter);
-        if (dateList.size() == 0) {
-            showNoPictureTip();
-        } else {
-            hideNoPictureTip();
-        }
-        if(dateList.size()==1){
-            file_count.setText(dateList.size()+" File");
-        }else {
-            file_count.setText(dateList.size()+" Files");
-        }
-        privateVideoAlbumGridViewAdapter.registerDataSetObserver(new DataSetObserver() {
-            @Override
-            public void onChanged() {
-                super.onChanged();
-                if(dateList.size()==1){
-                    file_count.setText(dateList.size()+" File");
-                }else {
-                    file_count.setText(dateList.size()+" Files");
-                }
-            }
-        });
-
+        relodads();
+        resetView();
     }
-
-    int grid_count = 4;
 
     @Override
     public void onPause() {
         super.onPause();
-        //   checkbox_select_all.setChecked(false);
         showDec();
 
-    }
-
-
-    public static void showNoPictureTip() {
-        tvNoPicture.setText(R.string.no_video);
-        tvNoPicture.setVisibility(View.VISIBLE);
-    }
-
-    public void initView(View view) {
-        TextView tvTitle = view.findViewById(R.id.title);
-        tvTitle.setText(R.string.private_video_album);
-        tvNoPicture = view.findViewById(R.id.tv_no_picture);
-        gridView = view.findViewById(R.id.album_GridView);
-        privateVideoAlbumGridViewAdapter = new PrivateVideoGridViewAdapter(getActivity(), dateList);
-        gridView.setAdapter(privateVideoAlbumGridViewAdapter);
-        if(dateList.size()==1){
-            file_count.setText(dateList.size()+" File");
-        }else {
-            file_count.setText(dateList.size()+" Files");
-        }
-        privateVideoAlbumGridViewAdapter.registerDataSetObserver(new DataSetObserver() {
-            @Override
-            public void onChanged() {
-                super.onChanged();
-                if(dateList.size()==1){
-                    file_count.setText(dateList.size()+" File");
-                }else {
-                    file_count.setText(dateList.size()+" Files");
-                }
-            }
-        });
-        FloatingActionButton floatingActionButton=view.findViewById(R.id.floatingActionButton);
-        floatingActionButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(getActivity(), VideoAlbum.class));
-                // getActivity().finish();
-            }
-        });
-
-        Button button_min=view.findViewById(R.id.button_min);
-        button_min.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (Bimp.tempSelectVideo.size() == 0) {
-                    //    Toast.makeText(getActivity(), getString(R.string.choose_at_least_one_video), Toast.LENGTH_SHORT).show();
-                    Notifi.message(getActivity(),getString(R.string.choose_at_least_one_video),true);
-                }
-                DecryptionTask decryptionTask = new DecryptionTask(Bimp.tempSelectVideo);
-                decryptionTask.execute();
-            }
-        });
-        checkbox_select_all=view.findViewById(R.id.checkbox_select_all);
-        checkbox_select_all.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                privateVideoAlbumGridViewAdapter.selectAll(((CheckBox) view).isChecked());
-                showDec();
-            }
-        });
-        ImageView grid=view.findViewById(R.id.grid);
-        grid.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(grid_count==4) {
-                    gridView.setNumColumns(3);
-                    grid_count--;
-                }else if(grid_count==3) {
-                    gridView.setNumColumns(2);
-                    grid_count--;
-                }else if(grid_count==2) {
-                    gridView.setNumColumns(4);
-                    grid_count=4;
-                }
-            }
-        });
-
-        ImageView reverse=view.findViewById(R.id.reverse);
-        reverse.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                Collections.reverse(dateList);
-                privateVideoAlbumGridViewAdapter = new PrivateVideoGridViewAdapter(getActivity(), dateList);
-                gridView.setAdapter(privateVideoAlbumGridViewAdapter);
-            }
-
-        });
     }
 
 
@@ -318,6 +205,285 @@ public class PrivateVideoFragment extends Fragment {
         }
     }
 
+    public void resetView() {
+        dateList = databaseAdapter.getVideo();
+        databaseAdapter = new DatabaseAdapter(getActivity());
+
+        adapter = new PrivateVideoRecyclerViewAdapter(getActivity(), mRecyclerViewItems);
+
+        if (dateList.size() == 0) {
+            showNoPictureTip();
+        } else {
+            hideNoPictureTip();
+        }
+        if (dateList.size() == 1) {
+            file_count.setText(dateList.size() + " File");
+        } else {
+            file_count.setText(dateList.size() + " Files");
+        }
+        adapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
+            @Override
+            public void onChanged() {
+                super.onChanged();
+                if (dateList.size() == 1) {
+                    file_count.setText(dateList.size() + " File");
+                } else {
+                    file_count.setText(dateList.size() + " Files");
+                }
+            }
+        });
+        mRecyclerView.setAdapter(adapter);
+    }
+
+    public static void deletePrivateVideo(VideoItem item, String videoPath, ContentResolver contentResolver) {
+
+        new File(item.getPath()).delete();
+        databaseAdapter.deleteVideo(item.getId());
+
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(MediaStore.Video.Media._ID, item.getId());
+        contentValues.put(MediaStore.Video.Media.DATA, videoPath);
+        contentValues.put(MediaStore.Video.Media.DISPLAY_NAME, item.getDisplayName());
+        contentValues.put(MediaStore.Video.Media.SIZE, item.getSize());
+        contentValues.put(MediaStore.Video.Media.MIME_TYPE, item.getMimeType());
+        contentValues.put(MediaStore.Video.Media.DATE_ADDED, item.getDateAdded());
+        contentValues.put(MediaStore.Video.Media.TITLE, item.getTitle());
+        contentValues.put(MediaStore.Video.Media.ALBUM, item.getAlbum());
+        contentValues.put(MediaStore.Video.Media.BUCKET_ID, item.getBucketId());
+        contentValues.put(MediaStore.Video.Media.BUCKET_DISPLAY_NAME, item.getBucketDisplayName());
+        contentValues.put(MediaStore.Video.Media.WIDTH, item.getWidth());
+        contentValues.put(MediaStore.Video.Media.HEIGHT, item.getHeight());
+        contentResolver.insert(MediaStore.Video.Media.EXTERNAL_CONTENT_URI, contentValues);
+    }
+
+    private AdLoader adLoader;
+
+    public void initView(View view) {
+        TextView tvTitle = view.findViewById(R.id.title);
+        tvTitle.setText(R.string.private_video_album);
+        tvNoPicture = view.findViewById(R.id.tv_no_picture);
+
+        FloatingActionButton floatingActionButton = view.findViewById(R.id.floatingActionButton);
+        floatingActionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getActivity(), VideoAlbum.class));
+            }
+        });
+
+        Button button_min = view.findViewById(R.id.button_min);
+        button_min.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (Bimp.tempSelectVideo.size() == 0) {
+                    Notifi.message(getActivity(), getString(R.string.choose_at_least_one_video), true);
+                }
+                DecryptionTask decryptionTask = new DecryptionTask(Bimp.tempSelectVideo);
+                decryptionTask.execute();
+            }
+        });
+        checkbox_select_all = view.findViewById(R.id.checkbox_select_all);
+        checkbox_select_all.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Bimp.tempSelectVideo.clear();
+
+                if (((CheckBox) view).isChecked()) {
+                    Bimp.tempSelectVideo.addAll(mRecyclerViewVideoItems2);
+                }
+                adapter.notifyDataSetChanged();
+                showDec();
+            }
+        });
+        ImageView grid = view.findViewById(R.id.grid);
+        grid.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
+
+        ImageView reverse = view.findViewById(R.id.reverse);
+        reverse.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Collections.reverse(mRecyclerViewVideoItems);
+                adapter = new PrivateImageRecyclerViewAdapter(getActivity(), mRecyclerViewVideoItems);
+                mRecyclerView.setAdapter(adapter);
+            }
+
+        });
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.vault_fragment, container, false);
+
+        getActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+
+        button_min = view.findViewById(R.id.button_min);
+
+        file_count = view.findViewById(R.id.file_count);
+
+        databaseAdapter = new DatabaseAdapter(getActivity());
+        dateList = databaseAdapter.getVideo();
+
+
+        mRecyclerViewItems = getRecyclerViewVideoItems();
+        mRecyclerViewVideoItems2 = getRecyclerViewVideoItems2();
+        //  View rootView = inflater.inflate(R.layout.vault_fragment, container, false);
+        mRecyclerView = view.findViewById(R.id.recycler_view);
+
+        // Use this setting to improve performance if you know that changes
+        // in content do not change the layout size of the RecyclerView.
+        mRecyclerView.setHasFixedSize(false);
+
+        // Specify a linear layout manager.
+        RecyclerView.LayoutManager layoutManager = new GridLayoutManager(getContext(), 3);
+
+
+        mRecyclerView.setLayoutManager(layoutManager);
+
+        // Specify an adapter.
+        adapter = new PrivateVideoRecyclerViewAdapter(getActivity(), mRecyclerViewItems);
+        mRecyclerView.setAdapter(adapter);
+
+        initView(view);
+        loadVideoData();
+        loadNativeAds();
+
+        return view;
+    }
+
+    private void loadNativeAds() {
+
+        AdLoader.Builder builder = new AdLoader.Builder(getContext(), "ca-app-pub-3940256099942544/2247696110");
+        adLoader = builder.forUnifiedNativeAd(
+                new UnifiedNativeAd.OnUnifiedNativeAdLoadedListener() {
+                    @Override
+                    public void onUnifiedNativeAdLoaded(UnifiedNativeAd unifiedNativeAd) {
+
+                        mNativeAds.add(unifiedNativeAd);
+                        if (!adLoader.isLoading()) {
+                            insertImageAds();
+                        }
+                    }
+                }).withAdListener(
+                new AdListener() {
+                    @Override
+                    public void onAdFailedToLoad(int errorCode) {
+
+                        Log.e("MainActivity", "The previous native ad failed to load. Attempting to"
+                                + " load another.");
+                        if (!adLoader.isLoading()) {
+                            insertImageAds();
+                        }
+                    }
+                }).build();
+
+        if (mRecyclerViewVideoItems.size() > 219) {
+            adLoader.loadAds(new AdRequest.Builder().build(), 4);
+        } else if (mRecyclerViewVideoItems.size() > 146) {
+            adLoader.loadAds(new AdRequest.Builder().build(), 3);
+        } else if (mRecyclerViewVideoItems.size() > 73) {
+            adLoader.loadAds(new AdRequest.Builder().build(), 2);
+        } else if (mRecyclerViewVideoItems.size() > 6) {
+            adLoader.loadAds(new AdRequest.Builder().build(), 1);
+        }
+
+    }
+
+    private void insertImageAds() {
+        if (mNativeAds.size() <= 0) {
+            return;
+        }
+
+        GridLayoutManager layoutManager = new GridLayoutManager(getContext(), 3);
+
+        try {
+            mRecyclerViewVideoItems.add(6, mNativeAds.get(0));
+            mRecyclerViewVideoItems.add(73, mNativeAds.get(1));
+            mRecyclerViewVideoItems.add(146, mNativeAds.get(2));
+            mRecyclerViewVideoItems.add(219, mNativeAds.get(3));
+
+
+            adapter.notifyItemInserted(6);
+            adapter.notifyItemInserted(73);
+            adapter.notifyItemInserted(146);
+            adapter.notifyItemInserted(219);
+            adapter.notifyItemRangeInserted(6, mRecyclerViewItems.size());
+            adapter.notifyItemRangeInserted(73, mRecyclerViewItems.size());
+            adapter.notifyItemRangeInserted(146, mRecyclerViewItems.size());
+            adapter.notifyItemRangeInserted(219, mRecyclerViewItems.size());
+        } catch (Exception e) {
+            // Toast.makeText(getContext(),e.toString(),Toast.LENGTH_SHORT).show();
+        }
+
+        layoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
+            @Override
+            public int getSpanSize(int position) {
+
+
+                if (position == 6 || position == 73 || position == 146 || position == 219 && position != 0) {
+
+                    return 3;
+                } else
+                    return 1;
+
+            }
+        });
+        mRecyclerView.setLayoutManager(layoutManager);
+
+    }
+
+    public List<Object> getRecyclerViewVideoItems() {
+        return mRecyclerViewVideoItems;
+    }
+
+    public List<VideoItem> getRecyclerViewVideoItems2() {
+        return mRecyclerViewVideoItems2;
+    }
+
+    private void loadVideoData() {
+        databaseAdapter = new DatabaseAdapter(getActivity());
+        dateList = databaseAdapter.getVideo();
+        for (int i = 0; i <= dateList.size() - 1; i++) {
+
+            mRecyclerViewVideoItems.add(dateList.get(i));
+            mRecyclerViewVideoItems2.add(dateList.get(i));
+        }
+    }
+
+    private void relodads() {
+        mRecyclerView.removeAllViews();
+        mRecyclerViewVideoItems.clear();
+        mRecyclerViewVideoItems2.clear();
+        mRecyclerViewVideoItems = getRecyclerViewVideoItems();
+        mRecyclerViewVideoItems2 = getRecyclerViewVideoItems2();
+        //  View rootView = inflater.inflate(R.layout.vault_fragment, container, false);
+
+
+        // Use this setting to improve performance if you know that changes
+        // in content do not change the layout size of the RecyclerView.
+        mRecyclerView.setHasFixedSize(false);
+
+        // Specify a linear layout manager.
+        RecyclerView.LayoutManager layoutManager = new GridLayoutManager(getContext(), 3);
+
+
+        mRecyclerView.setLayoutManager(layoutManager);
+
+        // Specify an adapter.
+        adapter = new PrivateImageRecyclerViewAdapter(getActivity(), mRecyclerViewVideoItems);
+        mRecyclerView.setAdapter(adapter);
+
+
+        loadVideoData();
+        loadNativeAds();
+    }
+
     public class DecryptionTask extends AsyncTask<Void, Void, Boolean> {
         private ArrayList<VideoItem> listPrivVideo;
         int startSize;
@@ -364,173 +530,16 @@ public class PrivateVideoFragment extends Fragment {
         @Override
         protected void onPostExecute(Boolean result) {
             super.onPostExecute(result);
-            privateVideoAlbumGridViewAdapter.refreshDataAfterDecrypt();
+            relodads();
+            mRecyclerViewVideoItems.removeAll(Bimp.tempSelectVideo);
+            adapter.notifyDataSetChanged();
+            Bimp.tempSelectVideo.clear();
             String showMessage = result ? getString(R.string.decrypt_success) : getString(R.string.partial_video_decryption_failed);
-            //  Toast.makeText(getActivity(), showMessage, Toast.LENGTH_SHORT).show();
             Notifi.message(getActivity(), showMessage, result);
             checkbox_select_all.setChecked(false);
             progressDialog.dismiss();
             showDec();
-
-        }
-    }
-
-    public static void deletePrivateVideo(VideoItem item, String videoPath, ContentResolver contentResolver) {
-
-        new File(item.getPath()).delete();
-        databaseAdapter.deleteVideo(item.getId());
-
-        ContentValues contentValues = new ContentValues();
-        contentValues.put(MediaStore.Video.Media._ID, item.getId());
-        contentValues.put(MediaStore.Video.Media.DATA, videoPath);
-        contentValues.put(MediaStore.Video.Media.DISPLAY_NAME, item.getDisplayName());
-        contentValues.put(MediaStore.Video.Media.SIZE, item.getSize());
-        contentValues.put(MediaStore.Video.Media.MIME_TYPE, item.getMimeType());
-        contentValues.put(MediaStore.Video.Media.DATE_ADDED, item.getDateAdded());
-        contentValues.put(MediaStore.Video.Media.TITLE, item.getTitle());
-        contentValues.put(MediaStore.Video.Media.ALBUM, item.getAlbum());
-        contentValues.put(MediaStore.Video.Media.BUCKET_ID, item.getBucketId());
-        contentValues.put(MediaStore.Video.Media.BUCKET_DISPLAY_NAME, item.getBucketDisplayName());
-        contentValues.put(MediaStore.Video.Media.WIDTH, item.getWidth());
-        contentValues.put(MediaStore.Video.Media.HEIGHT, item.getHeight());
-        contentResolver.insert(MediaStore.Video.Media.EXTERNAL_CONTENT_URI, contentValues);
-    }
-
-    private AdLoader adLoader;
-    private List<Object> mRecyclerViewImageItems = new ArrayList<>();
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.vault_fragment, container, false);
-
-        getActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-
-        button_min = view.findViewById(R.id.button_min);
-
-        file_count = view.findViewById(R.id.file_count);
-        executorService = Executors.newCachedThreadPool();
-        databaseAdapter = new DatabaseAdapter(getActivity());
-        dateList = databaseAdapter.getVideo();
-
-        initView(view);
-
-        mRecyclerViewItems = getRecyclerViewImageItems();
-        //  View rootView = inflater.inflate(R.layout.vault_fragment, container, false);
-        mRecyclerView = view.findViewById(R.id.recycler_view);
-
-        // Use this setting to improve performance if you know that changes
-        // in content do not change the layout size of the RecyclerView.
-        mRecyclerView.setHasFixedSize(false);
-
-        // Specify a linear layout manager.
-        RecyclerView.LayoutManager layoutManager = new GridLayoutManager(getContext(), 3);
-
-
-        mRecyclerView.setLayoutManager(layoutManager);
-
-        // Specify an adapter.
-        adapter = new RecyclerViewVideoAdapter(getActivity(), mRecyclerViewItems);
-        mRecyclerView.setAdapter(adapter);
-
-
-        loadImageData();
-        loadNativeAds();
-
-        return view;
-    }
-
-    private void loadNativeAds() {
-
-        AdLoader.Builder builder = new AdLoader.Builder(getContext(), "ca-app-pub-3940256099942544/2247696110");
-        adLoader = builder.forUnifiedNativeAd(
-                new UnifiedNativeAd.OnUnifiedNativeAdLoadedListener() {
-                    @Override
-                    public void onUnifiedNativeAdLoaded(UnifiedNativeAd unifiedNativeAd) {
-
-                        mNativeAds.add(unifiedNativeAd);
-                        if (!adLoader.isLoading()) {
-                            insertImageAds();
-                        }
-                    }
-                }).withAdListener(
-                new AdListener() {
-                    @Override
-                    public void onAdFailedToLoad(int errorCode) {
-
-                        Log.e("MainActivity", "The previous native ad failed to load. Attempting to"
-                                + " load another.");
-                        if (!adLoader.isLoading()) {
-                            insertImageAds();
-                        }
-                    }
-                }).build();
-
-        if (mRecyclerViewImageItems.size() > 219) {
-            adLoader.loadAds(new AdRequest.Builder().build(), 4);
-        } else if (mRecyclerViewImageItems.size() > 146) {
-            adLoader.loadAds(new AdRequest.Builder().build(), 3);
-        } else if (mRecyclerViewImageItems.size() > 73) {
-            adLoader.loadAds(new AdRequest.Builder().build(), 2);
-        } else if (mRecyclerViewImageItems.size() > 6) {
-            adLoader.loadAds(new AdRequest.Builder().build(), 1);
-        }
-
-    }
-
-    private void insertImageAds() {
-        if (mNativeAds.size() <= 0) {
-            return;
-        }
-
-        GridLayoutManager layoutManager = new GridLayoutManager(getContext(), 3);
-
-        try {
-            mRecyclerViewImageItems.add(6, mNativeAds.get(0));
-            mRecyclerViewImageItems.add(73, mNativeAds.get(1));
-            mRecyclerViewImageItems.add(146, mNativeAds.get(2));
-            mRecyclerViewImageItems.add(219, mNativeAds.get(3));
-
-
-            adapter.notifyItemInserted(6);
-            adapter.notifyItemInserted(73);
-            adapter.notifyItemInserted(146);
-            adapter.notifyItemInserted(219);
-            adapter.notifyItemRangeInserted(6, mRecyclerViewItems.size());
-            adapter.notifyItemRangeInserted(73, mRecyclerViewItems.size());
-            adapter.notifyItemRangeInserted(146, mRecyclerViewItems.size());
-            adapter.notifyItemRangeInserted(219, mRecyclerViewItems.size());
-        } catch (Exception e) {
-            // Toast.makeText(getContext(),e.toString(),Toast.LENGTH_SHORT).show();
-        }
-
-        layoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
-            @Override
-            public int getSpanSize(int position) {
-
-
-                if (position == 6 || position == 73 || position == 146 || position == 219 && position != 0) {
-
-                    return 3;
-                } else
-                    return 1;
-
-            }
-        });
-        mRecyclerView.setLayoutManager(layoutManager);
-
-    }
-
-    public List<Object> getRecyclerViewImageItems() {
-        return mRecyclerViewImageItems;
-    }
-
-    private void loadImageData() {
-        databaseAdapter = new DatabaseAdapter(getActivity());
-        dateList = databaseAdapter.getVideo();
-        for (int i = 0; i <= dateList.size() - 1; i++) {
-
-            mRecyclerViewImageItems.add(dateList.get(i));
-
+            resetView();
         }
     }
 }

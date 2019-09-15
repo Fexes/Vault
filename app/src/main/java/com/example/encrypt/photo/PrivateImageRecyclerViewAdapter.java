@@ -26,11 +26,13 @@ import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.encrypt.R;
 import com.example.encrypt.activity.BseApplication;
+import com.example.encrypt.util.UnifiedNativeAdViewHolder;
 import com.example.encrypt.vault.PrivatePhotoFragment;
 import com.google.android.gms.ads.formats.NativeAd;
 import com.google.android.gms.ads.formats.UnifiedNativeAd;
@@ -40,7 +42,7 @@ import com.makeramen.roundedimageview.RoundedImageView;
 import java.util.List;
 
 
-public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class PrivateImageRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     // A menu item view type.
     private static final int MENU_ITEM_VIEW_TYPE = 0;
 
@@ -52,7 +54,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     private final List<Object> mRecyclerViewItems;
 
 
-    public RecyclerViewAdapter(Context context, List<Object> mRecyclerViewItems) {
+    public PrivateImageRecyclerViewAdapter(Context context, List<Object> mRecyclerViewItems) {
         this.mContext = context;
 
         this.mRecyclerViewItems = mRecyclerViewItems;
@@ -78,7 +80,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         switch (viewType) {
             case UNIFIED_NATIVE_AD_VIEW_TYPE:
                 View unifiedNativeLayoutView = LayoutInflater.from(
-                        viewGroup.getContext()).inflate(R.layout.xxx,
+                        viewGroup.getContext()).inflate(R.layout.ad_layout,
                         viewGroup, false);
 
                 return new UnifiedNativeAdViewHolder(unifiedNativeLayoutView);
@@ -92,6 +94,12 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     }
 
     @Override
+    public void onViewDetachedFromWindow(@NonNull RecyclerView.ViewHolder holder) {
+        super.onViewDetachedFromWindow(holder);
+        holder.itemView.clearAnimation();
+    }
+
+    @Override
     public void onBindViewHolder(final RecyclerView.ViewHolder holder, final int position) {
         int viewType = getItemViewType(position);
         switch (viewType) {
@@ -100,7 +108,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 populateNativeAdView(nativeAd, ((UnifiedNativeAdViewHolder) holder).getAdView());
                 break;
             case MENU_ITEM_VIEW_TYPE:
-                // fall through
             default:
                 final MenuItemViewHolder menuItemHolder = (MenuItemViewHolder) holder;
                 try {
@@ -147,6 +154,14 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
                         }
                     });
+
+/*
+                    Animation animation = AnimationUtils.loadAnimation(mContext,
+                            (position > lastPosition) ? R.anim.up_from_bottom
+                                    : R.anim.down_from_top);
+                    holder.itemView.startAnimation(animation);
+                    lastPosition = position;
+*/
                 } catch (Exception e) {
                 }
         }
@@ -159,33 +174,32 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         ((TextView) adView.getBodyView()).setText(nativeAd.getBody());
         ((Button) adView.getCallToActionView()).setText(nativeAd.getCallToAction());
 
-        // These assets aren't guaranteed to be in every UnifiedNativeAd, so it's important to
-        // check before trying to display them.
+
         NativeAd.Image icon = nativeAd.getIcon();
 
         if (icon == null) {
-            adView.getIconView().setVisibility(View.INVISIBLE);
+            adView.getIconView().setVisibility(View.GONE);
         } else {
             ((ImageView) adView.getIconView()).setImageDrawable(icon.getDrawable());
             adView.getIconView().setVisibility(View.VISIBLE);
         }
 
         if (nativeAd.getPrice() == null) {
-            adView.getPriceView().setVisibility(View.INVISIBLE);
+            adView.getPriceView().setVisibility(View.GONE);
         } else {
             adView.getPriceView().setVisibility(View.VISIBLE);
             ((TextView) adView.getPriceView()).setText(nativeAd.getPrice());
         }
 
         if (nativeAd.getStore() == null) {
-            adView.getStoreView().setVisibility(View.INVISIBLE);
+            adView.getStoreView().setVisibility(View.GONE);
         } else {
             adView.getStoreView().setVisibility(View.VISIBLE);
             ((TextView) adView.getStoreView()).setText(nativeAd.getStore());
         }
 
         if (nativeAd.getStarRating() == null) {
-            adView.getStarRatingView().setVisibility(View.INVISIBLE);
+            adView.getStarRatingView().setVisibility(View.GONE);
         } else {
             ((RatingBar) adView.getStarRatingView())
                     .setRating(nativeAd.getStarRating().floatValue());
@@ -193,7 +207,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         }
 
         if (nativeAd.getAdvertiser() == null) {
-            adView.getAdvertiserView().setVisibility(View.INVISIBLE);
+            adView.getAdvertiserView().setVisibility(View.GONE);
         } else {
             ((TextView) adView.getAdvertiserView()).setText(nativeAd.getAdvertiser());
             adView.getAdvertiserView().setVisibility(View.VISIBLE);

@@ -13,9 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.example.encrypt.photo;
+package com.example.encrypt.util;
 
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -27,14 +29,29 @@ public class UnifiedNativeAdViewHolder extends RecyclerView.ViewHolder {
 
     private UnifiedNativeAdView adView;
 
-    UnifiedNativeAdViewHolder(View view) {
+    public UnifiedNativeAdViewHolder(View view) {
         super(view);
         adView = view.findViewById(R.id.ad_view);
 
         // The MediaView will display a video asset if one is present in the ad, and the
         // first image asset otherwise.
-        adView.setMediaView((MediaView) adView.findViewById(R.id.ad_media));
 
+        MediaView mediaView = adView.findViewById(R.id.ad_media);
+
+        mediaView.setOnHierarchyChangeListener(new ViewGroup.OnHierarchyChangeListener() {
+            @Override
+            public void onChildViewAdded(View parent, View child) {
+                if (child instanceof ImageView) {
+                    ImageView imageView = (ImageView) child;
+                    imageView.setAdjustViewBounds(true);
+                }
+            }
+
+            @Override
+            public void onChildViewRemoved(View parent, View child) {
+            }
+        });
+        adView.setMediaView(mediaView);
         // Register the view used for each individual asset.
         adView.setHeadlineView(adView.findViewById(R.id.ad_headline));
         adView.setBodyView(adView.findViewById(R.id.ad_body));

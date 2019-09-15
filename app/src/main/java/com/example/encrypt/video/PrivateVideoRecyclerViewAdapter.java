@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.example.encrypt.photo;
+package com.example.encrypt.video;
 
 import android.content.Context;
 import android.content.Intent;
@@ -26,13 +26,14 @@ import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.encrypt.R;
+import com.example.encrypt.photo.Bimp;
+import com.example.encrypt.util.UnifiedNativeAdViewHolder;
 import com.example.encrypt.vault.PrivateVideoFragment;
-import com.example.encrypt.video.PrivateVideoPlayActivity;
-import com.example.encrypt.video.VideoItem;
 import com.google.android.gms.ads.formats.NativeAd;
 import com.google.android.gms.ads.formats.UnifiedNativeAd;
 import com.google.android.gms.ads.formats.UnifiedNativeAdView;
@@ -41,7 +42,7 @@ import com.makeramen.roundedimageview.RoundedImageView;
 import java.util.List;
 
 
-public class RecyclerViewVideoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class PrivateVideoRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     // A menu item view type.
     private static final int MENU_ITEM_VIEW_TYPE = 0;
 
@@ -53,7 +54,7 @@ public class RecyclerViewVideoAdapter extends RecyclerView.Adapter<RecyclerView.
     private final List<Object> mRecyclerViewItems;
 
 
-    public RecyclerViewVideoAdapter(Context context, List<Object> mRecyclerViewItems) {
+    public PrivateVideoRecyclerViewAdapter(Context context, List<Object> mRecyclerViewItems) {
         this.mContext = context;
 
         this.mRecyclerViewItems = mRecyclerViewItems;
@@ -79,7 +80,7 @@ public class RecyclerViewVideoAdapter extends RecyclerView.Adapter<RecyclerView.
         switch (viewType) {
             case UNIFIED_NATIVE_AD_VIEW_TYPE:
                 View unifiedNativeLayoutView = LayoutInflater.from(
-                        viewGroup.getContext()).inflate(R.layout.xxx,
+                        viewGroup.getContext()).inflate(R.layout.ad_layout,
                         viewGroup, false);
 
                 return new UnifiedNativeAdViewHolder(unifiedNativeLayoutView);
@@ -90,6 +91,12 @@ public class RecyclerViewVideoAdapter extends RecyclerView.Adapter<RecyclerView.
                         R.layout.item_video_album_gridview, viewGroup, false);
                 return new MenuItemViewHolder(menuItemLayoutView);
         }
+    }
+
+    @Override
+    public void onViewDetachedFromWindow(@NonNull RecyclerView.ViewHolder holder) {
+        super.onViewDetachedFromWindow(holder);
+        holder.itemView.clearAnimation();
     }
 
     @Override
@@ -136,6 +143,7 @@ public class RecyclerViewVideoAdapter extends RecyclerView.Adapter<RecyclerView.
 
                         }
                     });
+
                 } catch (Exception e) {
                 }
         }

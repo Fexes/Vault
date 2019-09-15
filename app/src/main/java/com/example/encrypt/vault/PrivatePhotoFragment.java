@@ -5,7 +5,6 @@ import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
-import android.database.DataSetObserver;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -19,7 +18,6 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -35,8 +33,7 @@ import com.example.encrypt.database.DatabaseAdapter;
 import com.example.encrypt.photo.Bimp;
 import com.example.encrypt.photo.Folders;
 import com.example.encrypt.photo.ImageItem;
-import com.example.encrypt.photo.PrivateAlbumGridViewAdapter;
-import com.example.encrypt.photo.RecyclerViewAdapter;
+import com.example.encrypt.photo.PrivateImageRecyclerViewAdapter;
 import com.example.encrypt.util.Notifi;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdLoader;
@@ -52,15 +49,13 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 
 public class PrivatePhotoFragment extends Fragment {
-    private GridView gridView;
+
     public static ArrayList<ImageItem> dateList;
-    private PrivateAlbumGridViewAdapter privateAlbumGridViewAdapter;
-    private static ExecutorService executorService;
+
+
     private static DatabaseAdapter databaseAdapter;
     private ProgressDialog progressDialog;
     private static TextView tvNoPicture;
@@ -95,70 +90,9 @@ public class PrivatePhotoFragment extends Fragment {
     }
 
     static CheckBox checkbox_select_all;
-    int grid_count = 3;
-
-    public void initButtons(View view) {
 
 
-        FloatingActionButton floatingActionButton = view.findViewById(R.id.floatingActionButton);
-        floatingActionButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(getActivity(), Folders.class));
-                //getActivity().finish();
-            }
-        });
-
-        Button button_min = view.findViewById(R.id.button_min);
-        button_min.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (Bimp.tempSelectBitmap.size() == 0) {
-                    //   Toast.makeText(getActivity(), getString(R.string.choose_at_least_one_picture), Toast.LENGTH_SHORT).show();
-                    Notifi.message(getActivity(), getString(R.string.choose_at_least_one_picture), true);
-
-                }
-                PrivatePhotoFragment.DecryptionTask decryptionTask = new PrivatePhotoFragment.DecryptionTask(Bimp.tempSelectBitmap);
-                decryptionTask.execute();
-            }
-        });
-        checkbox_select_all = view.findViewById(R.id.checkbox_select_all);
-        checkbox_select_all.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                privateAlbumGridViewAdapter.selectAll(((CheckBox) view).isChecked());
-                showDec();
-            }
-        });
-        ImageView grid = view.findViewById(R.id.grid);
-        grid.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (grid_count == 4) {
-                    gridView.setNumColumns(3);
-                    grid_count--;
-                } else if (grid_count == 3) {
-                    gridView.setNumColumns(2);
-                    grid_count--;
-                } else if (grid_count == 2) {
-                    gridView.setNumColumns(4);
-                    grid_count = 4;
-                }
-            }
-        });
-
-        ImageView reverse = view.findViewById(R.id.reverse);
-        reverse.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                Collections.reverse(dateList);
-                privateAlbumGridViewAdapter = new PrivateAlbumGridViewAdapter(getActivity(), dateList);
-                gridView.setAdapter(privateAlbumGridViewAdapter);
-            }
-
-        });
-    }
+    private List<ImageItem> mRecyclerViewImageItems2 = new ArrayList<>();
 
 
     public static void showDec() {
@@ -174,8 +108,71 @@ public class PrivatePhotoFragment extends Fragment {
 
     public static RecyclerView.Adapter adapter;
     public static RecyclerView mRecyclerView;
-    private List<Object> mRecyclerViewItems;
+
     private List<UnifiedNativeAd> mNativeAds = new ArrayList<>();
+
+    public void initButtons(View view) {
+
+
+        FloatingActionButton floatingActionButton = view.findViewById(R.id.floatingActionButton);
+        floatingActionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getActivity(), Folders.class));
+            }
+        });
+
+        Button button_min = view.findViewById(R.id.button_min);
+        button_min.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (Bimp.tempSelectBitmap.size() == 0) {
+                    Notifi.message(getActivity(), getString(R.string.choose_at_least_one_picture), true);
+
+                }
+                DecryptionTask decryptionTask = new DecryptionTask(Bimp.tempSelectBitmap);
+                decryptionTask.execute();
+            }
+        });
+        checkbox_select_all = view.findViewById(R.id.checkbox_select_all);
+        checkbox_select_all.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Bimp.tempSelectBitmap.clear();
+                if (((CheckBox) view).isChecked()) {
+                    Bimp.tempSelectBitmap.addAll(mRecyclerViewImageItems2);
+                }
+
+                adapter.notifyDataSetChanged();
+                showDec();
+            }
+        });
+        ImageView grid = view.findViewById(R.id.grid);
+        grid.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
+
+        ImageView reverse = view.findViewById(R.id.reverse);
+        reverse.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Collections.reverse(mRecyclerViewImageItems);
+                adapter = new PrivateImageRecyclerViewAdapter(getActivity(), mRecyclerViewImageItems);
+                mRecyclerView.setAdapter(adapter);
+
+            }
+
+        });
+    }
+
+    public static void showNoPictureTip() {
+        tvNoPicture.setVisibility(View.VISIBLE);
+    }
 
     @Override
     public void onDestroy() {
@@ -183,25 +180,16 @@ public class PrivatePhotoFragment extends Fragment {
         Bimp.tempSelectBitmap.clear();
         dateList = null;
         databaseAdapter = null;
-        executorService = null;
+
         tvNoPicture = null;
     }
 
-    public static void showNoPictureTip() {
-        tvNoPicture.setVisibility(View.VISIBLE);
-    }
-
-
-    @Override
-    public void onResume() {
-        super.onResume();
-
+    public void resetView() {
         dateList = databaseAdapter.getPhoto();
 
 
         tvNoPicture = supervire.findViewById(R.id.tv_no_picture);
-        gridView = supervire.findViewById(R.id.album_GridView);//组件
-        privateAlbumGridViewAdapter = new PrivateAlbumGridViewAdapter(getActivity(), dateList);
+        adapter = new PrivateImageRecyclerViewAdapter(getActivity(), mRecyclerViewImageItems);
         if (dateList.size() == 0) {
             showNoPictureTip();
         } else {
@@ -212,19 +200,18 @@ public class PrivatePhotoFragment extends Fragment {
         }else {
             file_count.setText(dateList.size()+" Images");
         }
-        privateAlbumGridViewAdapter.registerDataSetObserver(new DataSetObserver() {
+        adapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
             @Override
             public void onChanged() {
                 super.onChanged();
-                if(dateList.size()==1){
-                    file_count.setText(dateList.size()+" Image");
-                }else {
-                    file_count.setText(dateList.size()+" Images");
+                if (dateList.size() == 1) {
+                    file_count.setText(dateList.size() + " Image");
+                } else {
+                    file_count.setText(dateList.size() + " Images");
                 }
             }
         });
-        gridView.setAdapter(privateAlbumGridViewAdapter);
-
+        mRecyclerView.setAdapter(adapter);
 
     }
 
@@ -311,59 +298,12 @@ public class PrivatePhotoFragment extends Fragment {
         }
     }
 
-    public class DecryptionTask extends AsyncTask<Void, Void, Boolean> {
-        private ArrayList<ImageItem> listPrivFliePath;
-        int startSize;
+    @Override
+    public void onResume() {
+        super.onResume();
+        relodads();
+        resetView();
 
-        public DecryptionTask(ArrayList<ImageItem> listPrivFliePath) {
-            this.listPrivFliePath = listPrivFliePath;
-            progressDialog = new ProgressDialog(getActivity());
-            progressDialog.setCancelable(false);
-        }
-
-        @Override
-        public void onPreExecute() {
-            super.onPreExecute();
-            startSize = getActivity().getContentResolver()
-                    .query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, null, null, null, null).getCount();
-            progressDialog.setTitle(getString(R.string.decrypting));
-            progressDialog.setIcon(R.mipmap.ic_launcher);
-            progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-            progressDialog.show();
-        }
-
-        @RequiresApi(api = Build.VERSION_CODES.N)
-        @Override
-        public Boolean doInBackground(Void... params) {
-            boolean result = decryptFileList(listPrivFliePath);
-            int totalTime = 0;
-            while (result && getActivity().getApplicationContext().getContentResolver().
-                    query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, null, null, null, null).getCount()
-                    != (startSize + listPrivFliePath.size()) && totalTime < listPrivFliePath.size() / 2) {
-                try {
-                    Thread.sleep(1000);
-                    totalTime += 2;
-
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-
-            return result;
-        }
-
-        @Override
-        public void onPostExecute(Boolean result) {
-            super.onPostExecute(result);
-            privateAlbumGridViewAdapter.refreshDataAfterDecrypt();
-            //loadFirstScreenImage();
-            String showMessage = result ? getString(R.string.decrypt_success) : getString(R.string.partial_picture_decryption_failed);
-            // Toast.makeText(getActivity(), showMessage, Toast.LENGTH_SHORT).show();
-            Notifi.message(getActivity(), showMessage, result);
-            checkbox_select_all.setChecked(false);
-            progressDialog.dismiss();
-            showDec();
-        }
     }
 
     private AdLoader adLoader;
@@ -380,7 +320,8 @@ public class PrivatePhotoFragment extends Fragment {
             Window w = getActivity().getWindow();
             w.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
         }
-        mRecyclerViewItems = getRecyclerViewImageItems();
+        mRecyclerViewImageItems = getRecyclerViewImageItems();
+        mRecyclerViewImageItems2 = getRecyclerViewImageItems2();
         //  View rootView = inflater.inflate(R.layout.vault_fragment, container, false);
         mRecyclerView = view.findViewById(R.id.recycler_view);
 
@@ -395,7 +336,7 @@ public class PrivatePhotoFragment extends Fragment {
         mRecyclerView.setLayoutManager(layoutManager);
 
         // Specify an adapter.
-        adapter = new RecyclerViewAdapter(getActivity(), mRecyclerViewItems);
+        adapter = new PrivateImageRecyclerViewAdapter(getActivity(), mRecyclerViewImageItems);
         mRecyclerView.setAdapter(adapter);
 
 
@@ -408,7 +349,7 @@ public class PrivatePhotoFragment extends Fragment {
         button_min = view.findViewById(R.id.button_min);
 
         file_count = view.findViewById(R.id.file_count);
-        executorService = Executors.newCachedThreadPool();
+
         databaseAdapter = new DatabaseAdapter(getActivity());
 
         initButtons(view);
@@ -417,14 +358,14 @@ public class PrivatePhotoFragment extends Fragment {
 
 
         tvNoPicture = view.findViewById(R.id.tv_no_picture);
-        gridView = view.findViewById(R.id.album_GridView);
-        privateAlbumGridViewAdapter = new PrivateAlbumGridViewAdapter(getActivity(), dateList);
+
+
         if (dateList.size() == 1) {
             file_count.setText(dateList.size() + " Image");
         } else {
             file_count.setText(dateList.size() + " Images");
         }
-        privateAlbumGridViewAdapter.registerDataSetObserver(new DataSetObserver() {
+        adapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
             @Override
             public void onChanged() {
                 super.onChanged();
@@ -435,13 +376,45 @@ public class PrivatePhotoFragment extends Fragment {
                 }
             }
         });
-        gridView.setAdapter(privateAlbumGridViewAdapter);
+        mRecyclerView.setAdapter(adapter);
 
         return view;
     }
 
+    public List<ImageItem> getRecyclerViewImageItems2() {
+        return mRecyclerViewImageItems2;
+    }
+
     public List<Object> getRecyclerViewImageItems() {
         return mRecyclerViewImageItems;
+    }
+
+    private void relodads() {
+        mRecyclerView.removeAllViews();
+        mRecyclerViewImageItems.clear();
+        mRecyclerViewImageItems2.clear();
+        mRecyclerViewImageItems = getRecyclerViewImageItems();
+        mRecyclerViewImageItems2 = getRecyclerViewImageItems2();
+        //  View rootView = inflater.inflate(R.layout.vault_fragment, container, false);
+
+
+        // Use this setting to improve performance if you know that changes
+        // in content do not change the layout size of the RecyclerView.
+        mRecyclerView.setHasFixedSize(false);
+
+        // Specify a linear layout manager.
+        RecyclerView.LayoutManager layoutManager = new GridLayoutManager(getContext(), 3);
+
+
+        mRecyclerView.setLayoutManager(layoutManager);
+
+        // Specify an adapter.
+        adapter = new PrivateImageRecyclerViewAdapter(getActivity(), mRecyclerViewImageItems);
+        mRecyclerView.setAdapter(adapter);
+
+
+        loadImageData();
+        loadNativeAds();
     }
 
     private void loadNativeAds() {
@@ -500,10 +473,10 @@ public class PrivatePhotoFragment extends Fragment {
             adapter.notifyItemInserted(73);
             adapter.notifyItemInserted(146);
             adapter.notifyItemInserted(219);
-            adapter.notifyItemRangeInserted(6, mRecyclerViewItems.size());
-            adapter.notifyItemRangeInserted(73, mRecyclerViewItems.size());
-            adapter.notifyItemRangeInserted(146, mRecyclerViewItems.size());
-            adapter.notifyItemRangeInserted(219, mRecyclerViewItems.size());
+            adapter.notifyItemRangeInserted(6, mRecyclerViewImageItems.size());
+            adapter.notifyItemRangeInserted(73, mRecyclerViewImageItems.size());
+            adapter.notifyItemRangeInserted(146, mRecyclerViewImageItems.size());
+            adapter.notifyItemRangeInserted(219, mRecyclerViewImageItems.size());
         } catch (Exception e) {
             // Toast.makeText(getContext(),e.toString(),Toast.LENGTH_SHORT).show();
         }
@@ -531,7 +504,64 @@ public class PrivatePhotoFragment extends Fragment {
         for (int i = 0; i <= dateList.size() - 1; i++) {
 
             mRecyclerViewImageItems.add(dateList.get(i));
+            mRecyclerViewImageItems2.add(dateList.get(i));
+        }
+    }
 
+    public class DecryptionTask extends AsyncTask<Void, Void, Boolean> {
+        private ArrayList<ImageItem> listPrivFliePath;
+        int startSize;
+
+        public DecryptionTask(ArrayList<ImageItem> listPrivFliePath) {
+            this.listPrivFliePath = listPrivFliePath;
+            progressDialog = new ProgressDialog(getActivity());
+            progressDialog.setCancelable(false);
+        }
+
+        @Override
+        public void onPreExecute() {
+            super.onPreExecute();
+            startSize = getActivity().getContentResolver()
+                    .query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, null, null, null, null).getCount();
+            progressDialog.setTitle(getString(R.string.decrypting));
+            progressDialog.setIcon(R.mipmap.ic_launcher);
+            progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+            progressDialog.show();
+        }
+
+        @RequiresApi(api = Build.VERSION_CODES.N)
+        @Override
+        public Boolean doInBackground(Void... params) {
+            boolean result = decryptFileList(listPrivFliePath);
+            int totalTime = 0;
+            while (result && getActivity().getApplicationContext().getContentResolver().
+                    query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, null, null, null, null).getCount()
+                    != (startSize + listPrivFliePath.size()) && totalTime < listPrivFliePath.size() / 2) {
+                try {
+                    Thread.sleep(1000);
+                    totalTime += 2;
+
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            return result;
+        }
+
+        @Override
+        public void onPostExecute(Boolean result) {
+            super.onPostExecute(result);
+            relodads();
+            mRecyclerViewImageItems.removeAll(Bimp.tempSelectBitmap);
+            adapter.notifyDataSetChanged();
+            Bimp.tempSelectBitmap.clear();
+            String showMessage = result ? getString(R.string.decrypt_success) : getString(R.string.partial_picture_decryption_failed);
+            Notifi.message(getActivity(), showMessage, result);
+            checkbox_select_all.setChecked(false);
+            progressDialog.dismiss();
+            resetView();
+            showDec();
         }
     }
 
