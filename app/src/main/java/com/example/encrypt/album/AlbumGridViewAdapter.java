@@ -150,7 +150,7 @@ public class AlbumGridViewAdapter extends BaseAdapter {
 			public boolean onLongClick(View view) {
 				context.startActivity(new Intent(context,Gallery.class).putExtra("position",position).putExtra("isFromPrivateAlbum",false));
 
-				return false;
+                return true;
 			}
 		});
 		return convertView;

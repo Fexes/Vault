@@ -74,8 +74,8 @@ public class VideoAlbumGridViewAdapter extends BaseAdapter {
             viewHolder = new ViewHolder();
             convertView = LayoutInflater.from(context).inflate(R.layout.item_video_album_gridview, parent, false);
             viewHolder.imageView =  convertView.findViewById(R.id.image_view);
-            viewHolder.checkBox = (CheckBox) convertView.findViewById(R.id.checkBox);
-            viewHolder.imagePlay = (ImageView) convertView.findViewById(R.id.image_play);
+            viewHolder.checkBox = convertView.findViewById(R.id.checkBox);
+            viewHolder.imagePlay = convertView.findViewById(R.id.image_play);
             viewHolder.imagePlay.setVisibility(View.VISIBLE);
             convertView.setTag(viewHolder);
         } else {
@@ -102,7 +102,16 @@ public class VideoAlbumGridViewAdapter extends BaseAdapter {
         } else {
             viewHolder.checkBox.setChecked(false);
         }
-
+        viewHolder.checkBox.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                Uri uri = Uri.parse(dataList.get(position).getPath());
+                Intent intent = new Intent(Intent.ACTION_VIEW);
+                intent.setDataAndType(uri, "video/*");
+                context.startActivity(intent);
+                return true;
+            }
+        });
         viewHolder.imageView.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
                 Uri uri = Uri.parse(dataList.get(position).getPath());

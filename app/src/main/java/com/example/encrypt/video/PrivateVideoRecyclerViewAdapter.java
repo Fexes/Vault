@@ -150,6 +150,7 @@ public class PrivateVideoRecyclerViewAdapter extends RecyclerView.Adapter<Recycl
 
                         }
                     });
+
                     menuItemHolder.imageView.setOnLongClickListener(new View.OnLongClickListener() {
                         @Override
                         public boolean onLongClick(View view) {

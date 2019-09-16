@@ -196,12 +196,14 @@ public class PrivatePhotoFragment extends Fragment {
         tvNoPicture.setVisibility(View.VISIBLE);
     }
 
+    @SuppressLint("RestrictedApi")
     @Override
     public void onDestroy() {
         super.onDestroy();
         Bimp.tempSelectBitmap.clear();
         dateList = null;
         databaseAdapter = null;
+        cancel.setVisibility(View.GONE);
         PrivateImageRecyclerViewAdapter.long_click = false;
         tvNoPicture = null;
     }
@@ -237,12 +239,15 @@ public class PrivatePhotoFragment extends Fragment {
 
     }
 
+    @SuppressLint("RestrictedApi")
     @Override
     public void onPause() {
         super.onPause();
         PrivateImageRecyclerViewAdapter.long_click = false;
+        cancel.setVisibility(View.GONE);
+        Bimp.tempSelectBitmap.clear();
         showDec();
-         if (!BseApplication.sp.getBoolean("privAlbumToGallery", false)) {
+        if (!BseApplication.sp.getBoolean("privAlbumToGallery", false)) {
 
         }
     }

@@ -29,7 +29,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.encrypt.R;
 import com.example.encrypt.database.DatabaseAdapter;
 import com.example.encrypt.photo.Bimp;
-import com.example.encrypt.photo.PrivateImageRecyclerViewAdapter;
 import com.example.encrypt.util.Notifi;
 import com.example.encrypt.video.PrivateVideoRecyclerViewAdapter;
 import com.example.encrypt.video.VideoAlbum;
@@ -248,24 +247,28 @@ public class PrivateVideoFragment extends Fragment {
         contentResolver.insert(MediaStore.Video.Media.EXTERNAL_CONTENT_URI, contentValues);
     }
 
+    @SuppressLint("RestrictedApi")
     @Override
     public void onDestroy() {
         super.onDestroy();
         Bimp.tempSelectVideo.clear();
-        PrivateImageRecyclerViewAdapter.long_click = false;
+        PrivateVideoRecyclerViewAdapter.long_click = false;
         dateList = null;
         databaseAdapter = null;
-
+        cancel.setVisibility(View.GONE);
         tvNoPicture = null;
     }
 
     private AdLoader adLoader;
 
+    @SuppressLint("RestrictedApi")
     @Override
     public void onPause() {
         super.onPause();
+        Bimp.tempSelectVideo.clear();
         showDec();
-        PrivateImageRecyclerViewAdapter.long_click = false;
+        cancel.setVisibility(View.GONE);
+        PrivateVideoRecyclerViewAdapter.long_click = false;
     }
 
     public void initView(View view) {
@@ -335,7 +338,7 @@ public class PrivateVideoFragment extends Fragment {
             public void onClick(View view) {
 
                 Collections.reverse(mRecyclerViewVideoItems);
-                adapter = new PrivateImageRecyclerViewAdapter(getActivity(), mRecyclerViewVideoItems);
+                adapter = new PrivateVideoRecyclerViewAdapter(getActivity(), mRecyclerViewVideoItems);
                 mRecyclerView.setAdapter(adapter);
             }
 
@@ -501,7 +504,7 @@ public class PrivateVideoFragment extends Fragment {
         mRecyclerView.setLayoutManager(layoutManager);
 
         // Specify an adapter.
-        adapter = new PrivateImageRecyclerViewAdapter(getActivity(), mRecyclerViewVideoItems);
+        adapter = new PrivateVideoRecyclerViewAdapter(getActivity(), mRecyclerViewVideoItems);
         mRecyclerView.setAdapter(adapter);
 
 
