@@ -99,6 +99,7 @@ public class PrivateImageRecyclerViewAdapter extends RecyclerView.Adapter<Recycl
         holder.itemView.clearAnimation();
     }
 
+    public static boolean long_click = false;
     @Override
     public void onBindViewHolder(final RecyclerView.ViewHolder holder, final int position) {
         int viewType = getItemViewType(position);
@@ -135,6 +136,13 @@ public class PrivateImageRecyclerViewAdapter extends RecyclerView.Adapter<Recycl
                         menuItemHolder.checkBox.setChecked(false);
 
                     }
+                    if (long_click) {
+
+                        menuItemHolder.checkBox.setVisibility(View.VISIBLE);
+                    } else {
+
+                        menuItemHolder.checkBox.setVisibility(View.GONE);
+                    }
 
                     menuItemHolder.imageView.setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -154,7 +162,17 @@ public class PrivateImageRecyclerViewAdapter extends RecyclerView.Adapter<Recycl
 
                         }
                     });
-
+                    menuItemHolder.imageView.setOnLongClickListener(new View.OnLongClickListener() {
+                        @Override
+                        public boolean onLongClick(View view) {
+                            long_click = !long_click;
+                            Bimp.tempSelectBitmap.add(menuItem);
+                            PrivatePhotoFragment.showDec();
+                            PrivatePhotoFragment.cancel_long();
+                            notifyDataSetChanged();
+                            return true;
+                        }
+                    });
 /*
                     Animation animation = AnimationUtils.loadAnimation(mContext,
                             (position > lastPosition) ? R.anim.up_from_bottom

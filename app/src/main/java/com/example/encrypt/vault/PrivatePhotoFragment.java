@@ -1,5 +1,6 @@
 package com.example.encrypt.vault;
 
+import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.ContentResolver;
 import android.content.ContentValues;
@@ -110,18 +111,38 @@ public class PrivatePhotoFragment extends Fragment {
     public static RecyclerView mRecyclerView;
 
     private List<UnifiedNativeAd> mNativeAds = new ArrayList<>();
+    static FloatingActionButton cancel, floatingActionButton;
 
+    @SuppressLint("RestrictedApi")
+    public static void cancel_long() {
+
+        cancel.setVisibility(View.VISIBLE);
+        floatingActionButton.setVisibility(View.GONE);
+    }
     public void initButtons(View view) {
 
 
-        FloatingActionButton floatingActionButton = view.findViewById(R.id.floatingActionButton);
+        floatingActionButton = view.findViewById(R.id.floatingActionButton);
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(getActivity(), Folders.class));
             }
         });
+        cancel = view.findViewById(R.id.cancel);
+        cancel.setOnClickListener(new View.OnClickListener() {
+            @SuppressLint("RestrictedApi")
+            @Override
+            public void onClick(View view) {
+                PrivateImageRecyclerViewAdapter.long_click = false;
 
+                cancel.setVisibility(View.GONE);
+                floatingActionButton.setVisibility(View.VISIBLE);
+                Bimp.tempSelectBitmap.clear();
+                showDec();
+                adapter.notifyDataSetChanged();
+            }
+        });
         Button button_min = view.findViewById(R.id.button_min);
         button_min.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -142,6 +163,7 @@ public class PrivatePhotoFragment extends Fragment {
                 Bimp.tempSelectBitmap.clear();
                 if (((CheckBox) view).isChecked()) {
                     Bimp.tempSelectBitmap.addAll(mRecyclerViewImageItems2);
+                    PrivateImageRecyclerViewAdapter.long_click = true;
                 }
 
                 adapter.notifyDataSetChanged();
@@ -180,7 +202,7 @@ public class PrivatePhotoFragment extends Fragment {
         Bimp.tempSelectBitmap.clear();
         dateList = null;
         databaseAdapter = null;
-
+        PrivateImageRecyclerViewAdapter.long_click = false;
         tvNoPicture = null;
     }
 
@@ -218,7 +240,7 @@ public class PrivatePhotoFragment extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
-
+        PrivateImageRecyclerViewAdapter.long_click = false;
         showDec();
          if (!BseApplication.sp.getBoolean("privAlbumToGallery", false)) {
 

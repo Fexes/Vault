@@ -97,7 +97,7 @@ public class AlbumGridViewAdapter extends BaseAdapter {
 		final ViewHolder viewHolder;
 		if (convertView == null) {
 			viewHolder = new ViewHolder();
-			convertView = LayoutInflater.from(context).inflate(R.layout.item_album_gridview, parent, false);
+            convertView = LayoutInflater.from(context).inflate(R.layout.item_select_image_gridview, parent, false);
 			viewHolder.imageView =  convertView.findViewById(R.id.image_view);
             viewHolder.checkBox = convertView.findViewById(R.id.checkBox);
 			convertView.setTag(viewHolder);
