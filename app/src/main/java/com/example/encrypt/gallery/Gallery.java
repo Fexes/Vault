@@ -1,4 +1,4 @@
-package com.example.encrypt.photo;
+package com.example.encrypt.gallery;
 
 import android.animation.ObjectAnimator;
 import android.app.ProgressDialog;
@@ -25,6 +25,9 @@ import androidx.viewpager.widget.ViewPager.OnPageChangeListener;
 import com.example.encrypt.R;
 import com.example.encrypt.activity.BaseActivity;
 import com.example.encrypt.activity.BseApplication;
+import com.example.encrypt.album.Album;
+import com.example.encrypt.photo.Bimp;
+import com.example.encrypt.photo.ImageItem;
 import com.example.encrypt.util.Notifi;
 import com.example.encrypt.vault.PrivatePhotoFragment;
 
@@ -60,12 +63,11 @@ public class Gallery extends BaseActivity implements OnClickListener, OnPageChan
 
     protected void onResume() {
         super.onResume();
-        //恢复privAlbumToGallery为false状态
         if (isFromPrivateAlbum) {
             BseApplication.editor.putBoolean("privAlbumToGallery", false).commit();
 
         }
-        initViewAndCtrl(); //初始化view 和 ctrl
+        initViewAndCtrl();
     }
 
     @Override

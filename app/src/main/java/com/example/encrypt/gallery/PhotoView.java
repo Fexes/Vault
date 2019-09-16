@@ -1,4 +1,4 @@
-package com.example.encrypt.photo;
+package com.example.encrypt.gallery;
 
 import android.content.Context;
 import android.graphics.RectF;

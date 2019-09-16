@@ -1,4 +1,4 @@
-package com.example.encrypt.photo;
+package com.example.encrypt.album;
 
 import android.content.ContentResolver;
 import android.content.Context;
@@ -7,6 +7,7 @@ import android.provider.MediaStore;
 import android.provider.MediaStore.Images.Media;
 import android.provider.MediaStore.Images.Thumbnails;
 
+import com.example.encrypt.photo.ImageItem;
 import com.example.encrypt.video.VideoItem;
 
 import java.util.ArrayList;

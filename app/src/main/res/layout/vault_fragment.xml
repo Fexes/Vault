@@ -174,7 +174,7 @@
         android:layout_marginEnd="20dp"
         android:layout_marginBottom="20dp"
         android:clickable="true"
-         app:backgroundTint="#6226F8"
+        app:backgroundTint="#0D47A1"
         app:srcCompat="@drawable/ic_add" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton

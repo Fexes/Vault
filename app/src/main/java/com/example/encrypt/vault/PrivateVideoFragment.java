@@ -1,5 +1,6 @@
 package com.example.encrypt.vault;
 
+import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.ContentResolver;
 import android.content.ContentValues;
@@ -82,16 +83,7 @@ public class PrivateVideoFragment extends Fragment {
         tvNoPicture.setVisibility(View.VISIBLE);
     }
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        Bimp.tempSelectVideo.clear();
-
-        dateList = null;
-        databaseAdapter = null;
-
-        tvNoPicture = null;
-    }
+    static FloatingActionButton cancel, floatingActionButton;
 
     @Override
     public void onResume() {
@@ -100,11 +92,11 @@ public class PrivateVideoFragment extends Fragment {
         resetView();
     }
 
-    @Override
-    public void onPause() {
-        super.onPause();
-        showDec();
+    @SuppressLint("RestrictedApi")
+    public static void cancel_long() {
 
+        cancel.setVisibility(View.VISIBLE);
+        floatingActionButton.setVisibility(View.GONE);
     }
 
 
@@ -256,21 +248,52 @@ public class PrivateVideoFragment extends Fragment {
         contentResolver.insert(MediaStore.Video.Media.EXTERNAL_CONTENT_URI, contentValues);
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Bimp.tempSelectVideo.clear();
+        PrivateImageRecyclerViewAdapter.long_click = false;
+        dateList = null;
+        databaseAdapter = null;
+
+        tvNoPicture = null;
+    }
+
     private AdLoader adLoader;
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        showDec();
+        PrivateImageRecyclerViewAdapter.long_click = false;
+    }
 
     public void initView(View view) {
         TextView tvTitle = view.findViewById(R.id.title);
         tvTitle.setText(R.string.private_video_album);
         tvNoPicture = view.findViewById(R.id.tv_no_picture);
 
-        FloatingActionButton floatingActionButton = view.findViewById(R.id.floatingActionButton);
+        floatingActionButton = view.findViewById(R.id.floatingActionButton);
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(getActivity(), VideoAlbum.class));
             }
         });
+        cancel = view.findViewById(R.id.cancel);
+        cancel.setOnClickListener(new View.OnClickListener() {
+            @SuppressLint("RestrictedApi")
+            @Override
+            public void onClick(View view) {
 
+                PrivateVideoRecyclerViewAdapter.long_click = false;
+                cancel.setVisibility(View.GONE);
+                floatingActionButton.setVisibility(View.VISIBLE);
+                Bimp.tempSelectVideo.clear();
+                showDec();
+                adapter.notifyDataSetChanged();
+            }
+        });
         Button button_min = view.findViewById(R.id.button_min);
         button_min.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -291,7 +314,9 @@ public class PrivateVideoFragment extends Fragment {
 
                 if (((CheckBox) view).isChecked()) {
                     Bimp.tempSelectVideo.addAll(mRecyclerViewVideoItems2);
+                    PrivateVideoRecyclerViewAdapter.long_click = true;
                 }
+
                 adapter.notifyDataSetChanged();
                 showDec();
             }

@@ -98,13 +98,13 @@
 
 
         <activity
-            android:name=".photo.Album"
+            android:name=".album.Album"
             android:screenOrientation="portrait" />
 
         <activity
             android:name=".photo.Folders"
             android:screenOrientation="portrait" />
-        <activity android:name=".photo.Gallery" />
+        <activity android:name=".gallery.Gallery" />
         <activity android:name=".video.PrivateVideoPlayActivity" />
         <activity
             android:name=".video.VideoAlbum"

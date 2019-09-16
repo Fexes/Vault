@@ -1,13 +1,15 @@
-package com.example.encrypt.photo;
+package com.example.encrypt.gallery;
 
 import android.content.Context;
-import androidx.viewpager.widget.PagerAdapter;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 
+import androidx.viewpager.widget.PagerAdapter;
+
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.example.encrypt.album.Album;
 import com.example.encrypt.vault.PrivatePhotoFragment;
 
 /**

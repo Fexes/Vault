@@ -10,6 +10,8 @@ import android.widget.TextView;
 
 import com.example.encrypt.R;
 import com.example.encrypt.activity.BaseActivity;
+import com.example.encrypt.album.AlbumHelper;
+import com.example.encrypt.album.ImageBucket;
 
 import java.util.List;
 

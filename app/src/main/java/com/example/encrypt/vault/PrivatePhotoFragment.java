@@ -134,8 +134,8 @@ public class PrivatePhotoFragment extends Fragment {
             @SuppressLint("RestrictedApi")
             @Override
             public void onClick(View view) {
-                PrivateImageRecyclerViewAdapter.long_click = false;
 
+                PrivateImageRecyclerViewAdapter.long_click = false;
                 cancel.setVisibility(View.GONE);
                 floatingActionButton.setVisibility(View.VISIBLE);
                 Bimp.tempSelectBitmap.clear();
@@ -323,6 +323,7 @@ public class PrivatePhotoFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+
         relodads();
         resetView();
 

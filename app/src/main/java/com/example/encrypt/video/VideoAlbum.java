@@ -25,9 +25,9 @@ import androidx.annotation.RequiresApi;
 import com.example.encrypt.R;
 import com.example.encrypt.activity.AdvancedSetup;
 import com.example.encrypt.activity.BaseActivity;
+import com.example.encrypt.album.AlbumHelper;
 import com.example.encrypt.database.DatabaseAdapter;
 import com.example.encrypt.database.PsDatabaseHelper;
-import com.example.encrypt.photo.AlbumHelper;
 import com.example.encrypt.photo.Bimp;
 import com.example.encrypt.util.Notifi;
 

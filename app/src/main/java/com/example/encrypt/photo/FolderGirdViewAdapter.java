@@ -14,10 +14,10 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.encrypt.R;
+import com.example.encrypt.album.Album;
 
 import java.util.ArrayList;
 
@@ -71,8 +71,8 @@ public class FolderGirdViewAdapter extends BaseAdapter {
 							  Object... params) {
 			if (imageView != null && bitmap != null) {
 				String url = (String) params[0];
-				if (url != null && url.equals((String) imageView.getTag())) {
-					((ImageView) imageView).setImageBitmap(bitmap);
+				if (url != null && url.equals(imageView.getTag())) {
+					imageView.setImageBitmap(bitmap);
 				} else {
 					Log.e(TAG, "callback, bmp not match");
 				}
@@ -100,10 +100,10 @@ public class FolderGirdViewAdapter extends BaseAdapter {
 			convertView = LayoutInflater.from(mContext).inflate(R.layout.item_folders_gridview, parent,false);
 			holder = new ViewHolder();
 //			holder.backImage = (ImageView) convertView.findViewById(R.id.file_back);
-			holder.imageView = (ImageView) convertView.findViewById(R.id.file_image);
+			holder.imageView = convertView.findViewById(R.id.file_image);
 			holder.choose_back =  convertView.findViewById(R.id.album_lay);
-			holder.folderName = (TextView) convertView.findViewById(R.id.name);
-			holder.fileNum = (TextView) convertView.findViewById(R.id.filenum);
+			holder.folderName = convertView.findViewById(R.id.name);
+			holder.fileNum = convertView.findViewById(R.id.filenum);
   			convertView.setTag(holder);
 			//AutoLayout:对于ListView的item的适配，注意添加这一行，即可在item上使用px高度
 //	        AutoUtils.autoSize(convertView);

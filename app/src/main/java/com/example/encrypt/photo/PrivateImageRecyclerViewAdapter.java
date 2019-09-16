@@ -32,6 +32,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.encrypt.R;
 import com.example.encrypt.activity.BseApplication;
+import com.example.encrypt.gallery.Gallery;
 import com.example.encrypt.util.UnifiedNativeAdViewHolder;
 import com.example.encrypt.vault.PrivatePhotoFragment;
 import com.google.android.gms.ads.formats.NativeAd;

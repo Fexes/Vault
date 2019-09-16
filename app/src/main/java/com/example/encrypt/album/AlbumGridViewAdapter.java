@@ -1,4 +1,4 @@
-package com.example.encrypt.photo;
+package com.example.encrypt.album;
 
 import android.content.Context;
 import android.content.Intent;
@@ -14,15 +14,15 @@ import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.example.encrypt.R;
+import com.example.encrypt.gallery.Gallery;
+import com.example.encrypt.photo.Bimp;
+import com.example.encrypt.photo.BitmapCache;
+import com.example.encrypt.photo.ImageItem;
 
 import java.util.ArrayList;
 
 
-/**
- * 适配器：将某一个相册中图片，以GridView的形式进行适配
- *
- * @author Tom
- */
+
 public class AlbumGridViewAdapter extends BaseAdapter {
 
 	private final String TAG = getClass().getSimpleName();
@@ -97,7 +97,7 @@ public class AlbumGridViewAdapter extends BaseAdapter {
 		final ViewHolder viewHolder;
 		if (convertView == null) {
 			viewHolder = new ViewHolder();
-            convertView = LayoutInflater.from(context).inflate(R.layout.item_select_image_gridview, parent, false);
+			convertView = LayoutInflater.from(context).inflate(R.layout.item_album_gridview, parent, false);
 			viewHolder.imageView =  convertView.findViewById(R.id.image_view);
             viewHolder.checkBox = convertView.findViewById(R.id.checkBox);
 			convertView.setTag(viewHolder);
@@ -119,7 +119,7 @@ public class AlbumGridViewAdapter extends BaseAdapter {
 
 			viewHolder.imageView.setOnClickListener(new OnClickListener() {
 				public void onClick(View v) {
-					context.startActivity(new Intent(context,Gallery.class).putExtra("position",position).putExtra("isFromPrivateAlbum",false));
+					context.startActivity(new Intent(context, Gallery.class).putExtra("position", position).putExtra("isFromPrivateAlbum", false));
 				}
 			});
 

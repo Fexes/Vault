@@ -1,4 +1,4 @@
-package com.example.encrypt.photo;
+package com.example.encrypt.gallery;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -26,8 +26,6 @@ public class PhotoViewAttacher implements IPhotoView, View.OnTouchListener,
 
 	static final String LOG_TAG = "PhotoViewAttacher";
 
-	// let debug flag be dynamic, but still Proguard can be used to remove from
-	// release builds
 	static final boolean DEBUG = Log.isLoggable(LOG_TAG, Log.DEBUG);
 
 	static final int EDGE_NONE = -1;
@@ -793,7 +791,7 @@ public class PhotoViewAttacher implements IPhotoView, View.OnTouchListener,
 	 * 
 	 * @author Chris Banes
 	 */
-	public static interface OnMatrixChangedListener {
+	public interface OnMatrixChangedListener {
 		/**
 		 * Callback for when the Matrix displaying the Drawable has changed.
 		 * This could be because the View's bounds have changed, or the user has
@@ -811,7 +809,7 @@ public class PhotoViewAttacher implements IPhotoView, View.OnTouchListener,
 	 * 
 	 * @author Chris Banes
 	 */
-	public static interface OnPhotoTapListener {
+	public interface OnPhotoTapListener {
 
 		/**
 		 * A callback to receive where the user taps on a photo. You will only
@@ -836,7 +834,7 @@ public class PhotoViewAttacher implements IPhotoView, View.OnTouchListener,
 	 * 
 	 * @author Chris Banes
 	 */
-	public static interface OnViewTapListener {
+	public interface OnViewTapListener {
 
 		/**
 		 * A callback to receive where the user taps on a ImageView. You will

@@ -1,4 +1,6 @@
-package com.example.encrypt.photo;
+package com.example.encrypt.album;
+
+import com.example.encrypt.photo.ImageItem;
 
 import java.util.List;
 

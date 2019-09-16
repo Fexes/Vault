@@ -1,4 +1,4 @@
-package com.example.encrypt.photo;
+package com.example.encrypt.album;
 
 import android.app.ProgressDialog;
 import android.content.ContentResolver;
@@ -26,6 +26,8 @@ import com.example.encrypt.activity.AdvancedSetup;
 import com.example.encrypt.activity.BaseActivity;
 import com.example.encrypt.database.DatabaseAdapter;
 import com.example.encrypt.database.PsDatabaseHelper;
+import com.example.encrypt.photo.Bimp;
+import com.example.encrypt.photo.ImageItem;
 import com.example.encrypt.util.Notifi;
 
 import java.io.File;
@@ -55,6 +57,7 @@ public class Album extends BaseActivity implements OnClickListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_album);
         addAppActivity(Album.this);
+        Bimp.tempSelectBitmap.clear();
         file_count=findViewById(R.id.file_count);
         button_add=findViewById(R.id.button_add);
         executorService = Executors.newFixedThreadPool(20);
@@ -172,7 +175,6 @@ public class Album extends BaseActivity implements OnClickListener {
                 finish();
                 break;
             case R.id.checkbox_select_all:
-           //     ((CheckBox) view).setText(((CheckBox) view).isChecked() ? getString(R.string.deselect_all) : getString(R.string.select_all));
                 gridImageAdapter.selectAll(((CheckBox) view).isChecked());
                 showDec();
                 break;
