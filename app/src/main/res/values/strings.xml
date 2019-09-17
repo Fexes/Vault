@@ -48,6 +48,8 @@
     <string name="change_password">Change Password</string>
     <string name="change_app_icon">Change App icon</string>
     <string name="change_icon_discription">Change the name and icon of the application in the app drawer</string>
+    <string name="hide_pattern">Hide Pattern</string>
+    <string name="hide_pattern_dis">Hide Pattern while logging into the application</string>
 
 
 </resources>

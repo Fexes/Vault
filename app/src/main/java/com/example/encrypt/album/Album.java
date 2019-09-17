@@ -96,8 +96,42 @@ public class Album extends BaseActivity implements OnClickListener {
         databaseAdapter.insertPhoto(contentValues);
     }
 
-    private void init() {
+    static TextView file_select_count;
 
+    public static void showDec() {
+        if (Bimp.tempSelectBitmap.size() == 1) {
+            file_select_count.setText(Bimp.tempSelectBitmap.size() + " Image Selected");
+        } else {
+            file_select_count.setText(Bimp.tempSelectBitmap.size() + " Images Selected");
+        }
+
+        if (Bimp.tempSelectBitmap.size() == 0) {
+            file_select_count.setVisibility(View.GONE);
+            button_add.setVisibility(View.GONE);
+        } else {
+            button_add.setVisibility(View.VISIBLE);
+            file_select_count.setVisibility(View.VISIBLE);
+        }
+    }
+
+    int grid_count = 3;
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Bimp.tempSelectBitmap.clear();// Bimp.tempSelectBitmap
+        if (null != progressDialog && progressDialog.isShowing()) {
+            progressDialog.dismiss();
+        }
+
+        dataList = null;
+        databaseAdapter = null;
+        executorService = null;
+
+    }
+
+    private void init() {
+        file_select_count = findViewById(R.id.file_select_count);
         gridView = findViewById(R.id.album_GridView);
         if(dataList.size()==1){
             file_count.setText(dataList.size()+" Image");
@@ -117,32 +151,6 @@ public class Album extends BaseActivity implements OnClickListener {
             }
         });
         gridView.setAdapter(gridImageAdapter);
-    }
-
-    int grid_count = 3;
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        Bimp.tempSelectBitmap.clear();// Bimp.tempSelectBitmap
-        if (null != progressDialog && progressDialog.isShowing()) {
-            progressDialog.dismiss();
-        }
-
-        dataList = null;
-        databaseAdapter = null;
-        executorService = null;
-
-    }
-
-    public static void showDec() {
-
-        if (Bimp.tempSelectBitmap.size() > 0) {
-            button_add.setVisibility(View.VISIBLE);
-        } else {
-            button_add.setVisibility(View.GONE);
-        }
-
     }
 
     public ProgressDialog progressDialog;

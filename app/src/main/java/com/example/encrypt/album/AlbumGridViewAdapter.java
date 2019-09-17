@@ -44,13 +44,10 @@ public class AlbumGridViewAdapter extends BaseAdapter {
 		if (selectAll) {
 			Bimp.tempSelectBitmap.addAll(dataList);
 		}
+
 		notifyDataSetChanged();
 	}
 
-
-    public ArrayList<ImageItem> getSelectedData(){
-        return Bimp.tempSelectBitmap;
-    }
 
 
     public void refreshDataAfterEncrypt(){

@@ -44,6 +44,7 @@
                 android:id="@+id/pattern_lock_view"
                 android:layout_marginTop="35dp"
                 android:layout_width="380dp"
+
                 android:layout_height="380dp"
                 android:layout_below="@+id/TxtEnterPasscode" />
         </RelativeLayout>

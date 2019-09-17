@@ -19,6 +19,7 @@ import androidx.annotation.Nullable;
 import com.example.encrypt.BuildConfig;
 import com.example.encrypt.R;
 import com.example.encrypt.lock.LockType;
+import com.example.encrypt.lock.utils.AppPreferences;
 import com.example.encrypt.onboarding.OnboardingActivity;
 import com.example.encrypt.util.ChangeIconDialogue;
 
@@ -26,9 +27,8 @@ import com.example.encrypt.util.ChangeIconDialogue;
 public class AdvancedSetup extends BaseActivity implements View.OnClickListener, CompoundButton.OnCheckedChangeListener {
 
     public static FingerprintManager mFingerprintManager;
-    RelativeLayout rv1;
-    Switch mSwitch1, /*mSwitch2, mSwitch3,*/
-            mSwitch4;
+    RelativeLayout rv1, rv44;
+    Switch mSwitch1, mSwitch4, mSwitch44;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -51,6 +51,23 @@ public class AdvancedSetup extends BaseActivity implements View.OnClickListener,
         mFingerprintManager = null;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        String Pattern = AppPreferences.getPattern(getApplicationContext());
+        if (Pattern != null) {
+
+            if (AppPreferences.getPasscodeType(getApplicationContext()).equalsIgnoreCase("0")) {
+                rv44.setVisibility(View.GONE);
+            } else {
+                rv44.setVisibility(View.VISIBLE);
+            }
+        } else {
+            rv44.setVisibility(View.GONE);
+        }
+
+    }
+
     @SuppressLint("NewApi")
     private void initView() {
 
@@ -58,23 +75,32 @@ public class AdvancedSetup extends BaseActivity implements View.OnClickListener,
         appversion.setText("Version "+BuildConfig.VERSION_NAME);
 
         rv1 = findViewById(R.id.rv1);
-
+        rv44 = findViewById(R.id.rv44);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && mFingerprintManager.isHardwareDetected()) {
             rv1.setVisibility(View.VISIBLE);
         }
         mSwitch1 = findViewById(R.id.switch1);
+        String Pattern = AppPreferences.getPattern(getApplicationContext());
+        if (Pattern != null) {
 
+            if (AppPreferences.getPasscodeType(getApplicationContext()).equalsIgnoreCase("0")) {
+                rv44.setVisibility(View.GONE);
+            } else {
+                rv44.setVisibility(View.VISIBLE);
+            }
+        }
 
         mSwitch4 = findViewById(R.id.switch4);
-
+        mSwitch44 = findViewById(R.id.switch44);
         mSwitch1.setChecked(BseApplication.sp.getBoolean("fingerprint", true));
 
+
+        mSwitch44.setChecked(BseApplication.sp.getBoolean("hidepattern", false));
 
         mSwitch4.setChecked(BseApplication.sp.getBoolean("fastExit", false));
 
         mSwitch1.setOnCheckedChangeListener(this);
-
-
+        mSwitch44.setOnCheckedChangeListener(this);
         mSwitch4.setOnCheckedChangeListener(this);
     }
 
@@ -87,6 +113,10 @@ public class AdvancedSetup extends BaseActivity implements View.OnClickListener,
 
             case R.id.switch4:
                 BseApplication.editor.putBoolean("fastExit", isChecked);
+                break;
+
+            case R.id.switch44:
+                BseApplication.editor.putBoolean("hidepattern", isChecked);
                 break;
         }
         BseApplication.editor.commit();
@@ -103,6 +133,9 @@ public class AdvancedSetup extends BaseActivity implements View.OnClickListener,
 
             case R.id.rv4:
                 mSwitch4.toggle();
+                break;
+            case R.id.rv44:
+                mSwitch44.toggle();
                 break;
             case R.id.rv5:
                  startActivity(new Intent(AdvancedSetup.this, LockType.class));

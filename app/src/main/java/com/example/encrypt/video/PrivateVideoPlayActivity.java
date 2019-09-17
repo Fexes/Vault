@@ -55,6 +55,11 @@ public class PrivateVideoPlayActivity extends BaseActivity {
         getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
+    }
 
     @Override
     protected void attachBaseContext(Context newBase) {
@@ -68,9 +73,7 @@ public class PrivateVideoPlayActivity extends BaseActivity {
         });
     }
 
-    /**
-     * 播放视频
-     */
+
     public void playVideo(String videoPath) {
         Uri uri = Uri.parse(videoPath);
         videoView.setVideoURI(uri);

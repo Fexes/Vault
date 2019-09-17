@@ -101,18 +101,7 @@ public class PrivateVideoFragment extends Fragment {
 
     static boolean result = true;
 
-    public static void showDec(){
-
-
-        if (Bimp.tempSelectVideo.size() > 0) {
-            button_min.setVisibility(View.VISIBLE);
-
-        }else {
-            button_min.setVisibility(View.GONE);
-
-        }
-
-    }
+    static TextView file_select_count;
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     public boolean decryptVideoList(final ArrayList<VideoItem> arrayList) {
@@ -271,11 +260,31 @@ public class PrivateVideoFragment extends Fragment {
         PrivateVideoRecyclerViewAdapter.long_click = false;
     }
 
-    public void initView(View view) {
-        TextView tvTitle = view.findViewById(R.id.title);
-        tvTitle.setText(R.string.private_video_album);
-        tvNoPicture = view.findViewById(R.id.tv_no_picture);
+    @SuppressLint("RestrictedApi")
+    public static void showDec() {
 
+        if (Bimp.tempSelectVideo.size() == 1) {
+            file_select_count.setText(Bimp.tempSelectVideo.size() + " Video Selected");
+        } else {
+            file_select_count.setText(Bimp.tempSelectVideo.size() + " Videos Selected");
+        }
+        if (Bimp.tempSelectVideo.size() == 0) {
+            file_select_count.setVisibility(View.GONE);
+            button_min.setVisibility(View.GONE);
+            //   cancel.setVisibility(View.GONE);
+            checkbox_select_all.setChecked(false);
+        } else {
+            button_min.setVisibility(View.VISIBLE);
+            file_select_count.setVisibility(View.VISIBLE);
+            cancel.setVisibility(View.VISIBLE);
+        }
+
+    }
+
+    public void initView(View view) {
+
+        tvNoPicture = view.findViewById(R.id.tv_no_picture);
+        file_select_count = view.findViewById(R.id.file_select_count);
         floatingActionButton = view.findViewById(R.id.floatingActionButton);
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override

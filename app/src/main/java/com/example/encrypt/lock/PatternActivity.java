@@ -75,6 +75,13 @@ public class PatternActivity extends Activity {
 
 
         mPatternLockView = findViewById(R.id.pattern_lock_view);
+        if ((BseApplication.sp.getBoolean("hidepattern", false))) {
+            mPatternLockView.setInStealthMode(true);
+        } else {
+            mPatternLockView.setInStealthMode(false);
+        }
+
+
         TxtEnterPasscode = findViewById(R.id.TxtEnterPasscode);
 
         FingerPrintImage = findViewById(R.id.fingerfrint_image);

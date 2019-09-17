@@ -24,6 +24,15 @@
             android:text="Restore Icon"
             android:textColor="@color/text_color_light" />
 
+        <RelativeLayout
+            android:layout_width="300dp"
+            android:layout_height="1dp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginRight="30dp"
+            android:layout_marginBottom="20dp"
+            android:background="@color/text_color_light" />
+
         <LinearLayout
             android:layout_width="match_parent"
 
@@ -110,14 +119,16 @@
 
         </LinearLayout>
 
-        <RelativeLayout
-            android:layout_width="300dp"
-            android:layout_height="1dp"
-            android:layout_marginLeft="30dp"
+        <TextView
+            android:layout_width="350dp"
+            android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:layout_marginRight="30dp"
-            android:layout_marginBottom="20dp"
-            android:background="@color/text_color_light" />
+            android:layout_weight="1"
+            android:fontFamily="@font/roboto_thin"
+            android:gravity="center"
+            android:text="@string/new_icon"
+            android:textColor="@color/text_color_light"
+            android:textSize="20dp" />
 
         <RelativeLayout
             android:layout_width="300dp"
@@ -137,17 +148,6 @@
             android:text="Select New Icon"
             android:textColor="@color/text_color_light"
             android:textSize="30dp" />
-
-        <TextView
-            android:layout_width="350dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:layout_weight="1"
-            android:fontFamily="@font/roboto_thin"
-            android:gravity="center"
-            android:text="@string/new_icon"
-            android:textColor="@color/text_color_light"
-            android:textSize="20dp" />
 
     </LinearLayout>
 

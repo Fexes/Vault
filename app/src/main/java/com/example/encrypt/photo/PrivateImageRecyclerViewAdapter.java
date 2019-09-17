@@ -127,6 +127,7 @@ public class PrivateImageRecyclerViewAdapter extends RecyclerView.Adapter<Recycl
                                 Bimp.tempSelectBitmap.remove(menuItem);
                             }
                             PrivatePhotoFragment.showDec();
+
                         }
                     });
                     if (Bimp.tempSelectBitmap.contains(menuItem)) {

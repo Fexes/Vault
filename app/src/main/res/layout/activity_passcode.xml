@@ -32,6 +32,56 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <RelativeLayout
+            android:id="@+id/LayoutPasscode"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/TxtEnterPasscode"
+            android:layout_centerHorizontal="true">
+
+            <ImageView
+                android:id="@+id/PassDot1"
+                android:layout_width="12dp"
+                android:layout_height="12dp"
+                android:src="@drawable/pass_border" />
+
+            <ImageView
+                android:id="@+id/PassDot2"
+                android:layout_width="12dp"
+                android:layout_height="12dp"
+                android:layout_marginLeft="15dp"
+                android:layout_toRightOf="@+id/PassDot1"
+                android:src="@drawable/pass_border" />
+
+            <ImageView
+                android:id="@+id/PassDot3"
+                android:layout_width="12dp"
+                android:layout_height="12dp"
+                android:layout_marginLeft="15dp"
+                android:layout_toRightOf="@+id/PassDot2"
+                android:src="@drawable/pass_border" />
+
+            <ImageView
+                android:id="@+id/PassDot4"
+                android:layout_width="12dp"
+                android:layout_height="12dp"
+                android:layout_marginLeft="15dp"
+                android:layout_toRightOf="@+id/PassDot3"
+                android:src="@drawable/pass_border" />
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/TxtEnterPasscode"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="10dp"
+            android:fontFamily="@font/roboto_thin"
+            android:text="Enter Pincode"
+            android:textColor="@color/text_color_light"
+            android:textSize="15sp" />
+
+        <RelativeLayout
             android:id="@+id/LayoutNumber"
             android:layout_marginBottom="30dp"
             android:layout_width="wrap_content"
@@ -239,56 +289,6 @@
                 </LinearLayout>
             </LinearLayout>
         </RelativeLayout>
-
-        <RelativeLayout
-            android:id="@+id/LayoutPasscode"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/TxtEnterPasscode"
-            android:layout_centerHorizontal="true">
-
-            <ImageView
-                android:id="@+id/PassDot1"
-                android:layout_width="12dp"
-                android:layout_height="12dp"
-                android:src="@drawable/pass_border" />
-
-            <ImageView
-                android:id="@+id/PassDot2"
-                android:layout_width="12dp"
-                android:layout_height="12dp"
-                android:layout_marginLeft="15dp"
-                android:layout_toRightOf="@+id/PassDot1"
-                android:src="@drawable/pass_border" />
-
-            <ImageView
-                android:id="@+id/PassDot3"
-                android:layout_width="12dp"
-                android:layout_height="12dp"
-                android:layout_marginLeft="15dp"
-                android:layout_toRightOf="@+id/PassDot2"
-                android:src="@drawable/pass_border" />
-
-            <ImageView
-                android:id="@+id/PassDot4"
-                android:layout_width="12dp"
-                android:layout_height="12dp"
-                android:layout_marginLeft="15dp"
-                android:layout_toRightOf="@+id/PassDot3"
-                android:src="@drawable/pass_border" />
-        </RelativeLayout>
-
-        <TextView
-            android:id="@+id/TxtEnterPasscode"
-            android:layout_width="wrap_content"
-            android:fontFamily="@font/roboto_thin"
-
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_marginBottom="10dp"
-            android:text="Enter Pincode"
-            android:textColor="@color/text_color_light"
-            android:textSize="15sp" />
 
         <ImageView
             android:id="@+id/fingerfrint_image"

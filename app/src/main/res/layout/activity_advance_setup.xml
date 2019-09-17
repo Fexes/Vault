@@ -207,6 +207,58 @@
 
 
             <RelativeLayout
+                android:id="@+id/rv44"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="5dp"
+                android:background="@drawable/settings_button_back"
+                android:clickable="true"
+                android:foreground="?android:attr/selectableItemBackgroundBorderless"
+                android:gravity="center"
+                android:onClick="onClick"
+                android:paddingTop="15dp"
+                android:paddingBottom="15dp"
+                android:visibility="gone">
+
+                <ImageView
+                    android:id="@+id/iv_pattern"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:src="@drawable/ic_hide" />
+
+                <Switch
+                    android:id="@+id/switch44"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true" />
+
+                <TextView
+                    android:id="@+id/tv_pattern"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_toEndOf="@id/iv_pattern"
+                    android:text="@string/hide_pattern"
+                    android:textColor="@color/text_color_light"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/tv_pattern"
+                    android:layout_toStartOf="@id/switch44"
+                    android:layout_toEndOf="@id/iv_pattern"
+                    android:text="@string/hide_pattern_dis"
+                    android:textColor="@color/text_color_light"
+                    android:textSize="12sp" />
+            </RelativeLayout>
+
+            <RelativeLayout
                 android:id="@+id/rv11"
                 android:layout_width="match_parent"
                 android:layout_height="80dp"

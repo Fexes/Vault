@@ -96,16 +96,7 @@ public class PrivatePhotoFragment extends Fragment {
     private List<ImageItem> mRecyclerViewImageItems2 = new ArrayList<>();
 
 
-    public static void showDec() {
-        if (Bimp.tempSelectBitmap.size() == 0) {
-
-            button_min.setVisibility(View.GONE);
-        } else {
-            button_min.setVisibility(View.VISIBLE);
-
-        }
-
-    }
+    static TextView file_select_count;
 
     public static RecyclerView.Adapter adapter;
     public static RecyclerView mRecyclerView;
@@ -113,91 +104,33 @@ public class PrivatePhotoFragment extends Fragment {
     private List<UnifiedNativeAd> mNativeAds = new ArrayList<>();
     static FloatingActionButton cancel, floatingActionButton;
 
+
     @SuppressLint("RestrictedApi")
     public static void cancel_long() {
 
         cancel.setVisibility(View.VISIBLE);
         floatingActionButton.setVisibility(View.GONE);
     }
-    public void initButtons(View view) {
 
+    @SuppressLint("RestrictedApi")
+    public static void showDec() {
+        if (Bimp.tempSelectBitmap.size() == 1) {
+            file_select_count.setText(Bimp.tempSelectBitmap.size() + " Image Selected");
+        } else {
+            file_select_count.setText(Bimp.tempSelectBitmap.size() + " Images Selected");
+        }
 
-        floatingActionButton = view.findViewById(R.id.floatingActionButton);
-        floatingActionButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(getActivity(), Folders.class));
-            }
-        });
-        cancel = view.findViewById(R.id.cancel);
-        cancel.setOnClickListener(new View.OnClickListener() {
-            @SuppressLint("RestrictedApi")
-            @Override
-            public void onClick(View view) {
+        if (Bimp.tempSelectBitmap.size() == 0) {
+            file_select_count.setVisibility(View.GONE);
+            button_min.setVisibility(View.GONE);
+            //    cancel.setVisibility(View.GONE);
+            checkbox_select_all.setChecked(false);
+        } else {
+            button_min.setVisibility(View.VISIBLE);
+            file_select_count.setVisibility(View.VISIBLE);
+            cancel.setVisibility(View.VISIBLE);
+        }
 
-                PrivateImageRecyclerViewAdapter.long_click = false;
-                cancel.setVisibility(View.GONE);
-                floatingActionButton.setVisibility(View.VISIBLE);
-                Bimp.tempSelectBitmap.clear();
-                showDec();
-                adapter.notifyDataSetChanged();
-            }
-        });
-        Button button_min = view.findViewById(R.id.button_min);
-        button_min.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (Bimp.tempSelectBitmap.size() == 0) {
-                    Notifi.message(getActivity(), getString(R.string.choose_at_least_one_picture), true);
-
-                }
-                DecryptionTask decryptionTask = new DecryptionTask(Bimp.tempSelectBitmap);
-                decryptionTask.execute();
-            }
-        });
-        checkbox_select_all = view.findViewById(R.id.checkbox_select_all);
-        checkbox_select_all.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                Bimp.tempSelectBitmap.clear();
-                if (((CheckBox) view).isChecked()) {
-                    Bimp.tempSelectBitmap.addAll(mRecyclerViewImageItems2);
-                    PrivateImageRecyclerViewAdapter.long_click = true;
-                }
-
-                adapter.notifyDataSetChanged();
-                showDec();
-            }
-        });
-        ImageView grid = view.findViewById(R.id.grid);
-        grid.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-            }
-        });
-
-        ImageView reverse = view.findViewById(R.id.reverse);
-        reverse.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                removeads();
-                Collections.reverse(mRecyclerViewImageItems);
-                Collections.reverse(mRecyclerViewImageItems2);
-
-
-                adapter = new PrivateImageRecyclerViewAdapter(getActivity(), mRecyclerViewImageItems);
-                mRecyclerView.setAdapter(adapter);
-
-
-                //   loadImageData();
-
-                loadNativeAds();
-
-            }
-
-        });
     }
 
     public static void showNoPictureTip() {
@@ -342,6 +275,87 @@ public class PrivatePhotoFragment extends Fragment {
 
     }
 
+    public void initButtons(View view) {
+
+
+        floatingActionButton = view.findViewById(R.id.floatingActionButton);
+        floatingActionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getActivity(), Folders.class));
+            }
+        });
+        cancel = view.findViewById(R.id.cancel);
+        cancel.setOnClickListener(new View.OnClickListener() {
+            @SuppressLint("RestrictedApi")
+            @Override
+            public void onClick(View view) {
+
+                PrivateImageRecyclerViewAdapter.long_click = false;
+                cancel.setVisibility(View.GONE);
+
+                floatingActionButton.setVisibility(View.VISIBLE);
+                Bimp.tempSelectBitmap.clear();
+                showDec();
+                adapter.notifyDataSetChanged();
+            }
+        });
+        Button button_min = view.findViewById(R.id.button_min);
+        button_min.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (Bimp.tempSelectBitmap.size() == 0) {
+                    Notifi.message(getActivity(), getString(R.string.choose_at_least_one_picture), true);
+
+                }
+                DecryptionTask decryptionTask = new DecryptionTask(Bimp.tempSelectBitmap);
+                decryptionTask.execute();
+            }
+        });
+        checkbox_select_all = view.findViewById(R.id.checkbox_select_all);
+        checkbox_select_all.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Bimp.tempSelectBitmap.clear();
+                if (((CheckBox) view).isChecked()) {
+                    Bimp.tempSelectBitmap.addAll(mRecyclerViewImageItems2);
+                    PrivateImageRecyclerViewAdapter.long_click = true;
+                }
+
+                adapter.notifyDataSetChanged();
+                showDec();
+            }
+        });
+        ImageView grid = view.findViewById(R.id.grid);
+        grid.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
+
+        ImageView reverse = view.findViewById(R.id.reverse);
+        reverse.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                removeads();
+                Collections.reverse(mRecyclerViewImageItems);
+                Collections.reverse(mRecyclerViewImageItems2);
+
+
+                adapter = new PrivateImageRecyclerViewAdapter(getActivity(), mRecyclerViewImageItems);
+                mRecyclerView.setAdapter(adapter);
+
+
+                //   loadImageData();
+
+                loadNativeAds();
+
+            }
+
+        });
+    }
     private AdLoader adLoader;
     private List<Object> mRecyclerViewImageItems = new ArrayList<>();
 
@@ -356,6 +370,7 @@ public class PrivatePhotoFragment extends Fragment {
             Window w = getActivity().getWindow();
             w.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
         }
+        file_select_count = view.findViewById(R.id.file_select_count);
         mRecyclerViewImageItems = getRecyclerViewImageItems();
         mRecyclerViewImageItems2 = getRecyclerViewImageItems2();
         //  View rootView = inflater.inflate(R.layout.vault_fragment, container, false);

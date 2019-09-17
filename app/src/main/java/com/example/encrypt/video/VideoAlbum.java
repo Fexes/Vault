@@ -120,11 +120,28 @@ public class VideoAlbum extends BaseActivity implements OnClickListener {
     }
 
     int grid_count = 3;
+    static TextView file_select_count;
+
+    public static void showDec() {
+        if (Bimp.tempSelectVideo.size() == 1) {
+            file_select_count.setText(Bimp.tempSelectVideo.size() + " Video Selected");
+        } else {
+            file_select_count.setText(Bimp.tempSelectVideo.size() + " Videos Selected");
+        }
+
+        if (Bimp.tempSelectVideo.size() == 0) {
+            file_select_count.setVisibility(View.GONE);
+            button_add.setVisibility(View.GONE);
+        } else {
+            button_add.setVisibility(View.VISIBLE);
+            file_select_count.setVisibility(View.VISIBLE);
+        }
+    }
 
     private void initView() {
         TextView tvTitle = findViewById(R.id.title);
         tvTitle.setText(R.string.select_video);
-
+        file_select_count = findViewById(R.id.file_select_count);
         gridView = findViewById(R.id.album_GridView);
         gridVideoAdapter = new VideoAlbumGridViewAdapter(this, videoList);
 
@@ -145,16 +162,6 @@ public class VideoAlbum extends BaseActivity implements OnClickListener {
             }
         });
         gridView.setAdapter(gridVideoAdapter);
-    }
-
-    public static void showDec() {
-        if (Bimp.tempSelectVideo.size() == 0) {
-
-            button_add.setVisibility(View.GONE);
-        } else {
-            button_add.setVisibility(View.VISIBLE);
-        }
-
     }
 
     public void onBackPressed() {
