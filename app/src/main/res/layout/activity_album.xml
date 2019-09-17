@@ -2,49 +2,45 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorPrimaryDark"
+    android:background="@drawable/grad_bac2"
     android:orientation="vertical">
-    <RelativeLayout
+
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="120dp"
-        android:paddingTop="20dp"
-        android:id="@+id/headview"
-        android:background="@drawable/grad_bac"
-        android:gravity="center_vertical">
+        android:layout_height="match_parent">
 
-        <ImageView
-            android:id="@+id/button_back"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="5dp"
-            android:layout_marginTop="5dp"
-            android:layout_marginEnd="5dp"
-            android:layout_marginBottom="5dp"
+        <Button
+            android:id="@+id/button_add"
+            android:layout_width="170dp"
+            android:layout_height="55dp"
+            android:visibility="gone"
+            android:layout_gravity="bottom|center_horizontal"
+            android:layout_marginBottom="20dp"
+            android:background="@drawable/button_back_enc"
             android:onClick="onClick"
-            android:src="@drawable/ic_arrow" />
+            android:text="@string/encrypt"
+            android:textColor="@color/text_color_light"
+            android:textSize="16sp" />
 
-        <ImageView
-            android:id="@+id/settings"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_margin="15dp"
-            android:src="@drawable/ic_settings_black_24dp"
-            android:onClick="onClick" />
+        <GridView
+            android:id="@+id/album_GridView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:horizontalSpacing="2dp"
+            android:numColumns="3"
+            android:verticalSpacing="2dp" />
 
         <TextView
-            android:id="@+id/title"
+            android:id="@+id/tv_no_picture"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_margin="10dp"
-            android:fontFamily="@font/alfa_slab_one"
-            android:gravity="bottom"
-            android:text="Select Images"
-            android:textColor="@color/white"
-            android:textSize="28dp" />
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/no_picture"
+            android:textColor="@color/text_color_light"
+            android:textSize="18sp"
+            android:visibility="gone" />
 
-
-    </RelativeLayout>
+    </FrameLayout>
     <Space
         android:layout_width="match_parent"
         android:background="@android:drawable/dialog_holo_light_frame"
@@ -53,19 +49,21 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="40dp"
-        android:background="#4B2270"
+        android:background="@color/info_bar"
         android:gravity="center"
         android:orientation="horizontal">
 
         <TextView
             android:id="@+id/file_count"
             android:layout_width="wrap_content"
+            android:fontFamily="@font/roboto_thin"
+
             android:layout_height="match_parent"
             android:layout_alignParentStart="true"
             android:gravity="center"
             android:layout_marginLeft="10dp"
             android:text="126 Files"
-            android:textColor="@color/white"
+            android:textColor="@color/text_color_light"
             android:textSize="16dp" />
 
         <LinearLayout
@@ -107,41 +105,46 @@
 
     </RelativeLayout>
 
-    <FrameLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="120dp"
+        android:paddingTop="20dp"
+        android:id="@+id/headview"
+        android:background="@drawable/grad_bac"
+        android:gravity="center_vertical">
 
-        <TextView
-            android:id="@+id/tv_no_picture"
+        <ImageView
+            android:id="@+id/button_back"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="@string/no_picture"
-            android:textColor="@color/lightgrey"
-            android:textSize="18sp"
-            android:visibility="gone" />
-
-        <GridView
-            android:id="@+id/album_GridView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:horizontalSpacing="2dp"
-            android:numColumns="3"
-            android:verticalSpacing="2dp" />
-
-        <Button
-            android:id="@+id/button_add"
-            android:layout_width="170dp"
-            android:layout_height="45dp"
-            android:visibility="gone"
-            android:layout_gravity="bottom|center_horizontal"
-            android:layout_marginBottom="20dp"
-            android:background="@drawable/button_back_enc"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="5dp"
+            android:layout_marginBottom="5dp"
             android:onClick="onClick"
-            android:text="@string/encrypt"
-            android:textColor="@color/white"
-            android:textSize="16sp" />
+            android:src="@drawable/ic_arrow" />
 
-    </FrameLayout>
+        <ImageView
+            android:id="@+id/settings"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_margin="15dp"
+            android:src="@drawable/ic_settings_black_24dp"
+            android:onClick="onClick" />
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_margin="10dp"
+            android:fontFamily="@font/alfa_slab_one"
+            android:gravity="bottom"
+            android:text="Select Images"
+            android:textColor="@color/text_color_light"
+            android:textSize="28dp" />
+
+
+    </RelativeLayout>
 
 </LinearLayout>

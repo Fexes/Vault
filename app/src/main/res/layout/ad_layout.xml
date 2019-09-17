@@ -42,17 +42,6 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
 
-                    <TextView
-                        android:id="@+id/ad_headline"
-                        android:layout_width="match_parent"
-                        android:fontFamily="@font/roboto_thin"
-                        android:text="this is an add"
-
-                        android:layout_height="wrap_content"
-                        android:textColor="#FFFFFF"
-                        android:textSize="16sp"
-                        android:textStyle="bold" />
-
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
@@ -64,7 +53,7 @@
                             android:gravity="bottom"
                             android:fontFamily="@font/roboto_thin"
                             android:text="this is an add"
-                            android:textColor="#FFFFFF"
+                            android:textColor="@color/text_color_light"
 
                             android:textSize="14sp"
                             android:textStyle="bold" />
@@ -79,6 +68,17 @@
                             android:stepSize="0.5" />
                     </LinearLayout>
 
+                    <TextView
+                        android:id="@+id/ad_headline"
+                        android:layout_width="match_parent"
+                        android:fontFamily="@font/roboto_thin"
+                        android:text="this is an add"
+
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/text_color_light"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
                 </LinearLayout>
             </LinearLayout>
 
@@ -87,24 +87,6 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-                <TextView
-                    android:id="@+id/ad_body"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/roboto_thin"
-                    android:layout_marginEnd="20dp"
-                    android:text="this is an add"
-                    android:textColor="#FFFFFF"
-                    android:layout_marginRight="20dp"
-                    android:textSize="12sp" />
-
-                <com.google.android.gms.ads.formats.MediaView
-                    android:id="@+id/ad_media"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginTop="5dp" />
-
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -112,18 +94,13 @@
                     android:orientation="horizontal"
                     android:layout_marginTop="5dp">
 
-                    <TextView
-                        android:id="@+id/ad_price"
+                    <Button
+                        android:id="@+id/ad_call_to_action"
+                        android:background="@drawable/button_ad_back"
                         android:layout_width="wrap_content"
+                        android:textColor="@color/text_color_light"
                         android:layout_height="wrap_content"
-                        android:paddingStart="5dp"
-                        android:paddingLeft="5dp"
-                        android:paddingEnd="5dp"
-                        android:fontFamily="@font/roboto_thin"
-                        android:text="this is an add"
-                        android:textColor="#FFFFFF"
-
-                        android:paddingRight="5dp"
+                        android:gravity="center"
                         android:textSize="12sp" />
 
                     <TextView
@@ -135,20 +112,43 @@
                         android:paddingEnd="5dp"
                         android:fontFamily="@font/roboto_thin"
                         android:text="this is an add"
-                        android:textColor="#FFFFFF"
+                        android:textColor="@color/text_color_light"
 
                         android:paddingRight="5dp"
                         android:textSize="12sp" />
 
-                    <Button
-                        android:id="@+id/ad_call_to_action"
-                        android:background="@drawable/button_ad_back"
+                    <TextView
+                        android:id="@+id/ad_price"
                         android:layout_width="wrap_content"
-                        android:textColor="#FFFFFF"
                         android:layout_height="wrap_content"
-                        android:gravity="center"
+                        android:paddingStart="5dp"
+                        android:paddingLeft="5dp"
+                        android:paddingEnd="5dp"
+                        android:fontFamily="@font/roboto_thin"
+                        android:text="this is an add"
+                        android:textColor="@color/text_color_light"
+
+                        android:paddingRight="5dp"
                         android:textSize="12sp" />
                 </LinearLayout>
+
+                <com.google.android.gms.ads.formats.MediaView
+                    android:id="@+id/ad_media"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="5dp" />
+
+                <TextView
+                    android:id="@+id/ad_body"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/roboto_thin"
+                    android:layout_marginEnd="20dp"
+                    android:text="this is an add"
+                    android:textColor="@color/text_color_light"
+                    android:layout_marginRight="20dp"
+                    android:textSize="12sp" />
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>

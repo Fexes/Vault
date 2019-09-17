@@ -5,7 +5,7 @@
     android:thicknessRatio="2"
     android:useLevel="false" >
 
-    <solid android:color="#FFFFFF" />
+    <solid android:color="@color/icon_color_light" />
 
     <stroke
         android:width="0.5dp"

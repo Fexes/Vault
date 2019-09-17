@@ -58,7 +58,7 @@
                     android:fontFamily="@font/alfa_slab_one"
                     android:gravity="bottom|center"
                     android:text="Vault"
-                    android:textColor="@color/white"
+                    android:textColor="@color/text_color_light"
                     android:textSize="38dp" />
 
             </RelativeLayout>

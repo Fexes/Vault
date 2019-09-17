@@ -112,8 +112,8 @@ public class PrivateVideoRecyclerViewAdapter extends RecyclerView.Adapter<Recycl
                 // fall through
             default:
                 final MenuItemViewHolder menuItemHolder = (MenuItemViewHolder) holder;
-                try {
-                    final VideoItem menuItem = (VideoItem) mRecyclerViewItems.get(position);
+
+                final VideoItem menuItem = (VideoItem) mRecyclerViewItems.get(position);
 
                     Glide.with(mContext).load(menuItem.getPath()).into(menuItemHolder.imageView);
                     menuItemHolder.checkBox.setOnClickListener(new View.OnClickListener() {
@@ -162,8 +162,7 @@ public class PrivateVideoRecyclerViewAdapter extends RecyclerView.Adapter<Recycl
                             return true;
                         }
                     });
-                } catch (Exception e) {
-                }
+
         }
     }
 

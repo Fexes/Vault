@@ -3,8 +3,8 @@
     android:shape="rectangle">
     <gradient
         android:angle="0"
-        android:startColor="#8000E1"
-        android:endColor="#770DEB"
+        android:endColor="@color/gradient_end_title"
+        android:startColor="@color/gradient_start"
         android:type="linear"/>
 </shape>
 <!--the shadow comes from here-->

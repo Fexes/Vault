@@ -5,23 +5,6 @@
               android:background="@drawable/grad_bac3"
               android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/title"
-        android:layout_width="wrap_content"
-        android:layout_height="80dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginEnd="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginBottom="10dp"
-        android:fontFamily="@font/alfa_slab_one"
-        android:gravity="bottom"
-        android:text="Settings"
-        android:textColor="@color/white"
-        android:textSize="28dp" />
-
-
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -76,7 +59,7 @@
                     android:layout_alignParentTop="true"
                     android:layout_toEndOf="@id/iv1"
                     android:text="@string/private_fingerprint"
-                    android:textColor="@color/white"
+                    android:textColor="@color/text_color_light"
                     android:textSize="16sp"
                     android:textStyle="bold" />
 
@@ -87,7 +70,7 @@
                     android:layout_toEndOf="@id/iv1"
                     android:layout_toStartOf="@id/switch1"
                     android:text="@string/enter_private_space_by_private_fingerprint"
-                    android:textColor="@color/white"
+                    android:textColor="@color/text_color_light"
                     android:textSize="12sp"/>
 
             </RelativeLayout>
@@ -132,7 +115,7 @@
                     android:layout_alignParentTop="true"
                     android:layout_toEndOf="@id/iv_homekey_exit_app"
                     android:text="@string/fast_exit"
-                    android:textColor="@color/white"
+                    android:textColor="@color/text_color_light"
                     android:textSize="16sp" />
 
                 <TextView
@@ -142,18 +125,12 @@
                     android:layout_toEndOf="@id/iv_homekey_exit_app"
                     android:layout_toStartOf="@id/switch4"
                     android:text="@string/fast_exit_when_press_home_key"
-                    android:textColor="@color/white"
+                    android:textColor="@color/text_color_light"
                     android:textSize="12sp"/>
             </RelativeLayout>
 
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="15dp"
-                android:visibility="gone"
-                android:text="Password Settings"
-                android:textColor="#FF8D00" />
+
 
             <RelativeLayout
                 android:id="@+id/rv5"
@@ -183,7 +160,7 @@
                     android:layout_centerVertical="true"
                     android:layout_toEndOf="@+id/iv4"
                     android:text="@string/change_password"
-                    android:textColor="@color/white"
+                    android:textColor="@color/text_color_light"
                     android:textSize="16sp" />
 
             </RelativeLayout>
@@ -216,7 +193,7 @@
                     android:layout_centerVertical="true"
                     android:layout_toEndOf="@+id/iv5"
                     android:text="@string/security_question"
-                    android:textColor="@color/white"
+                    android:textColor="@color/text_color_light"
                     android:textSize="16sp" />
             </RelativeLayout>
 
@@ -258,7 +235,7 @@
                     android:layout_toEndOf="@id/iv52"
                     android:text="@string/change_app_icon"
                     android:textStyle="bold"
-                    android:textColor="@color/white"
+                    android:textColor="@color/text_color_light"
                     android:textSize="16sp" />
 
                 <TextView
@@ -267,7 +244,7 @@
                     android:layout_below="@id/tv52"
                     android:layout_toEndOf="@id/iv52"
                     android:text="@string/change_icon_discription"
-                    android:textColor="@color/white"
+                    android:textColor="@color/text_color_light"
                     android:textSize="12sp" />
             </RelativeLayout>
 
@@ -305,7 +282,7 @@
                     android:layout_centerVertical="true"
                     android:layout_toEndOf="@+id/iv18"
                     android:text="App Intro"
-                    android:textColor="@color/white"
+                    android:textColor="@color/text_color_light"
                     android:textSize="16sp" />
             </RelativeLayout>
             <RelativeLayout
@@ -335,7 +312,7 @@
                     android:layout_centerVertical="true"
                     android:layout_toEndOf="@+id/iv8"
                     android:text="Rate Us"
-                    android:textColor="@color/white"
+                    android:textColor="@color/text_color_light"
                     android:textSize="16sp" />
             </RelativeLayout>
             <RelativeLayout
@@ -366,7 +343,7 @@
                     android:layout_centerVertical="true"
                     android:layout_toEndOf="@+id/iv6"
                     android:text="Help"
-                    android:textColor="@color/white"
+                    android:textColor="@color/text_color_light"
                     android:textSize="16sp" />
             </RelativeLayout>
 
@@ -397,14 +374,14 @@
                     android:layout_centerVertical="true"
                     android:layout_toEndOf="@+id/iv7"
                     android:text="Privacy Policy"
-                    android:textColor="@color/white"
+                    android:textColor="@color/text_color_light"
                     android:textSize="16sp" />
 
             </RelativeLayout>
 
             <TextView
                 android:id="@+id/appversion"
-                android:textColor="@color/white"
+                android:textColor="@color/text_color_light"
                 android:layout_width="wrap_content"
                 android:paddingTop="15dp"
                 android:fontFamily="@font/roboto_thin"
@@ -416,4 +393,21 @@
 
         </LinearLayout>
     </ScrollView>
+
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="wrap_content"
+        android:layout_height="80dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="10dp"
+        android:fontFamily="@font/alfa_slab_one"
+        android:gravity="bottom"
+        android:text="Settings"
+        android:textColor="@color/text_color_light"
+        android:textSize="28dp" />
 </LinearLayout>

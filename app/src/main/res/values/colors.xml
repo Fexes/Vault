@@ -7,4 +7,34 @@
     <color name="black">#000000</color>
     <color name="lightgrey">#d4d4d4</color>
     <color name="white">#FFFFFF</color>
+
+    <color name="gradient_start">#8000E1</color>
+    <color name="gradient_end">#6329FA</color>
+    <color name="info_bar">#4A148C</color>
+    <color name="screen_back">#FF280E41</color>
+    <color name="text_color_light">#FFFFFF</color>
+    <color name="icon_color_light">#FFFFFF</color>
+    <color name="fab_add">#9C27B0</color>
+    <color name="fab_cancel">#DD2C00</color>
+    <color name="gradient_end_title">#770DEB</color>
+
+    <color name="gradient_start2">#000000</color>
+    <color name="gradient_end2">#000000</color>
+    <color name="info_bar2">#263238</color>
+    <color name="screen_back2">#212121</color>
+    <color name="text_color_light2">#FFFFFF</color>
+    <color name="icon_color_light2">#FFFFFF</color>
+    <color name="fab_add2">#CE93D8</color>
+    <color name="fab_cancel2">#FF8A80</color>
+    <color name="gradient_end_title2">#770DEB</color>
+
+    <color name="gradient_start1">#FFFFFF</color>
+    <color name="gradient_end1">#FFFFFF</color>
+    <color name="info_bar1">#FFFFFF</color>
+    <color name="screen_back1">#E0E0E0</color>
+    <color name="text_color_light1">#212121</color>
+    <color name="icon_color_light1">#212121</color>
+    <color name="fab_add1">#CE93D8</color>
+    <color name="fab_cancel1">#FF8A80</color>
+    <color name="gradient_end_title1">#770DEB</color>
 </resources>

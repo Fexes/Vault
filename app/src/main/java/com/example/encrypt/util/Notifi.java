@@ -2,11 +2,11 @@ package com.example.encrypt.util;
 
 import android.app.Activity;
 import android.graphics.Color;
+import android.view.View;
+import android.widget.TextView;
 
 import com.example.encrypt.R;
 import com.google.android.material.snackbar.Snackbar;
-import android.view.View;
-import android.widget.TextView;
 
 public class Notifi {
 
@@ -17,14 +17,15 @@ public class Notifi {
         View snackBarView = snackbar.getView();
 
         if(error){
-            //Red
-            snackBarView.setBackgroundColor(Color.parseColor("#558B2F"));
-            TextView textView = (TextView) snackBarView.findViewById(R.id.snackbar_text);
+            //Green
+
+            snackBarView.setBackgroundColor(Color.parseColor("#64DD17"));
+            TextView textView = snackBarView.findViewById(R.id.snackbar_text);
             textView.setTextColor(Color.WHITE);
         }else{
-            //Green
-            snackBarView.setBackgroundColor(Color.parseColor("#BF360C"));
-            TextView textView = (TextView) snackBarView.findViewById(R.id.snackbar_text);
+            //Red
+            snackBarView.setBackgroundColor(Color.parseColor("#FF3D00"));
+            TextView textView = snackBarView.findViewById(R.id.snackbar_text);
             textView.setTextColor(Color.WHITE);
         }
         snackbar.show();

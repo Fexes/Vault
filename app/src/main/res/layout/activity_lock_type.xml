@@ -8,42 +8,6 @@
     tools:context="com.example.encrypt.lock.LockType">
 
 
-    <TextView
-        android:id="@+id/title"
-        android:layout_width="0dp"
-        android:layout_height="80dp"
-        android:layout_margin="10dp"
-        android:layout_marginStart="9dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="9dp"
-        android:fontFamily="@font/alfa_slab_one"
-        android:gravity="bottom|center"
-        android:text="SetUp Password"
-        android:textColor="@color/white"
-        android:textSize="28dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="MissingConstraints" />
-
-    <com.airbnb.lottie.LottieAnimationView
-        android:id="@+id/lav_thumbUp"
-        android:layout_width="wrap_content"
-
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginBottom="8dp"
-        android:background="@color/transparent"
-        app:layout_constraintBottom_toTopOf="@+id/linearLayout"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/title"
-        app:lottie_autoPlay="true"
-        app:lottie_fileName="password.json"
-        app:lottie_loop="false"
-        app:lottie_speed="0.70" />
-
     <LinearLayout
         android:id="@+id/linearLayout"
         android:layout_width="0dp"
@@ -55,32 +19,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
 
-
-        <TextView
-            android:id="@+id/textView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:fontFamily="@font/roboto_thin"
-            android:visibility="gone"
-            android:gravity="bottom|center"
-            android:text="Fingerprint"
-            android:textColor="@color/white"
-            android:textSize="28dp"
-            tools:ignore="MissingConstraints" />
-
-        <RelativeLayout
-            android:id="@+id/frl"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginLeft="30dp"
-            android:visibility="gone"
-            android:layout_marginTop="20dp"
-            android:layout_marginRight="30dp"
-            android:background="@color/white"
-            tools:ignore="MissingConstraints">
-
-        </RelativeLayout>
 
         <LinearLayout
             android:id="@+id/rv1"
@@ -115,7 +53,7 @@
                 android:fontFamily="@font/roboto_thin"
                 android:gravity="center"
                 android:text="Use Fingerprint to Login"
-                android:textColor="@color/white"
+                android:textColor="@color/text_color_light"
                 android:textSize="18dp"
                 android:textStyle="bold" />
 
@@ -131,28 +69,6 @@
 
 
         </LinearLayout>
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:fontFamily="@font/roboto_thin"
-            android:gravity="bottom|center"
-            android:text="Select Password Type"
-            android:textColor="@color/white"
-            android:textSize="28dp"
-            tools:ignore="MissingConstraints" />
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginLeft="30dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginRight="30dp"
-            android:background="@color/white"
-            tools:ignore="MissingConstraints">
-
-        </RelativeLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -172,7 +88,7 @@
                 android:background="@drawable/button_back_gen"
                 android:onClick="pin"
                 android:text="Pin"
-                android:textColor="@color/white" />
+                android:textColor="@color/text_color_light" />
 
             <Button
                 android:id="@+id/button2"
@@ -182,10 +98,94 @@
                 android:background="@drawable/button_back_gen"
                 android:onClick="pattern"
                 android:text="Pattern"
-                android:textColor="@color/white" />
+                android:textColor="@color/text_color_light" />
 
         </LinearLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginRight="30dp"
+            android:background="@color/text_color_light"
+            tools:ignore="MissingConstraints">
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/frl"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginLeft="30dp"
+            android:visibility="gone"
+            android:layout_marginTop="20dp"
+            android:layout_marginRight="30dp"
+            android:background="@color/text_color_light"
+            tools:ignore="MissingConstraints">
+
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:fontFamily="@font/roboto_thin"
+            android:visibility="gone"
+            android:gravity="bottom|center"
+            android:text="Fingerprint"
+            android:textColor="@color/text_color_light"
+            android:textSize="28dp"
+            tools:ignore="MissingConstraints" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:fontFamily="@font/roboto_thin"
+            android:gravity="bottom|center"
+            android:text="Select Password Type"
+            android:textColor="@color/text_color_light"
+            android:textSize="28dp"
+            tools:ignore="MissingConstraints" />
     </LinearLayout>
+
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/lav_thumbUp"
+        android:layout_width="wrap_content"
+
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginBottom="8dp"
+        android:background="@color/transparent"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/title"
+        app:lottie_autoPlay="true"
+        app:lottie_fileName="password.json"
+        app:lottie_loop="false"
+        app:lottie_speed="0.70" />
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="0dp"
+        android:layout_height="80dp"
+        android:layout_margin="10dp"
+        android:layout_marginStart="9dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="9dp"
+        android:fontFamily="@font/alfa_slab_one"
+        android:gravity="bottom|center"
+        android:text="SetUp Password"
+        android:textColor="@color/text_color_light"
+        android:textSize="28dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="MissingConstraints" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,6 +1,7 @@
 package com.example.encrypt.photo;
 
 
+import android.content.Intent;
 import android.database.DataSetObserver;
 import android.os.Bundle;
 import android.view.View;
@@ -9,6 +10,7 @@ import android.widget.GridView;
 import android.widget.TextView;
 
 import com.example.encrypt.R;
+import com.example.encrypt.activity.AdvancedSetup;
 import com.example.encrypt.activity.BaseActivity;
 import com.example.encrypt.album.AlbumHelper;
 import com.example.encrypt.album.ImageBucket;
@@ -68,5 +70,10 @@ public class Folders extends BaseActivity {
         super.onBackPressed();
        // startActivity(new Intent(Folders.this, MainActivity.class));
         finish();
+    }
+
+    public void onClick(View view) {
+
+        startActivity(new Intent(Folders.this, AdvancedSetup.class));
     }
 }

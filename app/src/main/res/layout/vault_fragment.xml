@@ -59,10 +59,55 @@
             android:background="@android:drawable/dialog_holo_light_frame"
             android:layout_height="1dp" />
 
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <Button
+                android:id="@+id/button_min"
+                android:layout_width="170dp"
+                android:layout_height="55dp"
+                android:visibility="gone"
+                android:layout_gravity="bottom|center_horizontal"
+                android:layout_marginBottom="20dp"
+                android:background="@drawable/button_back"
+                android:text="Unhide"
+                android:textColor="@color/white"
+                android:textSize="16sp" />
+
+            <GridView
+                android:id="@+id/album_GridView"
+                android:layout_width="match_parent"
+                android:layout_margin="3dp"
+                android:visibility="gone"
+                android:layout_height="match_parent"
+                android:horizontalSpacing="2dp"
+                android:numColumns="3"
+                android:verticalSpacing="2dp" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recycler_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scrollbars="vertical" />
+
+
+            <TextView
+                android:id="@+id/tv_no_picture"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/roboto_thin"
+                android:layout_gravity="center"
+                android:text="@string/no_picture"
+                android:textColor="@color/lightgrey"
+                android:textSize="18sp"
+                android:visibility="gone" />
+        </FrameLayout>
+
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="40dp"
-            android:background="#4B2270"
+            android:background="@color/info_bar"
              android:gravity="center"
             android:orientation="horizontal">
 
@@ -71,10 +116,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_alignParentStart="true"
+                android:fontFamily="@font/roboto_thin"
+
                 android:gravity="center"
                 android:layout_marginLeft="10dp"
                 android:text="126 Files"
-                android:textColor="@color/white"
+                android:textColor="@color/icon_color_light"
                 android:textSize="16dp" />
 
             <LinearLayout
@@ -115,58 +162,12 @@
 
         </RelativeLayout>
 
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            >
-
-            <TextView
-                android:id="@+id/tv_no_picture"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="@string/no_picture"
-                android:textColor="@color/lightgrey"
-                android:textSize="18sp"
-                android:visibility="gone" />
-
-            <GridView
-                android:id="@+id/album_GridView"
-                android:layout_width="match_parent"
-                android:layout_margin="3dp"
-                android:visibility="gone"
-                android:layout_height="match_parent"
-                android:horizontalSpacing="2dp"
-                android:numColumns="3"
-                android:verticalSpacing="2dp" />
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recycler_view"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:scrollbars="vertical" />
-
-
-            <Button
-                android:id="@+id/button_min"
-                android:layout_width="170dp"
-                android:layout_height="45dp"
-                android:visibility="gone"
-                android:layout_gravity="bottom|center_horizontal"
-                android:layout_marginBottom="20dp"
-                 android:background="@drawable/button_back"
-                android:text="Unhide"
-                android:textColor="@color/white"
-                android:textSize="16sp" />
-        </FrameLayout>
-
     </LinearLayout>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/floatingActionButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
         android:layout_marginStart="20dp"
@@ -174,7 +175,7 @@
         android:layout_marginEnd="20dp"
         android:layout_marginBottom="20dp"
         android:clickable="true"
-        app:backgroundTint="#0D47A1"
+        app:backgroundTint="@color/fab_add"
         app:srcCompat="@drawable/ic_add" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -189,6 +190,6 @@
         android:layout_marginBottom="20dp"
         android:clickable="true"
         android:visibility="gone"
-        app:backgroundTint="#FFC62828"
+        app:backgroundTint="@color/fab_cancel"
         app:srcCompat="@drawable/ic_close" />
 </RelativeLayout>

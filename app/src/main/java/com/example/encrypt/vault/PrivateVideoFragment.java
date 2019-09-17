@@ -208,18 +208,18 @@ public class PrivateVideoFragment extends Fragment {
             hideNoPictureTip();
         }
         if (dateList.size() == 1) {
-            file_count.setText(dateList.size() + " File");
+            file_count.setText(dateList.size() + " Video");
         } else {
-            file_count.setText(dateList.size() + " Files");
+            file_count.setText(dateList.size() + " Videos");
         }
         adapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
             @Override
             public void onChanged() {
                 super.onChanged();
                 if (dateList.size() == 1) {
-                    file_count.setText(dateList.size() + " File");
+                    file_count.setText(dateList.size() + " Video");
                 } else {
-                    file_count.setText(dateList.size() + " Files");
+                    file_count.setText(dateList.size() + " Videos");
                 }
             }
         });
@@ -337,9 +337,18 @@ public class PrivateVideoFragment extends Fragment {
             @Override
             public void onClick(View view) {
 
+                removeads();
                 Collections.reverse(mRecyclerViewVideoItems);
+                Collections.reverse(mRecyclerViewVideoItems2);
+
+
                 adapter = new PrivateVideoRecyclerViewAdapter(getActivity(), mRecyclerViewVideoItems);
                 mRecyclerView.setAdapter(adapter);
+
+
+                //   loadImageData();
+
+                loadNativeAds();
             }
 
         });
@@ -484,6 +493,40 @@ public class PrivateVideoFragment extends Fragment {
         }
     }
 
+    public void removeads() {
+        GridLayoutManager layoutManager = new GridLayoutManager(getContext(), 3);
+
+        try {
+            mRecyclerViewVideoItems.remove(6);
+            mRecyclerViewVideoItems.remove(73);
+            mRecyclerViewVideoItems.remove(146);
+            mRecyclerViewVideoItems.remove(219);
+
+
+            adapter.notifyItemRemoved(6);
+            adapter.notifyItemRemoved(73);
+            adapter.notifyItemRemoved(146);
+            adapter.notifyItemRemoved(219);
+            adapter.notifyItemRangeRemoved(6, mRecyclerViewVideoItems.size());
+            adapter.notifyItemRangeRemoved(73, mRecyclerViewVideoItems.size());
+            adapter.notifyItemRangeRemoved(146, mRecyclerViewVideoItems.size());
+            adapter.notifyItemRangeRemoved(219, mRecyclerViewVideoItems.size());
+        } catch (Exception e) {
+            // Toast.makeText(getContext(),e.toString(),Toast.LENGTH_SHORT).show();
+        }
+
+        layoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
+            @Override
+            public int getSpanSize(int position) {
+
+
+                return 1;
+
+            }
+        });
+        mRecyclerView.setLayoutManager(layoutManager);
+
+    }
     private void relodads() {
         mRecyclerView.removeAllViews();
         mRecyclerViewVideoItems.clear();

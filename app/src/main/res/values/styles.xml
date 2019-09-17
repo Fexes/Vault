@@ -2,7 +2,6 @@
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-        <!-- Customize your theme here. -->
         <item name="android:windowNoTitle">true</item> <!-- Hides the Action Bar -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
@@ -10,8 +9,6 @@
 
     </style>
 
-
-    <!--add by dongrp : theme for app start black or white screen problem -->
 
     <style name="AppTheme.NoActionBar">
         <item name="android:windowNoTitle">true</item> <!-- Hides the Action Bar -->

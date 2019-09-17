@@ -37,7 +37,7 @@
                  android:layout_centerHorizontal="true"
                 android:layout_marginBottom="10dp"
                 android:text="Draw Pattern"
-                android:textColor="#FFF"
+                android:textColor="@color/text_color_light"
                 android:textSize="15sp" />
 
             <com.andrognito.patternlockview.PatternLockView

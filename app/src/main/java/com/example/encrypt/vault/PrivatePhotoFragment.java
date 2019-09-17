@@ -182,10 +182,18 @@ public class PrivatePhotoFragment extends Fragment {
         reverse.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                removeads();
                 Collections.reverse(mRecyclerViewImageItems);
+                Collections.reverse(mRecyclerViewImageItems2);
+
+
                 adapter = new PrivateImageRecyclerViewAdapter(getActivity(), mRecyclerViewImageItems);
                 mRecyclerView.setAdapter(adapter);
+
+
+                //   loadImageData();
+
+                loadNativeAds();
 
             }
 
@@ -417,6 +425,40 @@ public class PrivatePhotoFragment extends Fragment {
         return mRecyclerViewImageItems;
     }
 
+    public void removeads() {
+        GridLayoutManager layoutManager = new GridLayoutManager(getContext(), 3);
+
+        try {
+            mRecyclerViewImageItems.remove(6);
+            mRecyclerViewImageItems.remove(73);
+            mRecyclerViewImageItems.remove(146);
+            mRecyclerViewImageItems.remove(219);
+
+
+            adapter.notifyItemRemoved(6);
+            adapter.notifyItemRemoved(73);
+            adapter.notifyItemRemoved(146);
+            adapter.notifyItemRemoved(219);
+            adapter.notifyItemRangeRemoved(6, mRecyclerViewImageItems.size());
+            adapter.notifyItemRangeRemoved(73, mRecyclerViewImageItems.size());
+            adapter.notifyItemRangeRemoved(146, mRecyclerViewImageItems.size());
+            adapter.notifyItemRangeRemoved(219, mRecyclerViewImageItems.size());
+        } catch (Exception e) {
+            // Toast.makeText(getContext(),e.toString(),Toast.LENGTH_SHORT).show();
+        }
+
+        layoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
+            @Override
+            public int getSpanSize(int position) {
+
+
+                return 1;
+
+            }
+        });
+        mRecyclerView.setLayoutManager(layoutManager);
+
+    }
     private void relodads() {
         mRecyclerView.removeAllViews();
         mRecyclerViewImageItems.clear();

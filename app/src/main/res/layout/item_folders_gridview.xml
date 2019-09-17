@@ -41,7 +41,7 @@
             android:layout_height="match_parent"
             android:gravity="center"
             android:layout_gravity="center"
-            android:textColor="@android:color/white"
+            android:textColor="@color/white"
              android:background="@drawable/album_txt_back"
             android:singleLine="true"
             android:textSize="15sp" />
